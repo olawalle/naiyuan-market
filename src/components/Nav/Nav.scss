@@ -1,0 +1,52 @@
+.nav {
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  .notif {
+    position: relative;
+    top: -2px;
+    left: -10px;
+    display: inline-block;
+    img {
+      height: 25px;
+    }
+    span {
+      background-color: rgb(29, 25, 25);
+      color: #fff;
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 20px;
+      position: relative;
+      top: -15px;
+      left: -8px;
+    }
+  }
+  .icns {
+    float: right;
+    height: 60px;
+    line-height: 60px;
+    padding-right: 60px;
+    .user {
+      width: 30px;
+      height: 30px;
+      margin-top: 15px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: inline-block;
+      text-align: center;
+      position: relative;
+      img {
+        width: 102%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+    .name {
+      font-size: 13px;
+      padding-left: 12px;
+      position: relative;
+      top: -10px;
+    }
+  }
+}

@@ -1,0 +1,137 @@
+@import "../margins.sass";
+
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+}
+
+// buttons
+button {
+  border: 0;
+  cursor: pointer;
+}
+.main-btn {
+  background: #c91f25;
+  color: #fff;
+  font-size: 14px;
+  height: 40px;
+}
+
+// imputs
+input {
+  &:focus {
+    outline: none;
+  }
+}
+.inp {
+  .label {
+    font-size: 12px;
+  }
+  .bd-input {
+    border: 0;
+    border-bottom: 1px solid #dfdfdf;
+    height: 35px;
+    &:focus {
+      border-bottom: 1px solid #3b3b3b;
+    }
+  }
+}
+
+// table
+
+.main-table {
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  border-collapse: collapse;
+  thead {
+    background-color: #c91f26;
+    tr {
+      th {
+        color: #fff;
+        font-size: 12px;
+        height: 40px;
+        padding-left: 20px;
+        border: 0;
+      }
+    }
+  }
+  tbody {
+    tr {
+      background-color: #fff;
+      border: 0;
+      border-bottom: 1px solid #f1f1f1;
+      td {
+        color: #5e5e5e;
+        padding-left: 20px;
+        font-size: 12px;
+        height: 50px;
+        line-height: 50px;
+        .no {
+          padding-right: 30px;
+        }
+        p {
+          margin: 0;
+        }
+        .dot {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          margin-right: 10px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
+
+// helpers
+.f-right {
+  float: right;
+}
+.f-left {
+  float: left;
+}
+.t-center {
+  text-align: center;
+}
+.t-right {
+  text-align: right;
+}
+.pointer {
+  cursor: pointer;
+}
+.red {
+  color: #c91f25;
+}
+.bg-yellow {
+  background-color: #fecb07;
+}
+.bg-red {
+  background-color: #c91f25;
+}
+.bg-green {
+  background-color: #01c361;
+}
+
+.gradient {
+  position: relative;
+  padding-top: 5px;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -5px; /* !importanté */
+    border-radius: inherit; /* !importanté */
+    z-index: 10;
+    height: 5px;
+    background: linear-gradient(to right, red, orange);
+  }
+}

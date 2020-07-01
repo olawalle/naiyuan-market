@@ -1,0 +1,47 @@
+.dashboard {
+  .side-wrap {
+    width: 80px;
+    position: relative;
+    transition: linear all 0.2s;
+    // overflow: hidden;
+    // display: inline-block;
+    float: left;
+    &.open {
+      width: 220px;
+    }
+    .arrow {
+      width: 25px;
+      height: 25px;
+      line-height: 26px;
+      border-radius: 50%;
+      background-color: #fff;
+      position: absolute;
+      top: 15px;
+      right: -15px;
+      text-align: center;
+
+      img {
+        width: 13px;
+        transition: linear all 0.2s;
+        &.rotate {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+  .dash-contents {
+    // display: inline-block;
+    overflow: auto;
+    background-color: #fafafa;
+    float: left;
+    height: 100vh;
+    overflow: hidden;
+    width: calc(100% - 220px);
+    &.wide {
+      width: calc(100% - 80px) !important;
+    }
+    &.narrow {
+      width: calc(100% - 220px) !important;
+    }
+  }
+}
