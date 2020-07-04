@@ -12,16 +12,31 @@
 button {
   border: 0;
   cursor: pointer;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 4px;
 }
 .main-btn {
   background: #c91f25;
   color: #fff;
   font-size: 14px;
-  height: 40px;
+}
+.white-btn {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  color: #c91f25;
+  background-color: #fff;
+}
+.bd-btn {
+  border: 1px solid #c91f25;
+  border-radius: 4px;
+  color: #c91f25;
+  background-color: #fff;
 }
 
 // imputs
 input {
+  padding-left: 20px;
   &:focus {
     outline: none;
   }
@@ -29,6 +44,7 @@ input {
 .inp {
   .label {
     font-size: 12px;
+    float: left;
   }
   .bd-input {
     border: 0;
@@ -37,6 +53,9 @@ input {
     &:focus {
       border-bottom: 1px solid #3b3b3b;
     }
+  }
+  .border-inp {
+    border: 1px solid #dfdfdf;
   }
 }
 
@@ -49,9 +68,53 @@ input {
   border-collapse: collapse;
   thead {
     background-color: #c91f26;
+    font-weight: 400;
     tr {
       th {
         color: #fff;
+        font-size: 12px;
+        height: 40px;
+        padding-left: 20px;
+        border: 0;
+      }
+    }
+  }
+  tbody {
+    tr {
+      background-color: #fff;
+      border: 0;
+      border-bottom: 1px solid #f1f1f1;
+      td {
+        color: #5e5e5e;
+        padding-left: 20px;
+        font-size: 12px;
+        height: 50px;
+        line-height: 50px;
+        .no {
+          padding-right: 30px;
+        }
+        p {
+          margin: 0;
+        }
+        select {
+          border: 1px solid #dfdfdf;
+        }
+      }
+    }
+  }
+}
+.white-table {
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  border-collapse: collapse;
+  text-align: left;
+  thead {
+    background-color: #fff;
+    tr {
+      border-bottom: 1px solid #f1f1f1;
+      th {
+        color: #000;
         font-size: 12px;
         height: 40px;
         padding-left: 20px;
@@ -104,8 +167,22 @@ input {
 .pointer {
   cursor: pointer;
 }
+.o-hidden {
+  overflow: hidden;
+}
+
 .red {
   color: #c91f25;
+}
+.grey {
+  color: #9ea0a5;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 50%;
 }
 .bg-yellow {
   background-color: #fecb07;
@@ -120,6 +197,7 @@ input {
 .gradient {
   position: relative;
   padding-top: 5px;
+  overflow: hidden;
   &:before {
     content: "";
     position: absolute;
@@ -132,6 +210,69 @@ input {
     border-radius: inherit; /* !importanté */
     z-index: 10;
     height: 5px;
-    background: linear-gradient(to right, red, orange);
+    background: linear-gradient(to right, orange, red);
+  }
+}
+
+// modals
+.placement-modal {
+  width: 500px;
+  padding: 0 0 20px;
+  &.currency-modal {
+    .amount {
+      padding: 0 30px;
+      .tt_ {
+        position: relative;
+        top: 20px;
+      }
+    }
+    .form {
+      margin-top: 35px !important;
+      input {
+        height: 40px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+  .heading {
+    font-size: 16px;
+    color: #411012;
+    border-bottom: 1px solid #f0ebeb;
+    padding: 20px;
+    margin: 0;
+  }
+  .amount {
+    .title {
+      font-size: 12px;
+      display: block;
+      color: #444141;
+    }
+    .amt {
+      font-size: 28px;
+    }
+  }
+  .form {
+    padding: 0 25px;
+    select {
+      height: 40px;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 20px;
+    }
+  }
+}
+
+// overrides
+.react-responsive-modal-modal {
+  padding: 0 !important;
+  border-radius: 4px;
+}
+.react-responsive-modal-closeButton {
+  top: -30px !important;
+  right: -36px !important;
+  svg {
+    fill: #fff;
   }
 }

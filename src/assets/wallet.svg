@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18.416" height="15.315" viewBox="0 0 18.416 15.315">
+  <g id="wallet" transform="translate(0.25 0.25)">
+    <g id="Group_11000" data-name="Group 11000">
+      <g id="Group_10999" data-name="Group 10999">
+        <path id="Path_12976" data-name="Path 12976" d="M15.332,44.308H2.584A2.587,2.587,0,0,0,0,46.892v9.647a2.587,2.587,0,0,0,2.584,2.584H15.332a2.587,2.587,0,0,0,2.584-2.584V46.892A2.587,2.587,0,0,0,15.332,44.308Zm1.55,8.958h-3.79a1.55,1.55,0,0,1,0-3.1h3.79Zm0-4.134h-3.79a2.584,2.584,0,1,0,0,5.168h3.79v2.239a1.552,1.552,0,0,1-1.55,1.55H2.584a1.552,1.552,0,0,1-1.55-1.55V46.892a1.552,1.552,0,0,1,1.55-1.55H15.332a1.552,1.552,0,0,1,1.55,1.55Z" transform="translate(0 -44.308)" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+      </g>
+    </g>
+    <g id="Group_11002" data-name="Group 11002" transform="translate(12.575 6.89)">
+      <g id="Group_11001" data-name="Group 11001">
+        <path id="Path_12977" data-name="Path 12977" d="M360.591,241.231H359.9a.517.517,0,1,0,0,1.034h.689a.517.517,0,1,0,0-1.034Z" transform="translate(-359.385 -241.231)" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -57,7 +57,7 @@ export default function Home() {
             </thead>
             <tbody>
               {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
-                <tr>
+                <tr key={`row${i}`}>
                   <td style={{ width: "30%" }}>
                     <span className="no">{i + 1}</span>
                     Deskjet Printers
