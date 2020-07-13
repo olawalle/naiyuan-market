@@ -35,10 +35,16 @@ button {
 }
 
 // imputs
-input {
-  padding-left: 20px;
+input,
+select,
+textarea {
   &:focus {
     outline: none;
+  }
+  &.has-error {
+    background-color: rgb(255, 242, 242) !important;
+    color: red !important;
+    border-color: red !important;
   }
 }
 .inp {
@@ -56,6 +62,7 @@ input {
   }
   .border-inp {
     border: 1px solid #dfdfdf;
+    padding-left: 20px;
   }
 }
 

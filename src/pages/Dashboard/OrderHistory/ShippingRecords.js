@@ -18,7 +18,7 @@ export default withRouter(function ShippingRecords({ history }) {
         </div>
       </div>
 
-      <div className="gradient w100p mt50">
+      <div className="gradient w100p mt30">
         <table className="white-table">
           <thead>
             <tr>

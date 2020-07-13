@@ -1,0 +1,35 @@
+.pay-supplier {
+  padding: 60px;
+  .header {
+    width: 100%;
+    font-size: 20px;
+    text-align: left;
+    margin-top: 0;
+  }
+  .gradient {
+    background-color: #fff;
+    padding: 20px 30px;
+    .roww {
+      width: 100%;
+      min-height: 50px;
+      padding: 15px 0;
+      margin-bottom: 10px;
+      .label {
+        width: 20%;
+        float: left;
+        text-align: left;
+        font-size: 14px;
+      }
+      .inp {
+        width: 80%;
+        float: left;
+        input {
+          height: 40px;
+        }
+        textarea {
+          height: 150px;
+        }
+      }
+    }
+  }
+}

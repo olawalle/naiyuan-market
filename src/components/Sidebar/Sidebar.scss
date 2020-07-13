@@ -26,10 +26,27 @@
         white-space: nowrap;
         overflow: hidden;
         border-left: 3px solid transparent;
+        span {
+          display: inline-block;
+          width: 50px;
+          svg {
+            width: 14px !important;
+            position: relative;
+            top: 4px;
+            fill: #aaaaaa;
+            stroke: #aaaaaa;
+          }
+        }
         &.active-link {
           background: #00000036;
           color: #fff;
           border-left: 3px solid #ffcb05;
+          span {
+            svg {
+              fill: #ffcb05;
+              stroke: #ffcb05;
+            }
+          }
         }
       }
       .inner {

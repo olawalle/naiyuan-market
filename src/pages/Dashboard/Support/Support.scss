@@ -1,0 +1,60 @@
+.support {
+  padding: 60px;
+  .wide {
+    width: 75%;
+    float: left;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    .gradient {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 5px;
+      overflow: hidden;
+      .inp {
+        input {
+          height: 40px;
+        }
+        textarea,
+        input {
+          width: 100%;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+        textarea {
+          padding: 20px;
+        }
+      }
+    }
+    .addresses {
+      font-size: 12px;
+      margin-top: 50px;
+      .address {
+        width: 33.33%;
+        float: left;
+        text-align: left;
+        padding: 0 40px;
+        &.mid {
+          border-left: 1px solid #df8385;
+          border-right: 1px solid #df8385;
+        }
+        .location {
+          color: #000;
+          font-weight: 600;
+        }
+        span {
+          display: block;
+          margin: 3px 0;
+        }
+      }
+    }
+  }
+  .narrow {
+    width: 25%;
+    float: left;
+    text-align: center;
+    background-image: url("../../../assets/contact.png");
+    background-size: cover;
+    background-position: center;
+    height: 600px;
+  }
+}

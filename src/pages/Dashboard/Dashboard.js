@@ -14,6 +14,9 @@ import OrderHistory from "./OrderHistory/OrderHistory";
 import MyWallet from "./MyWallet/MyWallet";
 import TnxHistory from "./MyWallet/TnxHistory";
 import ShippingRecords from "./OrderHistory/ShippingRecords";
+import PaySupplier from "./PaySupplier/PaySupplier";
+import Tracking from "./Tracking/Tracking";
+import Support from "./Support/Support";
 
 export default function Dashboard() {
   let match = useRouteMatch();
@@ -110,6 +113,15 @@ export default function Dashboard() {
             </Route>
             <Route path={`${match.path}shipping-records`}>
               <ShippingRecords />
+            </Route>
+            <Route path={`${match.path}pay-supplier`}>
+              <PaySupplier />
+            </Route>
+            <Route path={`${match.path}tracking`}>
+              <Tracking />
+            </Route>
+            <Route path={`${match.path}support`}>
+              <Support />
             </Route>
           </Switch>
         </div>
