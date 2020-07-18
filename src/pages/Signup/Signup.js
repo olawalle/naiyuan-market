@@ -141,7 +141,7 @@ export default withRouter(function Signup({ history }) {
         <div className="inp mb20">
           <span className="label">Password</span>
           <input
-            type="text"
+            type="password"
             onChange={(e) => updateForm("password", e.target.value)}
             className={`w100p bd-input ${hasError && !password && "has-error"}`}
           />
@@ -150,7 +150,7 @@ export default withRouter(function Signup({ history }) {
         <div className="inp mb20">
           <span className="label">Confirm Password</span>
           <input
-            type="text"
+            type="password"
             onChange={(e) => updateForm("confirm_password", e.target.value)}
             className={`w100p bd-input ${
               hasError && !password_confirm && "has-error"

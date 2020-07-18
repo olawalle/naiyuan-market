@@ -32,7 +32,7 @@ export default function SourceProducts() {
           </div>
         </div>
         <p className="upload">
-          Upload product Picture
+          <span>Upload product Picture</span>
           <button className="white-btn">Add file</button>
           <br />
           <button className="main-btn">Add to cart</button>

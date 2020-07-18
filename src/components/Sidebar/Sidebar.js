@@ -6,7 +6,13 @@ import logo from "../../assets/Logo.svg";
 import icon from "../../assets/Icon.svg";
 import { withRouter } from "react-router-dom";
 
-export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
+export const NavLinks = ({
+  onOpenModal,
+  history,
+  sideOpen,
+  closeNav,
+  setName,
+}) => {
   const [activeIndex, setactiveIndex] = useState(0);
   const [activeIndex_, setactiveIndex_] = useState(null);
   const icons = [
@@ -84,6 +90,7 @@ export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
     {
       text: "Dashboard",
       link: "/dashboard/",
+      name: "Dashboard",
     },
     {
       text: "Order Placement",
@@ -131,7 +138,8 @@ export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
   const openChild = (i, j) => {
     setTimeout(() => {
       setactiveIndex_(j);
-      let link = links.find((l, k) => k === i).children[j].link;
+      let linkParent = links.find((l, k) => k === i);
+      let link = linkParent.children[j].link;
       if (link === "/dashboard/order-placement") {
         onOpenModal(1);
         return;
@@ -140,62 +148,74 @@ export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
         onOpenModal(2);
         return;
       }
+      setName && setName(linkParent.children[j].text);
+      closeNav && closeNav();
       history.push(link);
     }, 100);
   };
 
   const goToLink = (i) => {
-    let link = links.find((l, k) => k === i).link;
+    let linkParent = links.find((l, k) => k === i);
+    setName && setName(linkParent.text);
+    let link = linkParent.link;
     link && history.push(link);
     setactiveIndex(i);
     setactiveIndex_(null);
+    if (!linkParent.children && closeNav) {
+      closeNav();
+    }
   };
+  return (
+    <ul className="links">
+      {links.map((link, i) => (
+        <li key={`link${i}`} className={`pointer`} onClick={() => goToLink(i)}>
+          <div
+            className={`main-link ${i === activeIndex ? "active-link" : ""}`}
+          >
+            <span dangerouslySetInnerHTML={{ __html: icons[i] }}></span>
+            {sideOpen && <span>{link.text}</span>}
+          </div>
+          {link.children && (
+            <div
+              className={`inner`}
+              style={{
+                height:
+                  i === activeIndex ? `${link.children.length * 45}px` : "0",
+              }}
+            >
+              {link.children.map((child, j) => {
+                return (
+                  <div
+                    key={`child${i}${j}`}
+                    className={`inner-link ${
+                      j === activeIndex_ ? "active-inner-link" : ""
+                    }`}
+                    onClick={() => openChild(i, j)}
+                  >
+                    <div className="circle"></div>
+                    {child.text}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
+export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
   return (
     <div className="sidebar">
       <div className="top">
         <img src={sideOpen ? logo : icon} alt="" />
       </div>
-      <ul>
-        {links.map((link, i) => (
-          <li
-            key={`link${i}`}
-            className={`pointer`}
-            onClick={() => goToLink(i)}
-          >
-            <div
-              className={`main-link ${i === activeIndex ? "active-link" : ""}`}
-            >
-              <span dangerouslySetInnerHTML={{ __html: icons[i] }}></span>
-              {sideOpen && <span>{link.text}</span>}
-            </div>
-            {link.children && (
-              <div
-                className={`inner`}
-                style={{
-                  height:
-                    i === activeIndex ? `${link.children.length * 45}px` : "0",
-                }}
-              >
-                {link.children.map((child, j) => {
-                  return (
-                    <div
-                      key={`child${i}${j}`}
-                      className={`inner-link ${
-                        j === activeIndex_ ? "active-inner-link" : ""
-                      }`}
-                      onClick={() => openChild(i, j)}
-                    >
-                      <div className="circle"></div>
-                      {child.text}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <NavLinks
+        sideOpen={sideOpen}
+        history={history}
+        onOpenModal={onOpenModal}
+      />
     </div>
   );
 });

@@ -87,7 +87,7 @@ export default function Dashboard() {
 
       <HashRouter>
         <div className={`dash-contents ${!sideOpen ? "wide" : "narrow"}`}>
-          <Nav />
+          <Nav onOpenModal={onOpenModal} />
           <Switch>
             <Route exact path={`${match.path}`}>
               <Home />

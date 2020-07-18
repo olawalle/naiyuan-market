@@ -3,11 +3,28 @@ import "./Home.scss";
 
 import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
+import { withRouter } from "react-router-dom";
 
-export default function Home() {
+const Balance = () => {
+  return (
+    <div className="balance">
+      <span className="title">Wallet Balance</span>
+      <span className="amt">N20,000</span>
+    </div>
+  );
+};
+
+export default withRouter(function Home({ history }) {
+  const toAll = () => {
+    history.push("/all");
+  };
+
   return (
     <div className="home">
       <div className="wide">
+        <div className="w100p mobile mb30">
+          <Balance />
+        </div>
         <div className="top-section">
           <div className="half gradient f-left">
             <div className="heading">
@@ -50,15 +67,15 @@ export default function Home() {
             <thead>
               <tr>
                 <th>Item</th>
-                <th>Qty</th>
-                <th>Total Cost</th>
+                <th className="web">Qty</th>
+                <th className="web">Total Cost</th>
                 <th>Tracking ID</th>
               </tr>
             </thead>
             <tbody>
               {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
                 <tr key={`row${i}`}>
-                  <td style={{ width: "30%" }}>
+                  <td>
                     <span className="no">{i + 1}</span>
                     Deskjet Printers
                     <img
@@ -72,8 +89,8 @@ export default function Home() {
                       alt=""
                     />
                   </td>
-                  <td>3 Units</td>
-                  <td>
+                  <td className="web">3 Units</td>
+                  <td className="web">
                     <div
                       className={`dot ${
                         !(i % 2)
@@ -90,7 +107,9 @@ export default function Home() {
               ))}
               <tr>
                 <td colSpan="4">
-                  <p className="red t-center">View All Packages</p>
+                  <p onClick={toAll} className="red t-center pointer">
+                    View All Packages
+                  </p>
                 </td>
               </tr>
             </tbody>
@@ -98,13 +117,11 @@ export default function Home() {
         </div>
       </div>
       <div className="narrow">
-        <div className="balance">
-          <span className="title">Wallet Balance</span>
-          <span className="amt">N20,000</span>
+        <div className="w100p web">
+          <Balance />
         </div>
-
         <img className="badge" src={badge} alt="" />
       </div>
     </div>
   );
-}
+});

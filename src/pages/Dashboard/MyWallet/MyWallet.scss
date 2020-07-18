@@ -208,4 +208,19 @@
       border: 1px solid #eee !important;
     }
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    padding: 60px 20px;
+    .body {
+      .small {
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      .big {
+        width: 100%;
+        .tnxs {
+          padding: 0 10px;
+        }
+      }
+    }
+  }
 }

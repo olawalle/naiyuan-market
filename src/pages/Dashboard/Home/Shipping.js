@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Home.scss";
 
 import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
+import ShippingModal from "../../../components/ShippingModal/ShippingModal";
 
 export default function Shipping() {
+  const [open, setopen] = useState(false);
+
+  const onCloseModal = () => {
+    setopen(false);
+  };
+
   return (
     <div className="home">
       <div className="wide">
@@ -55,9 +62,16 @@ export default function Shipping() {
                   <td>$12,100.00</td>
                 </tr>
               ))}
-              <tr>
-                <td colSpan="4">
-                  <p className="red t-center">View All Packages</p>
+
+              <tr style={{ border: 0 }}>
+                <td
+                  colSpan={4}
+                  className="t-right pr20"
+                  style={{ height: "200px" }}
+                >
+                  <button className="main-btn" onClick={() => setopen(true)}>
+                    Checkout
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -67,6 +81,8 @@ export default function Shipping() {
       <div className="narrow mt20">
         <img className="badge" src={badge} alt="" />
       </div>
+
+      <ShippingModal isOpen={open} onCloseModal={onCloseModal} />
     </div>
   );
 }

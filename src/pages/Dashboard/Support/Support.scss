@@ -57,4 +57,25 @@
     background-position: center;
     height: 600px;
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    padding: 60px 20px;
+    height: 100vh;
+    overflow: auto;
+    .wide {
+      width: 100%;
+      padding-right: 0;
+      .addresses {
+        .address {
+          width: 100%;
+          border-top: 1px solid #df8385 !important;
+          &.mid {
+            border: 0;
+          }
+        }
+      }
+    }
+    .narrow {
+      width: 100%;
+    }
+  }
 }

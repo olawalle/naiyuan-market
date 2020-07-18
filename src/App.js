@@ -7,6 +7,9 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import SnackbarProvider from "react-simple-snackbar";
+import AllPackages from "./pages/AllPackages/AllPackages";
+import Profile from "./pages/Profile/Profile";
+import Terms from "./pages/Profile/Terms";
 
 function App() {
   return (
@@ -22,6 +25,15 @@ function App() {
             </Route>
             <Route path="/dashboard/">
               <Dashboard />
+            </Route>
+            <Route path="/all/">
+              <AllPackages />
+            </Route>
+            <Route path="/profile/">
+              <Profile />
+            </Route>
+            <Route path="/terms/">
+              <Terms />
             </Route>
           </Switch>
         </div>

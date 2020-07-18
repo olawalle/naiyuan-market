@@ -128,4 +128,55 @@
       text-align: right;
     }
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    padding: 60px 20px;
+    .top {
+      height: auto;
+      .half {
+        width: 100%;
+      }
+      .upload {
+        span {
+          display: block;
+        }
+        .main-btn,
+        .white-btn {
+          width: 100%;
+          margin: 12px 0;
+        }
+      }
+    }
+    .btm {
+      padding: 15px;
+      .item-details {
+        .qty,
+        .date {
+          top: 0;
+          width: 50%;
+          .w40p {
+            width: 100% !important;
+          }
+        }
+      }
+      .item {
+        width: 100%;
+        .img {
+          width: 100%;
+        }
+        .details {
+          width: 100%;
+        }
+      }
+      .sub-footer,
+      .footer {
+        .item {
+          width: 0%;
+        }
+        .qty,
+        .date {
+          width: 50%;
+        }
+      }
+    }
+  }
 }

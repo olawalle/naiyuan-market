@@ -24,4 +24,16 @@
       }
     }
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    padding: 60px 20px;
+    .header {
+      .form {
+        padding: 15px 0;
+        width: 100%;
+        input {
+          width: 42%;
+        }
+      }
+    }
+  }
 }
