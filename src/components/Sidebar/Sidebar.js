@@ -93,9 +93,9 @@ export const NavLinks = ({
       name: "Dashboard",
     },
     {
-      text: "Order Placement",
+      text: "Product Sourcing",
       children: [
-        { text: "Sources Product", link: "/dashboard/source-products" },
+        { text: "Product Sourcing", link: "/dashboard/source-products" },
         {
           text: "Order Placement",
           link: "/dashboard/order-placement",
@@ -117,7 +117,7 @@ export const NavLinks = ({
     {
       text: "Shipping",
       children: [
-        { text: "Shipping", link: "/dashboard/shipping" },
+        { text: "My Packages", link: "/dashboard/shipping" },
         { text: "Shipping Records", link: "/dashboard/shipping-records" },
       ],
     },
@@ -137,7 +137,6 @@ export const NavLinks = ({
 
   const openChild = (i, j) => {
     setTimeout(() => {
-      setactiveIndex_(j);
       let linkParent = links.find((l, k) => k === i);
       let link = linkParent.children[j].link;
       if (link === "/dashboard/order-placement") {
@@ -159,12 +158,20 @@ export const NavLinks = ({
     setName && setName(linkParent.text);
     let link = linkParent.link;
     link && history.push(link);
-    setactiveIndex(i);
+
+    if (linkParent.children) {
+      activeIndex && activeIndex === i
+        ? setactiveIndex(null)
+        : setactiveIndex(i);
+    } else {
+      setactiveIndex(i);
+    }
     setactiveIndex_(null);
     if (!linkParent.children && closeNav) {
       closeNav();
     }
   };
+
   return (
     <ul className="links">
       {links.map((link, i) => (

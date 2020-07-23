@@ -5,11 +5,11 @@ import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
 import { withRouter } from "react-router-dom";
 
-const Balance = () => {
+const Balance = ({ icon }) => {
   return (
-    <div className="balance">
+    <div className="balance mb12">
       <span className="title">Wallet Balance</span>
-      <span className="amt">N20,000</span>
+      <span className="amt">{icon}20,000</span>
     </div>
   );
 };
@@ -23,7 +23,8 @@ export default withRouter(function Home({ history }) {
     <div className="home">
       <div className="wide">
         <div className="w100p mobile mb30">
-          <Balance />
+          <Balance icon="N" />
+          <Balance icon="Y" />
         </div>
         <div className="top-section">
           <div className="half gradient f-left">
@@ -34,8 +35,19 @@ export default withRouter(function Home({ history }) {
               </p>
             </div>
             <div className="btm">
-              <b>Address:</b> ad eveniet hic quibusdam iusto incidunt
-              repudiandae adipisci? Quibusdam, unde architecto!
+              <div className="half">
+                <p>
+                  <b>Address:</b> ad eveniet hic quibusdam iusto incidunt eniet
+                  hic quibusdam iusto incidunt
+                </p>
+                <span className="copy">copy</span>
+              </div>
+              <div className="half">
+                <p>
+                  <b>防飛間:</b> 防飛間応支違索加売偽顔動思首跡初発止見使
+                </p>
+                <span className="copy">copy</span>
+              </div>
             </div>
           </div>
           <div className="half gradient f-right">
@@ -68,12 +80,12 @@ export default withRouter(function Home({ history }) {
               <tr>
                 <th>Item</th>
                 <th className="web">Qty</th>
-                <th className="web">Total Cost</th>
                 <th>Tracking ID</th>
+                <th className="web">Status</th>
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
+              {[1, 2, 3, 4, 5, 6].map((row, i) => (
                 <tr key={`row${i}`}>
                   <td>
                     <span className="no">{i + 1}</span>
@@ -90,6 +102,7 @@ export default withRouter(function Home({ history }) {
                     />
                   </td>
                   <td className="web">3 Units</td>
+                  <td>IU2387GGJ08U</td>
                   <td className="web">
                     <div
                       className={`dot ${
@@ -102,7 +115,6 @@ export default withRouter(function Home({ history }) {
                     ></div>
                     Shipped
                   </td>
-                  <td>IU2387GGJ08U</td>
                 </tr>
               ))}
               <tr>
@@ -118,7 +130,8 @@ export default withRouter(function Home({ history }) {
       </div>
       <div className="narrow">
         <div className="w100p web">
-          <Balance />
+          <Balance icon="N" />
+          <Balance icon="Y" />
         </div>
         <img className="badge" src={badge} alt="" />
       </div>

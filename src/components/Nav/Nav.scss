@@ -142,10 +142,10 @@
       -moz-transform: rotate(0deg);
       -o-transform: rotate(0deg);
       transform: rotate(0deg);
-      -webkit-transition: 0.5s ease-in-out;
-      -moz-transition: 0.5s ease-in-out;
-      -o-transition: 0.5s ease-in-out;
-      transition: 0.5s ease-in-out;
+      // -webkit-transition: 0.5s ease-in-out;
+      // -moz-transition: 0.5s ease-in-out;
+      // -o-transition: 0.5s ease-in-out;
+      // transition: 0.5s ease-in-out;
       cursor: pointer;
       float: right;
       margin: 22px 20px;
@@ -166,9 +166,9 @@
       -moz-transform: rotate(0deg);
       -o-transform: rotate(0deg);
       transform: rotate(0deg);
-      -webkit-transition: 0.25s ease-in-out;
-      -moz-transition: 0.25s ease-in-out;
-      -o-transition: 0.25s ease-in-out;
+      // -webkit-transition: 0.25s ease-in-out;
+      // -moz-transition: 0.25s ease-in-out;
+      // -o-transition: 0.25s ease-in-out;
       background: #4a0003;
     }
     #nav-icon1.open {

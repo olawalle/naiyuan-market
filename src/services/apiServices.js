@@ -9,6 +9,15 @@ let signupUser = (data) => {
   });
 };
 
+let userLogin = (data) => {
+  return axios({
+    method: "post",
+    url: urls.loginUrl,
+    data,
+  });
+};
+
 export default {
   signupUser,
+  userLogin,
 };

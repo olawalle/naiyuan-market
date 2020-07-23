@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Nav.scss";
 
 import notif from "../../assets/notification.svg";
@@ -10,8 +10,11 @@ import logo from "../../assets/Logo.svg";
 import { withRouter } from "react-router-dom";
 import { NavLinks } from "../Sidebar/Sidebar";
 import Avatar from "../Avatar/Avatar";
+import { appContext } from "../../store/appContext";
 
 export default withRouter(function Nav({ showLogo, history }) {
+  const context = useContext(appContext);
+  const { user } = context;
   const [open, setopen] = useState(false);
   const [show_nav, setshow_nav] = useState(false);
   const [name, setName] = useState("Dashbaord");
@@ -62,7 +65,7 @@ export default withRouter(function Nav({ showLogo, history }) {
               backgroundPosition: "center",
             }}
           ></div>
-          <span className="name">Mr Eric Cantona</span>
+          <span className="name">{user.full_name}</span>
           <img
             src={caret}
             style={{

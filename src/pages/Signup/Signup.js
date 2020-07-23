@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import "./Signup.scss";
-import { withRouter } from "react-router-dom";
+import { withRouter, useRouteMatch } from "react-router-dom";
 import { countries } from "../../services/mocks";
 import Loader from "../../components/loader/Loader";
 import { useSnackbar } from "react-simple-snackbar";
 import apiServices from "../../services/apiServices";
 
 export default withRouter(function Signup({ history }) {
+  let match = useRouteMatch();
   const options = {
     position: "top-right",
   };
   const [openSnackbar, closeSnackbar] = useSnackbar(options);
   const [hasError, sethasError] = useState(false);
+  const [hasPasswordError, sethasPasswordError] = useState(false);
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
   const [username, setusername] = useState("");
@@ -21,7 +23,7 @@ export default withRouter(function Signup({ history }) {
   const [phone_number, setphone_number] = useState("");
   const [country_code, setcountry_code] = useState("");
   const [password, setpassword] = useState("");
-  const [password_confirm, setpassword_confirm] = useState("");
+  const [password_confirmation, setpassword_confirmation] = useState("");
   const [frontend_url, setfrontend_url] = useState("");
   const [loading, setloading] = useState(false);
 
@@ -45,6 +47,7 @@ export default withRouter(function Signup({ history }) {
         break;
       case "country":
         setcountry(value);
+        // setcountry_code(countries.find((c) => c.name === value).code);
         break;
       case "country_code":
         setcountry_code(value);
@@ -56,7 +59,7 @@ export default withRouter(function Signup({ history }) {
         setpassword(value);
         break;
       case "confirm_password":
-        setpassword_confirm(value);
+        setpassword_confirmation(value);
         break;
 
       default:
@@ -72,9 +75,9 @@ export default withRouter(function Signup({ history }) {
       email,
       country,
       phone_number,
-      country_code,
       password,
-      password_confirm,
+      password_confirmation,
+      frontend_url: window.location.origin,
     };
     console.log(data);
     if (
@@ -84,17 +87,26 @@ export default withRouter(function Signup({ history }) {
       !email ||
       !country ||
       !password ||
-      !password_confirm
+      !password_confirmation
     ) {
       sethasError(true);
+      sethasPasswordError(false);
       return;
     }
+
+    if (password !== password_confirmation) {
+      sethasPasswordError(true);
+      return;
+    }
+
     setloading(true);
     apiServices
       .signupUser(data)
       .then((res) => {
         console.log(res);
         setloading(false);
+        openSnackbar("Account created successfully. Kindly login", 5000);
+        history.push("/login");
       })
       .catch((err) => {
         console.log({ err });
@@ -143,7 +155,9 @@ export default withRouter(function Signup({ history }) {
           <input
             type="password"
             onChange={(e) => updateForm("password", e.target.value)}
-            className={`w100p bd-input ${hasError && !password && "has-error"}`}
+            className={`w100p bd-input ${
+              (hasError && !password) || hasPasswordError ? "has-error" : ""
+            }`}
           />
         </div>
 
@@ -153,7 +167,9 @@ export default withRouter(function Signup({ history }) {
             type="password"
             onChange={(e) => updateForm("confirm_password", e.target.value)}
             className={`w100p bd-input ${
-              hasError && !password_confirm && "has-error"
+              (hasError && !password_confirmation) || hasPasswordError
+                ? "has-error"
+                : ""
             }`}
           />
         </div>

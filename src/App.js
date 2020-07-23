@@ -10,32 +10,35 @@ import SnackbarProvider from "react-simple-snackbar";
 import AllPackages from "./pages/AllPackages/AllPackages";
 import Profile from "./pages/Profile/Profile";
 import Terms from "./pages/Profile/Terms";
+import AppContextProvider from "./store/appContext";
 
 function App() {
   return (
     <HashRouter>
       <SnackbarProvider>
         <div className="App">
-          <Switch match>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/dashboard/">
-              <Dashboard />
-            </Route>
-            <Route path="/all/">
-              <AllPackages />
-            </Route>
-            <Route path="/profile/">
-              <Profile />
-            </Route>
-            <Route path="/terms/">
-              <Terms />
-            </Route>
-          </Switch>
+          <AppContextProvider>
+            <Switch match>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <Signup />
+              </Route>
+              <Route path="/dashboard/">
+                <Dashboard />
+              </Route>
+              <Route path="/all/">
+                <AllPackages />
+              </Route>
+              <Route path="/profile/">
+                <Profile />
+              </Route>
+              <Route path="/terms/">
+                <Terms />
+              </Route>
+            </Switch>
+          </AppContextProvider>
         </div>
       </SnackbarProvider>
     </HashRouter>

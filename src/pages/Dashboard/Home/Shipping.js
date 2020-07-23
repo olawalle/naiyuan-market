@@ -70,7 +70,7 @@ export default function Shipping() {
                   style={{ height: "200px" }}
                 >
                   <button className="main-btn" onClick={() => setopen(true)}>
-                    Checkout
+                    Ship
                   </button>
                 </td>
               </tr>
