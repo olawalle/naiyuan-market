@@ -17,7 +17,7 @@ export default withRouter(function Nav({ showLogo, history }) {
   const { user } = context;
   const [open, setopen] = useState(false);
   const [show_nav, setshow_nav] = useState(false);
-  const [name, setName] = useState("Dashbaord");
+  const [name, setName] = useState("Dashboard");
 
   const toProfile = () => {
     history.push("/profile");
