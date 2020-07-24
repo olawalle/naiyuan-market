@@ -16,7 +16,7 @@ export default function Shipping() {
     <div className="home">
       <div className="wide">
         <div className="btm-section pt0">
-          <p>Shipping</p>
+          <p>My Packages</p>
           <table className="main-table">
             <thead>
               <tr>
@@ -31,17 +31,16 @@ export default function Shipping() {
             <tbody>
               {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
                 <tr key={`row${i}`}>
-                  <td style={{ width: "30%" }}>
+                  <td style={{ width: "40%" }}>
                     <input type="checkbox" name="" id="" />
                     <span className="no"></span>
                     Deskjet Printers
                     <img
                       src={screen}
-                      height="20"
                       style={{
                         float: "right",
-                        marginRight: "30px",
-                        marginTop: "15px",
+                        // marginRight: "30px",
+                        // marginTop: "15px",
                       }}
                       alt=""
                     />

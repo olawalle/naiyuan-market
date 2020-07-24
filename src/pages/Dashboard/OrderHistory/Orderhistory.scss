@@ -2,8 +2,10 @@
   padding: 60px;
   .header {
     width: 100%;
-    font-size: 20px;
     text-align: left;
+    p {
+      display: inline-block;
+    }
     .form {
       float: right;
       width: 50%;

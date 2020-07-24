@@ -41,11 +41,11 @@ export default withRouter(function Login({ history }) {
       email,
       password,
     };
-    console.log(data);
     if (!email || !password) {
       sethasError(true);
       return;
     }
+    setloading(true);
 
     apiServices
       .userLogin(data)
@@ -73,6 +73,7 @@ export default withRouter(function Login({ history }) {
           <span className="label">Email</span>
           <input
             onChange={(e) => updateForm("email", e.target.value)}
+            defaultValue={email}
             type="text"
             className={`w100p bd-input ${hasError && !email && "has-error"}`}
           />
@@ -81,6 +82,7 @@ export default withRouter(function Login({ history }) {
         <div className="inp mb20">
           <span className="label">Password</span>
           <input
+            defaultValue={password}
             onChange={(e) => updateForm("password", e.target.value)}
             type="password"
             className={`w100p bd-input ${hasError && !password && "has-error"}`}

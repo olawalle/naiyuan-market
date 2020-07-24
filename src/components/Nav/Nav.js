@@ -23,6 +23,12 @@ export default withRouter(function Nav({ showLogo, history }) {
     history.push("/profile");
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    history.push("/login");
+  };
+
   return (
     <div className="nav">
       {showLogo && <img src={logo} alt="" className="logo web" />}
@@ -39,14 +45,16 @@ export default withRouter(function Nav({ showLogo, history }) {
       <div className="activelink">{name}</div>
 
       <div className={`mobile-nav ${show_nav ? "open" : ""} `}>
-        <Avatar />
-        <div style={{ marginTop: "-60px" }}>
-          <NavLinks
-            closeNav={() => setshow_nav(false)}
-            sideOpen={true}
-            history={history}
-            setName={setName}
-          />
+        <div className="main-content">
+          <Avatar />
+          <div style={{ marginTop: "-60px" }}>
+            <NavLinks
+              closeNav={() => setshow_nav(false)}
+              sideOpen={true}
+              history={history}
+              setName={setName}
+            />
+          </div>
         </div>
       </div>
 
@@ -80,7 +88,7 @@ export default withRouter(function Nav({ showLogo, history }) {
               <li className="bb" onClick={toProfile}>
                 Edit profile <img src={edit} className="f-right m15" alt="" />{" "}
               </li>
-              <li>
+              <li onClick={handleLogout}>
                 Logout <img src={logout} className="f-right m15" alt="" />{" "}
               </li>
             </ul>

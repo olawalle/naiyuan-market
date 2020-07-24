@@ -147,6 +147,7 @@ export const NavLinks = ({
         onOpenModal(2);
         return;
       }
+      setactiveIndex_(j);
       setName && setName(linkParent.children[j].text);
       closeNav && closeNav();
       history.push(link);
@@ -175,9 +176,12 @@ export const NavLinks = ({
   return (
     <ul className="links">
       {links.map((link, i) => (
-        <li key={`link${i}`} className={`pointer`} onClick={() => goToLink(i)}>
+        <li key={`link${i}`}>
           <div
-            className={`main-link ${i === activeIndex ? "active-link" : ""}`}
+            onClick={() => goToLink(i)}
+            className={`main-link pointer ${
+              i === activeIndex ? "active-link" : ""
+            }`}
           >
             <span dangerouslySetInnerHTML={{ __html: icons[i] }}></span>
             {sideOpen && <span>{link.text}</span>}
@@ -194,7 +198,7 @@ export const NavLinks = ({
                 return (
                   <div
                     key={`child${i}${j}`}
-                    className={`inner-link ${
+                    className={`inner-link pointer ${
                       j === activeIndex_ ? "active-inner-link" : ""
                     }`}
                     onClick={() => openChild(i, j)}

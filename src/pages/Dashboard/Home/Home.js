@@ -4,12 +4,20 @@ import "./Home.scss";
 import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
 import { withRouter } from "react-router-dom";
+import { useState } from "react";
 
-const Balance = ({ icon }) => {
+const Balance = () => {
+  const [currency, setcurrency] = useState("N");
   return (
     <div className="balance mb12">
-      <span className="title">Wallet Balance</span>
-      <span className="amt">{icon}20,000</span>
+      <span className="title">
+        Wallet Balance{" "}
+        <select onChange={(e) => setcurrency(e.target.value)} name="" id="">
+          <option value="N">N</option>
+          <option value="Y">Y</option>
+        </select>{" "}
+      </span>
+      <span className="amt">{currency}20,000</span>
     </div>
   );
 };
@@ -19,19 +27,24 @@ export default withRouter(function Home({ history }) {
     history.push("/all");
   };
 
+  const toProfile = () => {
+    history.push("/profile");
+  };
+
   return (
     <div className="home">
       <div className="wide">
         <div className="w100p mobile mb30">
-          <Balance icon="N" />
-          <Balance icon="Y" />
+          <Balance />
         </div>
         <div className="top-section">
           <div className="half gradient f-left">
             <div className="heading">
               <p>
                 Hello Mr Mike Erik
-                <span className="f-right red">View Profile</span>
+                <span className="f-right red pointer" onClick={toProfile}>
+                  View Profile
+                </span>
               </p>
             </div>
             <div className="btm">
@@ -52,10 +65,7 @@ export default withRouter(function Home({ history }) {
           </div>
           <div className="half gradient f-right">
             <div className="heading">
-              <p>
-                Todays Exchange Rate
-                <span className="f-right red">View Profile</span>
-              </p>
+              <p>Todays Exchange Rate</p>
             </div>
             <div className="btm">
               <div className="thirds">
@@ -130,10 +140,9 @@ export default withRouter(function Home({ history }) {
       </div>
       <div className="narrow">
         <div className="w100p web">
-          <Balance icon="N" />
-          <Balance icon="Y" />
+          <Balance />
         </div>
-        <img className="badge" src={badge} alt="" />
+        <img className="badge web" src={badge} alt="" />
       </div>
     </div>
   );

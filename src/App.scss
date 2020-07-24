@@ -18,6 +18,9 @@ button {
   height: 40px;
   padding: 0 20px;
   border-radius: 4px;
+  &:focus {
+    outline: none;
+  }
 }
 .main-btn {
   background: #c91f25;
@@ -35,6 +38,10 @@ button {
   border-radius: 4px;
   color: #c91f25;
   background-color: #fff;
+}
+
+.overflow-hide {
+  overflow: hidden !important;
 }
 
 // imputs
@@ -179,6 +186,9 @@ ul.links {
         }
         select {
           border: 1px solid #dfdfdf;
+        }
+        img {
+          height: 40px;
         }
       }
     }

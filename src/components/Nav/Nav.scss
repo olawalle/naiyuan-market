@@ -116,8 +116,8 @@
   @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
     padding: 0 15px;
     .mobile-nav {
-      width: 90%;
-      background-color: #4a0003;
+      width: 100%;
+      background-color: transparent;
       position: fixed;
       top: 0;
       left: 0;
@@ -126,9 +126,14 @@
       transition: linear all 0.3s;
       z-index: 198776656;
       text-align: left;
-      padding: 30px 0;
       &.open {
         display: block;
+      }
+      .main-content {
+        background-color: #4a0003;
+        padding: 30px 0;
+        width: 80%;
+        height: 100vh;
       }
     }
 
@@ -136,19 +141,18 @@
       width: 50px;
       height: 20px;
       position: absolute;
-      left: 0;
-      margin: 50px auto;
+      right: 0;
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
       -o-transform: rotate(0deg);
       transform: rotate(0deg);
-      // -webkit-transition: 0.5s ease-in-out;
-      // -moz-transition: 0.5s ease-in-out;
-      // -o-transition: 0.5s ease-in-out;
-      // transition: 0.5s ease-in-out;
+      -webkit-transition: 0.5s ease-in-out;
+      -moz-transition: 0.5s ease-in-out;
+      -o-transition: 0.5s ease-in-out;
+      transition: 0.5s ease-in-out;
       cursor: pointer;
       float: right;
-      margin: 22px 20px;
+      margin: 22px 0px;
       display: block;
       z-index: 55;
     }
@@ -166,9 +170,9 @@
       -moz-transform: rotate(0deg);
       -o-transform: rotate(0deg);
       transform: rotate(0deg);
-      // -webkit-transition: 0.25s ease-in-out;
-      // -moz-transition: 0.25s ease-in-out;
-      // -o-transition: 0.25s ease-in-out;
+      -webkit-transition: 0.25s ease-in-out;
+      -moz-transition: 0.25s ease-in-out;
+      -o-transition: 0.25s ease-in-out;
       background: #4a0003;
     }
     #nav-icon1.open {
@@ -177,7 +181,7 @@
       span {
         // background-color: #fff;
         height: 2px;
-        background-color: #fff !important;
+        // background-color: #fff !important;
       }
     }
 
@@ -187,7 +191,6 @@
 
     #nav-icon1 span:nth-child(2) {
       top: 8px;
-      left: 8px;
     }
 
     #nav-icon1 span:nth-child(3) {
@@ -218,13 +221,13 @@
       display: inline-block;
       height: 100%;
       line-height: 60px;
-      width: calc(100% - 100px);
-      margin-left: 50px;
+      width: calc(100% - 50px);
       font-size: 16px;
       font-weight: 600;
+      text-align: left;
     }
     .notif {
-      left: 0;
+      left: -40px;
       width: 50px;
     }
   }

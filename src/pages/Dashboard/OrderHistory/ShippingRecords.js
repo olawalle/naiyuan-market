@@ -6,7 +6,7 @@ export default withRouter(function ShippingRecords({ history }) {
   return (
     <div className="orderHistory">
       <div className="header">
-        Shipping Records
+        <p>Shipping Records</p>
         <div className="form f-right">
           <input type="text" />
           <select name="" id="">
@@ -18,7 +18,7 @@ export default withRouter(function ShippingRecords({ history }) {
         </div>
       </div>
 
-      <div className="gradient w100p mt30">
+      <div className="gradient w100p mt15">
         <table className="white-table">
           <thead>
             <tr>

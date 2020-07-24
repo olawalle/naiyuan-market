@@ -33,4 +33,11 @@
       top: 6px;
     }
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    padding: 100px 15px;
+    .login-box {
+      width: 100%;
+      padding: 40px;
+    }
+  }
 }

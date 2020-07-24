@@ -6,6 +6,7 @@ import screen from "../../../assets/screen.png";
 export default function SourceProducts() {
   return (
     <div className="source-products">
+      <p className="header">Product Sourcing</p>
       <div className="top gradient">
         <div className="half">
           <div className="inp">
