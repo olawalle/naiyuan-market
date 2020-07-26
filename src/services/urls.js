@@ -3,3 +3,5 @@ export const baseUrl =
 
 export const signupUrl = `${baseUrl}auth/signup-email`;
 export const loginUrl = `${baseUrl}auth/login`;
+export const orderUrl = `${baseUrl}order`;
+export const ratesUrl = `${baseUrl}rates`;

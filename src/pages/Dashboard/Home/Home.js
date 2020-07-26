@@ -7,14 +7,14 @@ import { withRouter } from "react-router-dom";
 import { useState } from "react";
 
 const Balance = () => {
-  const [currency, setcurrency] = useState("N");
+  const [currency, setcurrency] = useState("₦");
   return (
     <div className="balance mb12">
       <span className="title">
         Wallet Balance{" "}
         <select onChange={(e) => setcurrency(e.target.value)} name="" id="">
-          <option value="N">N</option>
-          <option value="Y">Y</option>
+          <option value="₦">₦</option>
+          <option value="¥">¥</option>
         </select>{" "}
       </span>
       <span className="amt">{currency}20,000</span>
@@ -22,7 +22,7 @@ const Balance = () => {
   );
 };
 
-export default withRouter(function Home({ history }) {
+export default withRouter(function Home({ history, rates }) {
   const toAll = () => {
     history.push("/all");
   };
@@ -68,23 +68,17 @@ export default withRouter(function Home({ history }) {
               <p>Todays Exchange Rate</p>
             </div>
             <div className="btm">
-              <div className="thirds">
-                <p className="red">Naira/Yuan</p>
-                <span>445.00/6.123</span>
-              </div>
-              <div className="thirds">
-                <p className="red">Naira/Yuan</p>
-                <span>445.00/6.123</span>
-              </div>
-              <div className="thirds">
-                <p className="red">Naira/Yuan</p>
-                <span>445.00/6.123</span>
-              </div>
+              {rates.map((rate) => (
+                <div key={rate.pair} className="thirds">
+                  <p className="red">{rate.pair}</p>
+                  <span>{rate.rate}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
         <div className="btm-section">
-          <p>My Packages</p>
+          <p className="title">My Packages</p>
           <table className="main-table">
             <thead>
               <tr>

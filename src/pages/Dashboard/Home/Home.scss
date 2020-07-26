@@ -24,12 +24,12 @@
             font-size: 14px;
             text-align: left;
             .red {
-              font-size: 12px;
+              font-size: 13px;
             }
           }
         }
         .btm {
-          font-size: 12px;
+          font-size: 13px;
           text-align: left;
           padding: 25px 25px 35px;
           height: 90px;
@@ -38,6 +38,7 @@
             width: 33.33%;
             display: inline-block;
             font-size: 14px;
+            white-space: nowrap;
             p {
               font-weight: 600;
               margin: 0 0 5px;
@@ -57,7 +58,7 @@
             }
             .copy {
               float: right;
-              font-size: 12px;
+              font-size: 13px;
               color: #c91f25;
               cursor: pointer;
               font-style: italic;
@@ -95,10 +96,12 @@
       top: 20px;
       left: 20px;
       font-size: 14px;
+      width: 90%;
       select {
         border: 0;
         background: transparent;
-        color: #c3c3c3;
+        color: #e2e2e2;
+        float: right;
       }
     }
     .amt {
@@ -119,6 +122,14 @@
         .half {
           width: 100%;
           margin-bottom: 20px;
+        }
+      }
+      .btm-section {
+        padding-top: 30px;
+        text-align: left;
+        .title {
+          margin-top: 40px;
+          float: left;
         }
       }
     }

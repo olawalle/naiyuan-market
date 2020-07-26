@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dashboard.scss";
 
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -17,12 +17,14 @@ import ShippingRecords from "./OrderHistory/ShippingRecords";
 import PaySupplier from "./PaySupplier/PaySupplier";
 import Tracking from "./Tracking/Tracking";
 import Support from "./Support/Support";
+import apiServices from "../../services/apiServices";
 
 export default function Dashboard() {
   let match = useRouteMatch();
   const [sideOpen, setsideOpen] = useState(true);
   const [open, setopen] = useState(false);
   const [makePayment, setmakePayment] = useState(false);
+  const [rates, setrates] = useState([]);
 
   const onOpenModal = (n) => {
     setopen(true);
@@ -32,6 +34,17 @@ export default function Dashboard() {
   const onCloseModal = () => {
     setopen(false);
   };
+
+  useEffect(() => {
+    apiServices
+      .getRates()
+      .then((res) => {
+        setrates(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="dashboard">
@@ -90,7 +103,7 @@ export default function Dashboard() {
           <Nav onOpenModal={onOpenModal} />
           <Switch>
             <Route exact path={`${match.path}`}>
-              <Home />
+              <Home rates={rates} />
             </Route>
 
             <Route path={`${match.path}source-products`}>

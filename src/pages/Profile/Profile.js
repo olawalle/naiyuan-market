@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Profile.scss";
 import { withRouter } from "react-router-dom";
 import Nav from "../../components/Nav/Nav";
 import Avatar from "../../components/Avatar/Avatar";
+import { appContext } from "../../store/appContext";
 
 export default withRouter(function Profile({ history }) {
+  const context = useContext(appContext);
+  const { user } = context;
+
+  const [updatedData, setupdatedData] = useState({});
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
+
+  const updateForm = (key, value) => {
+    let data = {
+      ...updatedData,
+    };
+    data[key] = value;
+    setupdatedData(data);
+  };
+
   const toDash = () => {
     history.push("/dashboard/");
   };
@@ -29,22 +47,42 @@ export default withRouter(function Profile({ history }) {
 
           <div className="inp mb20 f-left">
             <span className="label">Full name</span>
-            <input type="text" className="w100p bd-input" />
+            <input
+              defaultValue={user.full_name}
+              type="text"
+              className="w100p bd-input"
+              onChange={(e) => updateForm("full_name", e.target.value)}
+            />
           </div>
 
           <div className="inp mb20 f-right">
             <span className="label">Usename</span>
-            <input type="text" className="w100p bd-input" />
+            <input
+              defaultValue={user.username}
+              type="text"
+              className="w100p bd-input"
+              onChange={(e) => updateForm("username", e.target.value)}
+            />
           </div>
 
           <div className="inp mb20 f-left">
             <span className="label">Phone No.</span>
-            <input type="text" className="w100p bd-input" />
+            <input
+              defaultValue={user.phone}
+              type="text"
+              className="w100p bd-input"
+              onChange={(e) => updateForm("phone", e.target.value)}
+            />
           </div>
 
           <div className="inp mb20 f-right">
             <span className="label">Email Address</span>
-            <input type="text" className="w100p bd-input" />
+            <input
+              defaultValue={user.email}
+              type="text"
+              className="w100p bd-input"
+              onChange={(e) => updateForm("email", e.target.value)}
+            />
           </div>
 
           <div className="inp mb20 f-left">
@@ -54,7 +92,12 @@ export default withRouter(function Profile({ history }) {
 
           <div className="inp mb20 f-right">
             <span className="label">Country</span>
-            <input type="text" className="w100p bd-input" />
+            <input
+              defaultValue={user.country}
+              type="text"
+              className="w100p bd-input"
+              onChange={(e) => updateForm("country", e.target.value)}
+            />
           </div>
           <div className="reset">
             <p>Reset Password</p>

@@ -72,10 +72,10 @@ export default withRouter(function Login({ history }) {
         <div className="inp mb20">
           <span className="label">Email</span>
           <input
-            onChange={(e) => updateForm("email", e.target.value)}
             defaultValue={email}
             type="text"
             className={`w100p bd-input ${hasError && !email && "has-error"}`}
+            onChange={(e) => updateForm("email", e.target.value)}
           />
         </div>
 

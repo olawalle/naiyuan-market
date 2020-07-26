@@ -17,7 +17,24 @@ let userLogin = (data) => {
   });
 };
 
+let postOrder = (data) => {
+  return axios({
+    method: "post",
+    url: urls.orderUrl,
+    data,
+  });
+};
+
+let getRates = () => {
+  return axios({
+    method: "get",
+    url: urls.ratesUrl,
+  });
+};
+
 export default {
   signupUser,
   userLogin,
+  postOrder,
+  getRates,
 };

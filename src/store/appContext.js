@@ -23,6 +23,7 @@ export default class AppContextProvider extends Component {
       updated_at: "2020-07-20 14:35:53",
       username: "",
     },
+    cart: [],
   };
 
   componentWillMount() {
@@ -56,18 +57,29 @@ export default class AppContextProvider extends Component {
     this.setState({ user });
   };
 
+  updateCart = (item) => {
+    this.setState({ cart: [...this.state.cart, item] });
+  };
+
+  removeItem = (j) => {
+    let items = this.state.cart.filter((item, i) => i !== j);
+    this.setState({ cart: items });
+  };
+
   updateLoggedInStatus = (status) => {
     this.setState({ isLoggedIn: status });
   };
 
   render() {
-    const { updateUser, updateLoggedInStatus } = this;
+    const { updateUser, updateLoggedInStatus, updateCart, removeItem } = this;
     return (
       <appContext.Provider
         value={{
           ...this.state,
           updateUser,
           updateLoggedInStatus,
+          updateCart,
+          removeItem,
         }}
       >
         {this.props.children}

@@ -59,7 +59,7 @@ textarea {
 }
 .inp {
   .label {
-    font-size: 12px;
+    font-size: 13px;
     float: left;
   }
   .bd-input {
@@ -81,8 +81,10 @@ textarea {
 ul.links {
   padding: 0;
   margin: 50px 0;
+  height: 80vh;
+  overflow: auto;
   li {
-    font-size: 12px;
+    font-size: 13px;
     color: #aaaaaa;
     // text-overflow: ellipsis;
     transition: linear all 0.1s;
@@ -160,7 +162,7 @@ ul.links {
     tr {
       th {
         color: #fff;
-        font-size: 12px;
+        font-size: 13px;
         height: 40px;
         padding-left: 20px;
         border: 0;
@@ -175,7 +177,7 @@ ul.links {
       td {
         color: #5e5e5e;
         padding-left: 20px;
-        font-size: 12px;
+        font-size: 13px;
         height: 50px;
         line-height: 50px;
         .no {
@@ -206,7 +208,7 @@ ul.links {
       border-bottom: 1px solid #f1f1f1;
       th {
         color: #000;
-        font-size: 12px;
+        font-size: 13px;
         height: 40px;
         padding-left: 20px;
         border: 0;
@@ -221,7 +223,7 @@ ul.links {
       td {
         color: #5e5e5e;
         padding-left: 20px;
-        font-size: 12px;
+        font-size: 13px;
         height: 50px;
         line-height: 50px;
         .no {
@@ -338,7 +340,7 @@ ul.links {
   }
   .amount {
     .title {
-      font-size: 12px;
+      font-size: 13px;
       display: block;
       color: #444141;
     }
