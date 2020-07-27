@@ -11,6 +11,7 @@ import { withRouter } from "react-router-dom";
 import { NavLinks } from "../Sidebar/Sidebar";
 import Avatar from "../Avatar/Avatar";
 import { appContext } from "../../store/appContext";
+import { Modal } from "react-responsive-modal";
 
 export default withRouter(function Nav({ showLogo, history }) {
   const context = useContext(appContext);
@@ -18,9 +19,14 @@ export default withRouter(function Nav({ showLogo, history }) {
   const [open, setopen] = useState(false);
   const [show_nav, setshow_nav] = useState(false);
   const [name, setName] = useState("Dashboard");
+  const [openNotif, setopenNotif] = useState(false);
 
   const toProfile = () => {
     history.push("/profile");
+  };
+
+  const onCloseModal = () => {
+    setopenNotif(false);
   };
 
   const handleLogout = () => {
@@ -58,8 +64,43 @@ export default withRouter(function Nav({ showLogo, history }) {
         </div>
       </div>
 
+      <Modal open={openNotif} onClose={onCloseModal} center>
+        <div className="gradient t-center o-hidden notif-modal">
+          <p className="heading t-center">Notifications</p>
+          <ul>
+            <li>
+              <p className="heading_">Tracking number</p>
+              <p className="texts">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
+                reiciendis possimus quisquam labore rerum porro eveniet
+                eligendi, pariatur sit fugit accusantium eos, temporibus quod
+                inventore a voluptatem odio magnam dolorum?
+              </p>
+            </li>
+            <li>
+              <p className="heading_">Tracking number</p>
+              <p className="texts">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
+                reiciendis possimus quisquam labore rerum porro eveniet
+                eligendi, pariatur sit fugit accusantium eos, temporibus quod
+                inventore a voluptatem odio magnam dolorum?
+              </p>
+            </li>
+            <li>
+              <p className="heading_">Tracking number</p>
+              <p className="texts">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
+                reiciendis possimus quisquam labore rerum porro eveniet
+                eligendi, pariatur sit fugit accusantium eos, temporibus quod
+                inventore a voluptatem odio magnam dolorum?
+              </p>
+            </li>
+          </ul>
+        </div>
+      </Modal>
+
       <div className="icns">
-        <div className="notif">
+        <div className="notif pointer" onClick={() => setopenNotif(true)}>
           <img src={notif} alt="" />
           <span>12</span>
         </div>

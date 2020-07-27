@@ -100,4 +100,27 @@
       line-height: 22px;
     }
   }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    .header {
+      padding: 40px 20px;
+      height: 120px;
+      .left {
+        width: 100%;
+      }
+    }
+    .profile-content {
+      padding: 20px;
+      .wide {
+        width: 100%;
+        height: auto;
+        .inp {
+          width: 100%;
+        }
+      }
+      .narrow {
+        width: 100%;
+        margin-top: 30px;
+      }
+    }
+  }
 }

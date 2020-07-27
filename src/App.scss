@@ -88,7 +88,7 @@ textarea {
 ul.links {
   padding: 0;
   margin: 50px 0;
-  height: 80vh;
+  height: 70vh;
   overflow: auto;
   li {
     font-size: 13px;
@@ -318,6 +318,33 @@ ul.links {
 }
 
 // modals
+.notif-modal {
+  width: 600px;
+  padding: 0 0 20px;
+  text-align: left;
+  .heading {
+    font-size: 16px;
+    color: #411012;
+    border-bottom: 1px solid #f0ebeb;
+    padding: 20px;
+    margin: 0;
+  }
+  ul {
+    padding: 0 40px;
+    li {
+      list-style: none;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      .heading_ {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .texts {
+        font-size: 14px;
+      }
+    }
+  }
+}
 .placement-modal {
   width: 500px;
   padding: 0 0 20px;
