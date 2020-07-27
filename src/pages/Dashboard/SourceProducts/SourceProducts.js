@@ -1,53 +1,66 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./SourceProducts.scss";
 
 import screen from "../../../assets/screen.png";
 import apiServices from "../../../services/apiServices";
 import { appContext } from "../../../store/appContext";
+import { mainUrl } from "../../../services/urls";
+import Loader from "../../../components/loader/Loader";
+import { useSnackbar } from "react-simple-snackbar";
 
 export default function SourceProducts() {
   const context = useContext(appContext);
-  const { updateCart, removeItem, cart } = context;
+  const options = {
+    position: "top-right",
+  };
+  const [openSnackbar, closeSnackbar] = useSnackbar(options);
+  const { updateCart, removeItem, cart, clearCart } = context;
   const [orderData, setorderData] = useState({
-    website_id: "",
-    url: "",
+    requested_date: "",
+    picture: [],
     quantity: "",
     description: "",
-    amount: "",
-    dateNeeded: "",
   });
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
+  const [uploadingImage, setuploadingImage] = useState(false);
 
   const addToCart = () => {
-    const {
-      website_id,
-      url,
-      quantity,
-      description,
-      amount,
-      dateNeeded,
-    } = orderData;
+    const { quantity, description, requested_date, picture } = orderData;
     let data = {
-      website_id,
-      url,
+      picture,
       quantity,
       description,
-      amount,
-      dateNeeded,
+      requested_date,
     };
     updateCart(data);
     setorderData({
-      website_id: "",
-      url: "",
+      requested_date: "",
+      picture: [],
       quantity: "",
       description: "",
-      amount: "",
-      dateNeeded: "",
     });
   };
 
+  // const getBase64Image = (file, callback) => {
+  //   const reader = new FileReader();
+
+  //   reader.addEventListener("load", () => callback(reader.result));
+
+  //   reader.readAsDataURL(file);
+  // };
+
+  // const b64toBlob = (b64Data) => {
+  //   const url = b64Data;
+  //   let result = "";
+  //   fetch(url).then((res) => {
+  //     result = res.blob();
+  //     return result;
+  //   });
+  // };
+
   const updateForm = (key, value) => {
+    console.log({ key, value });
     let data = {
       ...orderData,
     };
@@ -57,6 +70,48 @@ export default function SourceProducts() {
 
   const deleteItem = (i) => {
     removeItem(i);
+  };
+
+  const checkout = () => {
+    console.log(cart);
+    let data = cart.map((itm) => {
+      return {
+        ...itm,
+        picture: JSON.stringify(itm.picture),
+      };
+    });
+    setloading(true);
+    data.map((item) => {
+      apiServices
+        .postProcurement(item)
+        .then((res) => {
+          console.log(res);
+          openSnackbar("Order placed sucessfully", 5000);
+          clearCart();
+          setloading(false);
+        })
+        .catch((err) => {
+          console.log({ err });
+          setloading(false);
+        });
+    });
+  };
+
+  const uploadPhoto = (file) => {
+    let data = new FormData();
+    data.append("picture", file);
+    setuploadingImage(true);
+    apiServices
+      .uploadPic(data)
+      .then((res) => {
+        setuploadingImage(false);
+        openSnackbar("Image uploaded sucessfully", 5000);
+        updateForm("picture", [...orderData.picture, res.data.picture]);
+      })
+      .catch((err) => {
+        setuploadingImage(false);
+        console.log(err);
+      });
   };
 
   return (
@@ -74,6 +129,7 @@ export default function SourceProducts() {
               className={`w100p border-inp ${
                 hasError && !orderData.description && "has-error"
               }`}
+              value={orderData.description}
               onChange={(e) => updateForm("description", e.target.value)}
             ></textarea>
           </div>
@@ -86,6 +142,7 @@ export default function SourceProducts() {
               className={`w100p border-inp ${
                 hasError && !orderData.quantity && "has-error"
               }`}
+              value={orderData.quantity}
               onChange={(e) => updateForm("quantity", e.target.value)}
             />
           </div>
@@ -96,17 +153,33 @@ export default function SourceProducts() {
             <input
               type="date"
               className={`w100p border-inp ${
-                hasError && !orderData.dateNeeded && "has-error"
+                hasError && !orderData.requested_date && "has-error"
               }`}
-              onChange={(e) => updateForm("dateNeeded", e.target.value)}
+              value={orderData.requested_date}
+              onChange={(e) => updateForm("requested_date", e.target.value)}
             />
           </div>
         </div>
         <p className="upload">
           <span>Upload product Picture</span>
-          <button className="white-btn">Add file</button>
+          <button className="white-btn" disabled={uploadingImage}>
+            <input
+              onChange={(e) => {
+                let file = e.target.files[0];
+                uploadPhoto(file);
+              }}
+              type="file"
+              name=""
+              id=""
+            />
+            <span>{uploadingImage ? "Uploading..." : "Add file"}</span>
+          </button>
           <br />
-          <button onClick={addToCart} className="main-btn">
+          <button
+            disabled={uploadingImage}
+            onClick={addToCart}
+            className="main-btn"
+          >
             Add to cart
           </button>
         </p>{" "}
@@ -123,7 +196,12 @@ export default function SourceProducts() {
           return (
             <div key={`item${i}`} className="item-details">
               <div className="item">
-                <img src={screen} alt="" className="img" />
+                <div className="img">
+                  <img
+                    src={`${mainUrl}/image/${item.picture[0].path}`}
+                    alt=""
+                  />
+                </div>
                 <div className="details">
                   <p className="name">{item.name || "---"}</p>
                   <p className="desc">{item.description}</p>
@@ -145,35 +223,63 @@ export default function SourceProducts() {
                   />
                 </div>
               </div>
-              <div className="date">{item.dateNeeded}</div>
+              <div className="date">{item.requested_date}</div>
             </div>
           );
         })}
-        <div className="sub-footer">
-          <div className="item"></div>
-          <div className="qty">
-            <p>Total items</p>
-            <p>Tax</p>
-            <p>Sourcing fee</p>
-          </div>
-          <div className="date">
-            <p>{cart.length} Item(s)</p>
-            <p>
-              20.00 <span className="grey">USD</span>
-            </p>
-            <p>
-              20,000.00 <span className="grey">USD</span>
-            </p>
-          </div>
-        </div>
-        <div className="footer">
-          <div className="item"></div>
-          <div className="qty">GRAND TOTAL</div>
-          <div className="date">
-            <b>2,200</b> <span className="grey">USD</span>
-          </div>
-        </div>
+        {cart.length ? (
+          <>
+            <div className="sub-footer">
+              <div className="item"></div>
+              <div className="qty">
+                <p>Total items</p>
+                <p>Tax</p>
+                <p>Sourcing fee</p>
+              </div>
+              <div className="date">
+                <p>
+                  {cart.reduce((sum, item) => {
+                    sum += parseFloat(item.quantity);
+                    return sum;
+                  }, 0)}{" "}
+                  Item(s)
+                </p>
+                <p>
+                  20.00 <span className="grey">USD</span>
+                </p>
+                <p>
+                  20,000.00 <span className="grey">USD</span>
+                </p>
+              </div>
+            </div>
+            <div className="footer">
+              <div className="item"></div>
+              <div className="qty">GRAND TOTAL</div>
+              <div className="date">
+                <b>2,200</b> <span className="grey">USD</span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p>There are no items in your cart</p>
+        )}
       </div>
+      {cart.length ? (
+        <div className="t-right mb60">
+          <button
+            style={{
+              position: loading ? "relative" : "",
+              top: loading ? "-13px" : "",
+            }}
+            className="bd-btn"
+          >
+            Save
+          </button>
+          <button onClick={() => checkout()} className="main-btn ml15">
+            {loading ? <Loader /> : "Checkout"}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

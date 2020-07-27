@@ -53,8 +53,10 @@ export default withRouter(function Login({ history }) {
         console.log(res);
         updateUser(res.data.user);
         sessionStorage.setItem("naiyuan_token", res.data.token);
-        setloading(false);
-        history.push("/dashboard");
+        setTimeout(() => {
+          setloading(false);
+          history.push("/dashboard");
+        }, 500);
       })
       .catch((err) => {
         console.log({ err });

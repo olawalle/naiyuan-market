@@ -30,7 +30,7 @@ export default class AppContextProvider extends Component {
     let state = JSON.parse(localStorage.getItem("naiyuanStore"));
     this.setState(state);
     let token = sessionStorage.getItem("naiyuan_token");
-    axios.defaults.headers.common["Authorization"] = `${token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setTimeout(() => {
       this.setState({ loading: false });
     }, 1000);
@@ -46,11 +46,29 @@ export default class AppContextProvider extends Component {
   }
 
   logout = () => {
-    this.setState({});
-    setTimeout(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    }, 1000);
+    this.setState({
+      isLoggedIn: false,
+      user: {
+        balance: null,
+        country: "",
+        country_code: "",
+        created_at: "",
+        email: "",
+        first_name: "",
+        full_name: "",
+        id: null,
+        is_active: null,
+        is_locked: null,
+        last_name: "",
+        phone: "",
+        phone_number: "",
+        role: null,
+        updated_at: "2020-07-20 14:35:53",
+        username: "",
+      },
+      cart: [],
+    });
+    sessionStorage.clear();
   };
 
   updateUser = (user) => {
@@ -59,6 +77,10 @@ export default class AppContextProvider extends Component {
 
   updateCart = (item) => {
     this.setState({ cart: [...this.state.cart, item] });
+  };
+
+  clearCart = () => {
+    this.setState({ cart: [] });
   };
 
   removeItem = (j) => {
@@ -71,7 +93,13 @@ export default class AppContextProvider extends Component {
   };
 
   render() {
-    const { updateUser, updateLoggedInStatus, updateCart, removeItem } = this;
+    const {
+      updateUser,
+      updateLoggedInStatus,
+      updateCart,
+      clearCart,
+      removeItem,
+    } = this;
     return (
       <appContext.Provider
         value={{
@@ -79,6 +107,7 @@ export default class AppContextProvider extends Component {
           updateUser,
           updateLoggedInStatus,
           updateCart,
+          clearCart,
           removeItem,
         }}
       >

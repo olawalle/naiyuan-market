@@ -10,7 +10,10 @@
 .mobile {
   display: none;
 }
-
+.Snackbar_snackbar-wrapper-bottom-right__8wQeQ,
+.Snackbar_snackbar-wrapper-top-right__2CAmf {
+  z-index: 1234545456656 !important;
+}
 // buttons
 button {
   border: 0;
@@ -20,6 +23,10 @@ button {
   border-radius: 4px;
   &:focus {
     outline: none;
+  }
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
   }
 }
 .main-btn {

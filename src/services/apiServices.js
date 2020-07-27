@@ -25,10 +25,33 @@ let postOrder = (data) => {
   });
 };
 
+let getOrders = () => {
+  return axios({
+    method: "get",
+    url: urls.orderUrl,
+  });
+};
+
 let getRates = () => {
   return axios({
     method: "get",
     url: urls.ratesUrl,
+  });
+};
+
+let postProcurement = (data) => {
+  return axios({
+    method: "post",
+    url: urls.procurementsUrl,
+    data,
+  });
+};
+
+let uploadPic = (data) => {
+  return axios({
+    method: "post",
+    url: urls.picturesUrl,
+    data,
   });
 };
 
@@ -37,4 +60,7 @@ export default {
   userLogin,
   postOrder,
   getRates,
+  postProcurement,
+  uploadPic,
+  getOrders,
 };

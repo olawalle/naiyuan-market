@@ -44,6 +44,15 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
+
+    apiServices
+      .getOrders()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
