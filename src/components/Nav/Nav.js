@@ -15,7 +15,7 @@ import { Modal } from "react-responsive-modal";
 
 export default withRouter(function Nav({ showLogo, history }) {
   const context = useContext(appContext);
-  const { user } = context;
+  const { user, notifications } = context;
   const [open, setopen] = useState(false);
   const [show_nav, setshow_nav] = useState(false);
   const [name, setName] = useState("Dashboard");
@@ -68,33 +68,12 @@ export default withRouter(function Nav({ showLogo, history }) {
         <div className="gradient t-center o-hidden notif-modal">
           <p className="heading t-center">Notifications</p>
           <ul>
-            <li>
-              <p className="heading_">Tracking number</p>
-              <p className="texts">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                reiciendis possimus quisquam labore rerum porro eveniet
-                eligendi, pariatur sit fugit accusantium eos, temporibus quod
-                inventore a voluptatem odio magnam dolorum?
-              </p>
-            </li>
-            <li>
-              <p className="heading_">Tracking number</p>
-              <p className="texts">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                reiciendis possimus quisquam labore rerum porro eveniet
-                eligendi, pariatur sit fugit accusantium eos, temporibus quod
-                inventore a voluptatem odio magnam dolorum?
-              </p>
-            </li>
-            <li>
-              <p className="heading_">Tracking number</p>
-              <p className="texts">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                reiciendis possimus quisquam labore rerum porro eveniet
-                eligendi, pariatur sit fugit accusantium eos, temporibus quod
-                inventore a voluptatem odio magnam dolorum?
-              </p>
-            </li>
+            {notifications.map((notif, i) => (
+              <li key={`notif${i}`}>
+                <p className="heading_">{notif.title}</p>
+                <p className="texts">{notif.body}</p>
+              </li>
+            ))}
           </ul>
         </div>
       </Modal>
@@ -102,7 +81,7 @@ export default withRouter(function Nav({ showLogo, history }) {
       <div className="icns">
         <div className="notif pointer" onClick={() => setopenNotif(true)}>
           <img src={notif} alt="" />
-          <span>12</span>
+          {notifications.length ? <span>{notifications.length}</span> : null}
         </div>
 
         <div className="web dropdown-wrap">

@@ -6,10 +6,11 @@ import apiServices from "../../services/apiServices";
 import Loader from "../../components/loader/Loader";
 import { useSnackbar } from "react-simple-snackbar";
 import { appContext } from "../../store/appContext";
+import axios from "axios";
 
 export default withRouter(function Login({ history }) {
   const context = useContext(appContext);
-  const { user, updateUser } = context;
+  const { user, updateUser, setTnx } = context;
   const options = {
     position: "top-right",
   };
@@ -21,6 +22,10 @@ export default withRouter(function Login({ history }) {
 
   const toSignup = () => {
     history.push("/signup");
+  };
+
+  const toForgot = () => {
+    history.push("/forgot-password");
   };
 
   const updateForm = (key, value) => {
@@ -50,12 +55,32 @@ export default withRouter(function Login({ history }) {
     apiServices
       .userLogin(data)
       .then((res) => {
-        console.log(res);
         updateUser(res.data.user);
         sessionStorage.setItem("naiyuan_token", res.data.token);
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.data.token}`;
         setTimeout(() => {
           setloading(false);
           history.push("/dashboard");
+          apiServices
+            .getProcurements()
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          apiServices
+            .getTnxs()
+            .then((tnx) => {
+              console.log({ tnx });
+              setTnx(tnx.data.transactions.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }, 500);
       })
       .catch((err) => {
@@ -91,7 +116,9 @@ export default withRouter(function Login({ history }) {
           />
         </div>
 
-        <div className="forgot red f-right">Forgot password?</div>
+        <div className="forgot red f-right pointer" onClick={toForgot}>
+          Forgot password?
+        </div>
 
         <button className="w100p main-btn mt12" onClick={login}>
           {!loading ? <span>LOG IN</span> : <Loader />}

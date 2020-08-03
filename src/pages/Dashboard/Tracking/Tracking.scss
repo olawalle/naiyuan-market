@@ -134,6 +134,11 @@
     }
     .box {
       padding: 30px 12px;
+      overflow: auto;
+      .indicator,
+      .orders {
+        width: 600px;
+      }
     }
   }
 }

@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Home.scss";
 
 import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
 import ShippingModal from "../../../components/ShippingModal/ShippingModal";
+import { appContext } from "../../../store/appContext";
+import { useSnackbar } from "react-simple-snackbar";
 
 export default function Shipping() {
+  const context = useContext(appContext);
+  const { orders, websites } = context;
+  const options = {
+    position: "top-right",
+  };
+  const [openSnackbar, closeSnackbar] = useSnackbar(options);
+
   const [open, setopen] = useState(false);
+  const [pickedItems, setpickedItems] = useState([]);
 
   const onCloseModal = () => {
     setopen(false);
+  };
+
+  const updateItems = (i) => {
+    pickedItems.includes(i)
+      ? setpickedItems(pickedItems.filter((j) => j !== i))
+      : setpickedItems([...pickedItems, i]);
   };
 
   return (
@@ -21,22 +37,38 @@ export default function Shipping() {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" name="" id="" /> Item
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    onChange={(e) => {
+                      e.target.checked
+                        ? setpickedItems([...Array(orders.length).keys()])
+                        : setpickedItems([]);
+                    }}
+                  />{" "}
+                  Item
                 </th>
                 <th>Supplier</th>
-                <th>Qty</th>
+                <th>Status</th>
                 <th>Total Cost</th>
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
+              {orders.map((row, i) => (
                 <tr key={`row${i}`}>
                   <td style={{ width: "40%" }}>
-                    <input type="checkbox" name="" id="" />
+                    <input
+                      type="checkbox"
+                      checked={pickedItems.includes(i)}
+                      onChange={() => updateItems(i)}
+                      name=""
+                      id=""
+                    />
                     <span className="no"></span>
                     Deskjet Printers
                     <img
-                      src={screen}
+                      src={row.picture_url}
                       style={{
                         float: "right",
                         // marginRight: "30px",
@@ -45,20 +77,22 @@ export default function Shipping() {
                       alt=""
                     />
                   </td>
-                  <td>Hp</td>
+                  <td>{row.website.name}</td>
                   <td>
                     <div
                       className={`dot ${
-                        !(i % 2)
+                        row.status === "pending"
                           ? "bg-yellow"
-                          : !(i % 3)
+                          : row.status === "cancelled"
                           ? "bg-red"
                           : "bg-green"
                       }`}
                     ></div>
-                    Shipped
+                    {row.status}
                   </td>
-                  <td>$12,100.00</td>
+                  <td>
+                    $ {(row.amount * parseFloat(row.quantity)).toLocaleString()}
+                  </td>
                 </tr>
               ))}
 
@@ -68,7 +102,17 @@ export default function Shipping() {
                   className="t-right pr20"
                   style={{ height: "200px" }}
                 >
-                  <button className="main-btn" onClick={() => setopen(true)}>
+                  <button
+                    className="main-btn"
+                    onClick={() => {
+                      pickedItems.length
+                        ? setopen(true)
+                        : openSnackbar(
+                            "Please select items to be shipped",
+                            5000
+                          );
+                    }}
+                  >
                     Ship
                   </button>
                 </td>
@@ -81,7 +125,12 @@ export default function Shipping() {
         <img className="badge" src={badge} alt="" />
       </div>
 
-      <ShippingModal isOpen={open} onCloseModal={onCloseModal} />
+      <ShippingModal
+        orders={orders}
+        isOpen={open}
+        pickedItems={pickedItems}
+        onCloseModal={onCloseModal}
+      />
     </div>
   );
 }

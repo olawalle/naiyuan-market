@@ -23,7 +23,8 @@
       .inp {
         width: 80%;
         float: left;
-        input {
+        input,
+        select {
           height: 40px;
         }
         textarea {

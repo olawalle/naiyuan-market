@@ -5,9 +5,35 @@ import badge from "../../../assets/Image.svg";
 import screen from "../../../assets/screen.png";
 import { withRouter } from "react-router-dom";
 import { useState } from "react";
+import { useContext } from "react";
+import { appContext } from "../../../store/appContext";
+import { useEffect } from "react";
+import apiServices from "../../../services/apiServices";
 
-const Balance = () => {
+export const Balance = () => {
+  const context = useContext(appContext);
+  const { user, rates, setTnx } = context;
   const [currency, setcurrency] = useState("₦");
+
+  useEffect(() => {
+    apiServices
+      .getTnxs()
+      .then((tnx) => {
+        setTnx(tnx.data.transactions.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const returnBalance = () => {
+    let yuanRate = rates.find((r) => r.pair === "Naira/Yuan");
+    let yuanRate_ = yuanRate ? parseFloat(yuanRate.rate.split("/")[1]) : null;
+    let yuanBalance = user.balance * yuanRate_;
+    let val = currency === "₦" ? user.balance : yuanBalance;
+    return val.toLocaleString();
+  };
+
   return (
     <div className="balance mb12">
       <span className="title">
@@ -17,12 +43,16 @@ const Balance = () => {
           <option value="¥">¥</option>
         </select>{" "}
       </span>
-      <span className="amt">{currency}20,000</span>
+      <span className="amt">
+        {currency} {returnBalance()}
+      </span>
     </div>
   );
 };
 
-export default withRouter(function Home({ history, rates }) {
+export default withRouter(function Home({ history }) {
+  const context = useContext(appContext);
+  const { orders, rates } = context;
   const toAll = () => {
     history.push("/all");
   };
@@ -68,12 +98,13 @@ export default withRouter(function Home({ history, rates }) {
               <p>Todays Exchange Rate</p>
             </div>
             <div className="btm">
-              {rates.map((rate) => (
-                <div key={rate.pair} className="thirds">
-                  <p className="red">{rate.pair}</p>
-                  <span>{rate.rate}</span>
-                </div>
-              ))}
+              {rates &&
+                rates.map((rate) => (
+                  <div key={rate.pair} className="thirds">
+                    <p className="red">{rate.pair}</p>
+                    <span>{rate.rate}</span>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -89,13 +120,13 @@ export default withRouter(function Home({ history, rates }) {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5, 6].map((row, i) => (
+              {orders.map((row, i) => (
                 <tr key={`row${i}`}>
                   <td>
                     <span className="no">{i + 1}</span>
                     Deskjet Printers
                     <img
-                      src={screen}
+                      src={row.picture_url}
                       height="20"
                       style={{
                         float: "right",
@@ -105,19 +136,19 @@ export default withRouter(function Home({ history, rates }) {
                       alt=""
                     />
                   </td>
-                  <td className="web">3 Units</td>
-                  <td>IU2387GGJ08U</td>
+                  <td className="web">{row.quantity} Units</td>
+                  <td>{row.reference}</td>
                   <td className="web">
                     <div
                       className={`dot ${
-                        !(i % 2)
+                        row.status === "pending"
                           ? "bg-yellow"
-                          : !(i % 3)
+                          : row.status === "cancelled"
                           ? "bg-red"
                           : "bg-green"
                       }`}
-                    ></div>
-                    Shipped
+                    ></div>{" "}
+                    <span className="pr10">{row.status}</span>
                   </td>
                 </tr>
               ))}

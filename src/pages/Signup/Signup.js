@@ -94,7 +94,7 @@ export default withRouter(function Signup({ history }) {
       return;
     }
 
-    if (password !== password_confirmation) {
+    if (password !== password_confirmation || password.length < 8) {
       sethasPasswordError(true);
       return;
     }
@@ -159,6 +159,12 @@ export default withRouter(function Signup({ history }) {
               (hasError && !password) || hasPasswordError ? "has-error" : ""
             }`}
           />
+          {(hasPasswordError && password.length < 8) ||
+            (hasError && password.length < 8 && (
+              <span className="red" style={{ fontSize: 10 }}>
+                Password must contain at least 8 characters
+              </span>
+            ))}
         </div>
 
         <div className="inp mb20">

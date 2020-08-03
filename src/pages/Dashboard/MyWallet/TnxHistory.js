@@ -1,10 +1,71 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./MyWallet.scss";
 import up from "../../../assets/up.svg";
 import down from "../../../assets/down.svg";
 import calendar from "../../../assets/calendar.svg";
+import { appContext } from "../../../store/appContext";
+import * as dayjs from "dayjs";
 
 export default function TnxHistory() {
+  const context = useContext(appContext);
+  const { tnx, orders } = context;
+  const [transactions, settransactions] = useState({});
+  const [tnx_, setTnx_] = useState([]);
+  const [dates, setdates] = useState({ start: null, end: null });
+
+  useEffect(() => {
+    let tnx_ = tnx.map((tn) => {
+      return {
+        ...tn,
+        dateNo: tn.created_at
+          .split(" ")[0]
+          .split("-")
+          .reverse()
+          .reduce((sum, no) => sum + parseFloat(no), 0),
+      };
+    });
+    setTnx_(tnx_);
+    let transactionsObj = tnx_
+      .map((t) => {
+        return {
+          ...t,
+          date: dayjs(t.created_at).format("DD MMM YYYY"),
+        };
+      })
+      .reduce((obj, tn) => {
+        obj[tn.date] = obj[tn.date] ? [...obj[tn.date], tn] : [tn];
+        return obj;
+      }, {});
+    settransactions(transactionsObj);
+  }, []);
+
+  const filterTnx = (n, val) => {
+    if (n === 1 && val) {
+      setdates({
+        ...dates,
+        start: val
+          .split("-")
+          .reverse()
+          .reduce((sum, no) => sum + parseFloat(no), 0),
+      });
+    }
+    if (n === 2 && val) {
+      setdates({
+        ...dates,
+        end: val
+          .split("-")
+          .reverse()
+          .reduce((sum, no) => sum + parseFloat(no), 0),
+      });
+    }
+
+    setTimeout(() => {
+      if (dates.end && dates.start) {
+        console.log({ start: dates.start, end: dates.end });
+      }
+    }, 500);
+  };
+
   return (
     <div className="mywallet">
       <div className="heading">Transaction</div>
@@ -15,12 +76,22 @@ export default function TnxHistory() {
             <div className="btm">
               <div className="half">
                 <p className="to">From</p>
-                <input type="date" />
+                <input
+                  type="date"
+                  onKeyUp={(e) => {
+                    filterTnx(1, e.target.value);
+                  }}
+                />
                 <img src={calendar} alt="" />
               </div>
               <div className="half">
-                <p className="to">From</p>
-                <input type="date" />
+                <p className="to">To</p>
+                <input
+                  type="date"
+                  onKeyUp={(e) => {
+                    filterTnx(2, e.target.value);
+                  }}
+                />
                 <img src={calendar} alt="" />
               </div>
             </div>
@@ -29,70 +100,56 @@ export default function TnxHistory() {
         <div className="big gradient">
           <div className="top">Transactions Record</div>
           <div className="tnxs">
-            {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
-              <div className="tnx">
-                <span className="date">20th Oct, 2019</span>
-                <div className="row w100p">
-                  <div className="one">
-                    <div className={`${i % 3 ? "redd" : "green"}`}>
-                      <img src={`${i % 3 ? down : up}`} alt="" />
+            {Object.keys(transactions).map((key, i) => {
+              return (
+                <div className="tnx">
+                  <span className="date">{key}</span>
+                  {transactions[key].map((day) => (
+                    <div className="row w100p">
+                      <div className="one">
+                        <div
+                          className={`${
+                            day.event !== "Wallet Funding" ? "redd" : "green"
+                          }`}
+                        >
+                          <img
+                            src={`${
+                              day.event !== "Wallet Funding" ? down : up
+                            }`}
+                            alt=""
+                          />
+                        </div>
+                        <div className="texts">
+                          <p className="txt">{day.event}</p>
+                          <p className="sub">{day.event}</p>
+                        </div>
+                      </div>
+                      <div className="two">
+                        <div
+                          className={`dot ${
+                            day.status === "pending"
+                              ? "bg-yellow"
+                              : day.status === "cancelled"
+                              ? "bg-red"
+                              : "bg-green"
+                          }`}
+                        ></div>
+                        {day.status}
+                      </div>
+                      <div className="three">
+                        <span
+                          className={`${
+                            day.event !== "Wallet Funding" ? "out" : "in"
+                          }`}
+                        >
+                          NGN {parseFloat(day.amount).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                    <div className="texts">
-                      <p className="txt">Transfer to John Doe</p>
-                      <p className="sub">Paid to supplier</p>
-                    </div>
-                  </div>
-                  <div className="two">
-                    <div
-                      className={`dot ${
-                        !(i % 2)
-                          ? "bg-yellow"
-                          : !(i % 3)
-                          ? "bg-red"
-                          : "bg-green"
-                      }`}
-                    ></div>
-                    Shipped
-                  </div>
-                  <div className="three">
-                    <span className={`${i % 3 ? "out" : "in"}`}>
-                      $234,342.10
-                    </span>
-                  </div>
+                  ))}
                 </div>
-                <div className="row w100p">
-                  <div className="one">
-                    <div className={`${i % 3 ? "redd" : "green"}`}>
-                      <img src={`${i % 3 ? down : up}`} alt="" />
-                    </div>
-                    <div className="texts">
-                      <p className="txt">Transfer to John Doe</p>
-                      <p className="sub">Paid to supplier</p>
-                    </div>
-                  </div>
-                  <div className="two">
-                    <div
-                      className={`dot ${
-                        !(i % 2)
-                          ? "bg-yellow"
-                          : !(i % 3)
-                          ? "bg-red"
-                          : "bg-green"
-                      }`}
-                    ></div>
-                    Shipped
-                  </div>
-                  <div className="three">
-                    <span className={`${i % 3 ? "out" : "in"}`}>
-                      $234,342.10
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <p className="view-all red t-center m0 p15">
-              <span style={{ fontSize: 12 }}>View All Transactions</span>
-            </p>
+              );
+            })}
           </div>
         </div>
       </div>

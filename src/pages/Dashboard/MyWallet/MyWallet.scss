@@ -39,8 +39,32 @@
       .gradient {
         background-color: #fff;
         .btm {
-          padding: 20px;
-          height: 90px;
+          padding: 40px 20px;
+          .one {
+            width: 60%;
+            float: left;
+            .chart {
+              width: 100%;
+              transform: scale(1.4);
+            }
+          }
+          .two {
+            width: 40%;
+            float: left;
+            p {
+              text-align: left;
+              .sm {
+                font-size: 12px;
+                color: #888484;
+                display: block;
+              }
+              .bg {
+                font-size: 18px;
+                font-weight: 600;
+                display: block;
+              }
+            }
+          }
         }
       }
 
@@ -74,8 +98,9 @@
         }
         img {
           position: absolute;
-          right: 0;
-          top: 25px;
+          right: 15px;
+          top: 32px;
+          width: 20px;
         }
       }
     }
@@ -87,7 +112,7 @@
       border-radius: 5px;
       overflow: hidden;
       margin-bottom: 60px;
-
+      position: relative;
       .tnxs {
         padding: 0 30px;
         .tnx {
@@ -185,6 +210,12 @@
             }
           }
         }
+        .red {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -200,9 +231,9 @@
       font-size: 10px;
     }
     select {
-      padding: 0 20px;
-      width: 120px;
-      height: 25px;
+      padding: 0 10px;
+      width: 80px;
+      height: 30px;
       position: relative;
       top: -5px;
       border: 1px solid #eee !important;
@@ -219,6 +250,22 @@
         width: 100%;
         .tnxs {
           padding: 0 10px;
+          .tnx {
+            .row {
+              .one {
+                width: 40%;
+                .green {
+                  margin-bottom: 10px;
+                }
+              }
+              .two {
+                width: 30%;
+              }
+              .three {
+                width: 30%;
+              }
+            }
+          }
         }
       }
     }

@@ -1,0 +1,30 @@
+.rates {
+  padding: 30px;
+  position: relative;
+  .main-btn {
+    position: absolute;
+    right: 60px;
+  }
+  .rates-wrap {
+    width: 100%;
+    margin-top: 60px;
+    .rate {
+      width: 30%;
+      display: inline-block;
+      box-shadow: 2px 6px 6px 5px #eeeeee6b;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 0 1.5%;
+    }
+    .link {
+      width: 46%;
+      display: inline-block;
+      box-shadow: 2px 6px 6px 5px #eeeeee6b;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 0 1.5%;
+    }
+  }
+}

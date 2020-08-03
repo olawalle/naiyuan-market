@@ -5,6 +5,8 @@ import home from "../../assets/home.svg";
 import logo from "../../assets/Logo.svg";
 import icon from "../../assets/Icon.svg";
 import { withRouter } from "react-router-dom";
+import { useContext } from "react";
+import { appContext } from "../../store/appContext";
 
 export const NavLinks = ({
   onOpenModal,
@@ -12,6 +14,7 @@ export const NavLinks = ({
   sideOpen,
   closeNav,
   setName,
+  role,
 }) => {
   const [activeIndex, setactiveIndex] = useState(0);
   const [activeIndex_, setactiveIndex_] = useState(null);
@@ -145,16 +148,55 @@ export const NavLinks = ({
       text: "Contact Support",
       link: "/dashboard/support",
     },
+    // {
+    //   text: "Orders",
+    //   link: "/dashboard/orders/",
+    //   name: "Orders",
+    // },
+    // {
+    //   name: "Exchange Rates",
+    //   text: "Exchange Rates",
+    //   link: "/dashboard/exchange-rates",
+    // },
+    // {
+    //   name: "Websites",
+    //   text: "Websites",
+    //   link: "/dashboard/websites",
+    // },
+    // {
+    //   name: "Notifications",
+    //   text: "Notifications",
+    //   link: "/dashboard/notifications",
+    // },
   ]);
+
+  const [adminLinks, setAdminLinks] = useState([
+    {
+      text: "Orders",
+      link: "/dashboard/orders/",
+      name: "Orders",
+    },
+    {
+      name: "Exchange Rates",
+      text: "Exchange Rates",
+      link: "/dashboard/exchange-rates",
+    },
+    {
+      name: "Notifications",
+      text: "Notifications",
+      link: "/dashboard/notifications",
+    },
+  ]);
+  const linksRendered = role === 6 ? adminLinks : links;
 
   const openChild = (i, j) => {
     setTimeout(() => {
-      let linkParent = links.find((l, k) => k === i);
+      let linkParent = linksRendered.find((l, k) => k === i);
       let link = linkParent.children[j].link;
-      if (link === "/dashboard/order-placement") {
-        onOpenModal(1);
-        return;
-      }
+      // if (link === "/dashboard/order-placement") {
+      //   onOpenModal(1);
+      //   return;
+      // }
       if (link === "/calculator") {
         onOpenModal(2);
         return;
@@ -167,7 +209,7 @@ export const NavLinks = ({
   };
 
   const goToLink = (i) => {
-    let linkParent = links.find((l, k) => k === i);
+    let linkParent = linksRendered.find((l, k) => k === i);
     setName && setName(linkParent.text);
     let link = linkParent.link;
     link && history.push(link);
@@ -187,7 +229,7 @@ export const NavLinks = ({
 
   return (
     <ul className="links">
-      {links.map((link, i) => (
+      {linksRendered.map((link, i) => (
         <li key={`link${i}`}>
           <div
             onClick={() => goToLink(i)}
@@ -229,6 +271,8 @@ export const NavLinks = ({
 };
 
 export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
+  const context = useContext(appContext);
+  const { user } = context;
   return (
     <div className="sidebar">
       <div className="top">
@@ -238,6 +282,7 @@ export default withRouter(function Sidebar({ sideOpen, history, onOpenModal }) {
         sideOpen={sideOpen}
         history={history}
         onOpenModal={onOpenModal}
+        role={user.role}
       />
     </div>
   );

@@ -24,6 +24,11 @@ export default class AppContextProvider extends Component {
       username: "",
     },
     cart: [],
+    notifications: [],
+    orders: [],
+    websites: [],
+    rates: [],
+    tnx: [],
   };
 
   componentWillMount() {
@@ -71,8 +76,22 @@ export default class AppContextProvider extends Component {
     sessionStorage.clear();
   };
 
+  saveOrders = (orders) => this.setState({ orders });
+
   updateUser = (user) => {
     this.setState({ user });
+  };
+
+  setWebsites = (websites) => {
+    this.setState({ websites });
+  };
+
+  setrates = (rates) => this.setState({ rates });
+
+  setTnx = (tnx) => this.setState({ tnx });
+
+  updateNotifications = (notifications) => {
+    this.setState({ notifications });
   };
 
   updateCart = (item) => {
@@ -99,16 +118,26 @@ export default class AppContextProvider extends Component {
       updateCart,
       clearCart,
       removeItem,
+      updateNotifications,
+      saveOrders,
+      setWebsites,
+      setrates,
+      setTnx,
     } = this;
     return (
       <appContext.Provider
         value={{
           ...this.state,
           updateUser,
+          updateNotifications,
           updateLoggedInStatus,
           updateCart,
           clearCart,
           removeItem,
+          saveOrders,
+          setWebsites,
+          setrates,
+          setTnx,
         }}
       >
         {this.props.children}

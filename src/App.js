@@ -11,6 +11,7 @@ import AllPackages from "./pages/AllPackages/AllPackages";
 import Profile from "./pages/Profile/Profile";
 import Terms from "./pages/Profile/Terms";
 import AppContextProvider from "./store/appContext";
+import ForgotPassword from "./pages/Login/ForgotPassword";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
             <Switch match>
               <Route path="/login">
                 <Login />
+              </Route>
+              <Route path="/forgot-password">
+                <ForgotPassword />
               </Route>
               <Route path="/signup">
                 <Signup />

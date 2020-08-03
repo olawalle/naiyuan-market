@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import "./Orderhistory.scss";
+import { useContext } from "react";
+import { appContext } from "../../../store/appContext";
 
 export default withRouter(function OrderHistory({ history }) {
+  const context = useContext(appContext);
+  const { orders, websites } = context;
+
   return (
     <div className="orderHistory">
       <div className="header">
@@ -32,23 +37,31 @@ export default withRouter(function OrderHistory({ history }) {
           </thead>
 
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
+            {orders.map((row, i) => (
               <tr key={`row${i}`}>
-                <td>Oct-20-2020</td>
-                <td>Cheese</td>
-                <td>Ali express</td>
-                <td>1434</td>
+                <td>{row.created_at}</td>
                 <td>
-                  <b>3,200.00</b>USD
+                  --- <img src={row.picture_url} width={30} alt="" />
+                </td>
+                <td>
+                  {websites.find((web) => web.id === row.website_id).name}
+                </td>
+                <td>{row.reference}</td>
+                <td>
+                  <b>$ {row.total}</b>
                 </td>
                 <td>
                   <div
                     className={`dot ${
-                      !(i % 2) ? "bg-yellow" : !(i % 3) ? "bg-red" : "bg-green"
+                      row.status === "pending"
+                        ? "bg-yellow"
+                        : row.status === "cancelled"
+                        ? "bg-red"
+                        : "bg-green"
                     }`}
                   ></div>{" "}
-                  <span className="pr10">Delivered</span>
-                  <select
+                  <span className="pr10">{row.status}</span>
+                  {/* <select
                     name=""
                     id=""
                     className="pl12 bd-input"
@@ -60,7 +73,7 @@ export default withRouter(function OrderHistory({ history }) {
                     }}
                   >
                     <option value=""></option>
-                  </select>
+                  </select> */}
                 </td>
               </tr>
             ))}
