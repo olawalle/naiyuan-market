@@ -53,6 +53,7 @@ export const Balance = () => {
 export default withRouter(function Home({ history }) {
   const context = useContext(appContext);
   const { orders, rates, addresses } = context;
+  console.log({ addresses });
   const toAll = () => {
     history.push("/all");
   };
@@ -80,7 +81,7 @@ export default withRouter(function Home({ history }) {
             <div className="btm">
               <div className="half">
                 <p>
-                  <b>Address:</b> {addresses[0].address}
+                  <b>Address:</b> {addresses.length ? addresses[0].address : ""}
                 </p>
                 <span className="copy">copy</span>
               </div>
