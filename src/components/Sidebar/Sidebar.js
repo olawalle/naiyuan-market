@@ -164,6 +164,11 @@ export const NavLinks = ({
     //   link: "/dashboard/websites",
     // },
     // {
+    //   name: "Shipping Types",
+    //   text: "Shipping Types",
+    //   link: "/dashboard/shipping-types",
+    // },
+    // {
     //   name: "Notifications",
     //   text: "Notifications",
     //   link: "/dashboard/notifications",

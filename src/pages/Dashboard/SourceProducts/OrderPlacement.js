@@ -27,7 +27,7 @@ export default withRouter(function OrderPlacement({ history }) {
   } = context;
   const [orderData, setorderData] = useState({
     link: "",
-    website_id: null,
+    website_id: "",
     quantity: "",
     description: "",
     amount: "",

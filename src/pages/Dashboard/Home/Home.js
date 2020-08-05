@@ -12,7 +12,7 @@ import apiServices from "../../../services/apiServices";
 
 export const Balance = () => {
   const context = useContext(appContext);
-  const { user, rates, setTnx } = context;
+  const { user, rates, setTnx, addresses } = context;
   const [currency, setcurrency] = useState("₦");
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const Balance = () => {
 
 export default withRouter(function Home({ history }) {
   const context = useContext(appContext);
-  const { orders, rates } = context;
+  const { orders, rates, addresses } = context;
   const toAll = () => {
     history.push("/all");
   };
@@ -80,8 +80,7 @@ export default withRouter(function Home({ history }) {
             <div className="btm">
               <div className="half">
                 <p>
-                  <b>Address:</b> ad eveniet hic quibusdam iusto incidunt eniet
-                  hic quibusdam iusto incidunt
+                  <b>Address:</b> {addresses[0].address}
                 </p>
                 <span className="copy">copy</span>
               </div>

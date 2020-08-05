@@ -37,7 +37,7 @@ export default function TnxHistory() {
         return obj;
       }, {});
     settransactions(transactionsObj);
-  }, []);
+  }, [tnx]);
 
   const filterTnx = (n, val) => {
     if (n === 1 && val) {

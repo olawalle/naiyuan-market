@@ -21,6 +21,9 @@ export default withRouter(function MyWallet({ history }) {
   const [withdrawing, setwithdrawing] = useState(false);
   const [transactions, settransactions] = useState({});
   const [step, setStep] = useState(1);
+  const [account_name, setaccount_name] = useState("");
+  const [account_number, setaccount_number] = useState("");
+  const [bank_name, setbank_name] = useState("");
 
   useEffect(() => {
     let transactionsObj = tnx
@@ -71,6 +74,7 @@ export default withRouter(function MyWallet({ history }) {
         console.log(res);
         window.open(res.data.payment, "_self");
         setLoading(false);
+        // sessionStorage.setItem('naiyuan_ref', res.data.transaction.reference)
         // setwithdrawing(true);
         setopen(false);
       })
@@ -78,6 +82,21 @@ export default withRouter(function MyWallet({ history }) {
         console.log(err);
         setLoading(false);
         setopen(false);
+      });
+  };
+
+  const handleWithdrawal = () => {
+    setLoading(true);
+    let data = { amount, account_name, account_number, bank_name };
+    apiServices
+      .withdrawFund(data)
+      .then((res) => {
+        setLoading(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
       });
   };
 
@@ -107,6 +126,7 @@ export default withRouter(function MyWallet({ history }) {
       },
     ],
   };
+
   const options = {
     legend: {
       display: false,
@@ -150,40 +170,48 @@ export default withRouter(function MyWallet({ history }) {
                 <span className="label">How much do you want to withdraw</span>
                 <input
                   type="number"
-                  className={`w100p border-input`}
+                  className={`w100p light-input`}
                   onChange={(e) => setAmount(e.target.value)}
                   style={{ height: 40, marginBottom: 20 }}
                 />
               </div>
             ) : (
               <div className="inp mb20">
-                <span className="label">Reciever Name</span>
+                <span className="label">Bank</span>
                 <select
-                  className={`w100p border-input`}
+                  type="number"
+                  className={`w100p light-input`}
                   style={{ height: 40, marginBottom: 20 }}
-                  onChange={(e) => setAmount(e.target.value)}
-                ></select>
-
+                  onChange={(e) => setbank_name(e.target.value)}
+                >
+                  <option value=""></option>
+                  <option value="Firstbank">Firstbank</option>
+                  <option value="Zenith Bank">Zenith Bank</option>
+                  <option value="Gtb">Gtb</option>
+                  <option value="Access Bank">Access Bank</option>
+                </select>
                 <span className="label">Reciever Name</span>
                 <input
-                  type="number"
-                  className={`w100p border-input`}
+                  type="text"
+                  className={`w100p light-input`}
                   style={{ height: 40, marginBottom: 20 }}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setaccount_name(e.target.value)}
                 />
 
-                <span className="label">Amount</span>
+                <span className="label">Account Number</span>
                 <input
                   type="number"
-                  className={`w100p border-input`}
+                  className={`w100p light-input`}
                   style={{ height: 40 }}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setaccount_number(e.target.value)}
                 />
               </div>
             )}
             <button
               className="main-btn w48p f-right"
-              onClick={() => setStep(step + 1)}
+              onClick={() =>
+                step === 1 ? setStep(step + 1) : handleWithdrawal()
+              }
             >
               {loading ? <Loader /> : "Proceed"}
             </button>

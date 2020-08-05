@@ -79,7 +79,7 @@ let getAllProcurements = () => {
 let getAllShippings = () => {
   return axios({
     method: "get",
-    url: `${urls.shippingUrl}/all`,
+    url: `${urls.baseUrl}user-shippings`,
   });
 };
 
@@ -199,6 +199,14 @@ let verifyAcctFunding = (data) => {
   });
 };
 
+let withdrawFund = (data) => {
+  return axios({
+    method: "post",
+    url: urls.withdrawalUrl,
+    data,
+  });
+};
+
 let getTnxs = () => {
   return axios({
     method: "get",
@@ -228,10 +236,40 @@ let deleteAddress = (id) => {
   });
 };
 
+let getShippingTypes = () => {
+  return axios({
+    method: "get",
+    url: `${urls.shippingTypeUrl}s`,
+  });
+};
+
+let addShippingType = (data) => {
+  return axios({
+    method: "post",
+    url: `${urls.shippingTypeUrl}/create`,
+    data,
+  });
+};
+
+let updateShippingType = (data, id) => {
+  return axios({
+    method: "post",
+    url: `${urls.shippingTypeUrl}/update/${id}`,
+    data,
+  });
+};
+
+let deleteShippingType = (id) => {
+  return axios({
+    method: "delete",
+    url: `${urls.shippingTypeUrl}/id`,
+  });
+};
+
 let getUserShippings = () => {
   return axios({
     method: "get",
-    url: urls.shippingUrl,
+    url: urls.userShippingUrl,
   });
 };
 
@@ -246,7 +284,7 @@ let uploadShipping = (data) => {
 let trackShipping = (id) => {
   return axios({
     method: "get",
-    url: `${urls.trackingUrl}/id`,
+    url: `${urls.trackingUrl}/${id}`,
   });
 };
 
@@ -272,6 +310,7 @@ export default {
   postPayment,
   getLinkDetails,
   verifyAcctFunding,
+  withdrawFund,
   getTnxs,
   getAddresses,
   addAddress,
@@ -284,4 +323,8 @@ export default {
   getAllShippings,
   getAllUserss,
   postNotification,
+  getShippingTypes,
+  addShippingType,
+  updateShippingType,
+  deleteShippingType,
 };

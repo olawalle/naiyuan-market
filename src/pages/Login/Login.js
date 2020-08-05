@@ -10,7 +10,14 @@ import axios from "axios";
 
 export default withRouter(function Login({ history }) {
   const context = useContext(appContext);
-  const { user, updateUser, setTnx } = context;
+  const {
+    user,
+    updateUser,
+    setTnx,
+    saveAddresses,
+    saveShippings,
+    saveUserShippings,
+  } = context;
   const options = {
     position: "top-right",
   };
@@ -77,6 +84,34 @@ export default withRouter(function Login({ history }) {
             .then((tnx) => {
               console.log({ tnx });
               setTnx(tnx.data.transactions.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          apiServices
+            .getAddresses()
+            .then((res) => {
+              saveAddresses(res.data.addresses.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          apiServices
+            .getAllShippings()
+            .then((res) => {
+              saveShippings(res.data.usershippings.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          apiServices
+            .getUserShippings()
+            .then((res) => {
+              console.log(res);
+              saveUserShippings(res.data.usershippings.data);
             })
             .catch((err) => {
               console.log(err);

@@ -122,7 +122,7 @@ export default function Websites() {
       </button>
       <div className="rates-wrap">
         {websites.map((rate, i) => (
-          <div key={"rate" + i} className="link">
+          <div key={"rate" + i} className="link gradient">
             <p>{rate.name}</p>
             <p>{rate.link}</p>
             <button onClick={() => OpenModal(i)} className="white-btn">

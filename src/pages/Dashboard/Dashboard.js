@@ -26,6 +26,7 @@ import Websites from "./Rates/Websites";
 import OrderPlacement from "./SourceProducts/OrderPlacement";
 import VerifyPayment from "../Login/VerifyPayment";
 import Notifications from "./OrderHistory/Notifications";
+import ShippingTypes from "./Rates/ShippingTypes";
 
 export default function Dashboard() {
   const context = useContext(appContext);
@@ -56,13 +57,13 @@ export default function Dashboard() {
     setopen(false);
   };
 
-  const calculate = () => {
+  const calculate = (n) => {
     let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
     let naira_yuan = rates.find((r) => r.pair === "Naira/Yuan");
     let oneDollar = naira_dollar
-      ? parseFloat(naira_dollar.rate.split("/")[1])
+      ? parseFloat(naira_dollar.rate.split("/")[0])
       : 0;
-    let oneYuan = naira_yuan ? parseFloat(naira_yuan.rate.split("/")[1]) : 0;
+    let oneYuan = naira_yuan ? parseFloat(naira_yuan.rate.split("/")[0]) : 0;
     let dollar_yuan_rate = oneDollar / oneYuan;
 
     if (topSym === "Naira") {
@@ -74,13 +75,17 @@ export default function Dashboard() {
     if (topSym === "Dollar") {
       btmSym === "Naira"
         ? setBtmAmt(topAmt / oneDollar)
-        : setBtmAmt(topAmt / dollar_yuan_rate);
+        : setBtmAmt(topAmt * dollar_yuan_rate);
     }
 
     if (topSym === "Yuan") {
       btmSym === "Naira"
-        ? setBtmAmt(topAmt / oneYuan)
-        : setBtmAmt(topAmt * dollar_yuan_rate);
+        ? setBtmAmt(topAmt * oneYuan)
+        : setBtmAmt(topAmt / dollar_yuan_rate);
+    }
+
+    if (topSym === btmSym) {
+      setBtmAmt(topAmt);
     }
   };
 
@@ -123,9 +128,13 @@ export default function Dashboard() {
       });
   }, []);
 
+  useEffect(() => {
+    calculate();
+  }, [topSym, topAmt, btmSym, btmAmt]);
+
   const dollaAmt = () => {
     let dollar = rates.find((r) => r.pair === "Naira/Dollar");
-    let dollarRate = dollar ? dollar.rate.split("/")[1] : 0;
+    let dollarRate = dollar ? (1 / dollar.rate.split("/")[0]).toFixed(4) : 0;
     return dollarRate;
   };
 
@@ -144,7 +153,7 @@ export default function Dashboard() {
           <p className="amount mt55">
             <span className="title">1 Nigerian Naira equals </span>
             <span className="amt mb12">{dollaAmt()} United states Dollars</span>
-            <span className="title tt_">11 June, 20202 Disclaimer</span>
+            <span className="title tt_">11 June, 2020 Disclaimer</span>
           </p>
           <div className="form w100p mt12">
             <div className="inp w48p f-left">
@@ -164,6 +173,7 @@ export default function Dashboard() {
                   setTopSym(e.target.value);
                   calculate();
                 }}
+                defaultValue={topSym}
                 className="border-inp w100p"
               >
                 <option value="Naira">Naira</option>
@@ -182,6 +192,7 @@ export default function Dashboard() {
                   calculate();
                 }}
                 className="border-inp w100p"
+                readOnly
               />
             </div>
             <div className="inp w48p f-right">
@@ -190,6 +201,7 @@ export default function Dashboard() {
                   setBtmSym(e.target.value);
                   calculate();
                 }}
+                defaultValue={btmSym}
                 className="border-inp w100p"
               >
                 <option value="Yuan">Yuan</option>
@@ -252,6 +264,9 @@ export default function Dashboard() {
             </Route>
             <Route path={`${match.path}websites`}>
               <Websites />
+            </Route>
+            <Route path={`${match.path}shipping-types`}>
+              <ShippingTypes />
             </Route>
             <Route path={`${match.path}verify-payment`}>
               <VerifyPayment />

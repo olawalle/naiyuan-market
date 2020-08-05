@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import "./rates.scss";
 import { appContext } from "../../../store/appContext";
@@ -7,9 +7,10 @@ import Loader from "../../../components/loader/Loader";
 import apiServices from "../../../services/apiServices";
 import { useSnackbar } from "react-simple-snackbar";
 
-export default function Rates() {
-  const context = useContext(appContext);
-  const { rates, setrates } = context;
+export default function ShippingTypes() {
+  //   const context = useContext(appContext);
+  //   const { shippingTypes, setshippingTypes } = context;
+  const [shippingTypes, setshippingTypes] = useState([]);
   const [open, setopen] = useState(false);
   const [loading, setloading] = useState(false);
   const [isAdding, setisAdding] = useState(false);
@@ -24,11 +25,12 @@ export default function Rates() {
     setopen(false);
   };
 
-  const getRates = () => {
+  const getshippingTypes = () => {
     apiServices
-      .getRates()
+      .getShippingTypes()
       .then((res) => {
-        setrates(res.data);
+        console.log(res);
+        setshippingTypes(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -36,22 +38,22 @@ export default function Rates() {
   };
 
   const OpenModal = (i) => {
-    setselectedPair(rates[i]);
+    setselectedPair(shippingTypes[i]);
     setopen(true);
     setisAdding(false);
   };
 
   const submit = () => {
-    const { pair, rate } = selectedPair;
-    let data = { pair, rate };
-    if (!pair || !rate) {
+    const { name, rate, duration } = selectedPair;
+    let data = { name, rate, duration };
+    if (!name || !duration || !rate) {
       sethasError(true);
       return;
     }
     setloading(true);
     const request = isAdding
-      ? apiServices.addRate(data)
-      : apiServices.updateRate(data, selectedPair.id);
+      ? apiServices.addShippingType(data)
+      : apiServices.updateShippingType(data, selectedPair.id);
 
     request
       .then((res) => {
@@ -59,7 +61,7 @@ export default function Rates() {
         openSnackbar("Request successful", 5000);
         setloading(false);
         setopen(false);
-        getRates();
+        getshippingTypes();
       })
       .catch((err) => {
         console.log({ err });
@@ -72,6 +74,10 @@ export default function Rates() {
       });
   };
 
+  useEffect(() => {
+    getshippingTypes();
+  }, []);
+
   return (
     <div className="rates">
       <Modal open={open} onClose={onCloseModal} center>
@@ -79,17 +85,17 @@ export default function Rates() {
           className="gradient t-center o-hidden placement-modal"
           style={{ padding: 30 }}
         >
-          <div className="header">{isAdding ? "Add" : "Update"} Rate</div>
+          <div className="header">{isAdding ? "Add" : "Update"} Shipping</div>
           <div className="inp mb20">
-            <span className="label">Pair</span>
+            <span className="label">Name</span>
             <input
-              defaultValue={selectedPair.pair}
+              defaultValue={selectedPair.name}
               type="text"
               className={`w100p bd-input ${
-                hasError && !selectedPair.pair && "has-error"
+                hasError && !selectedPair.name && "has-error"
               }`}
               onChange={(e) =>
-                setselectedPair({ ...selectedPair, pair: e.target.value })
+                setselectedPair({ ...selectedPair, name: e.target.value })
               }
             />
           </div>
@@ -106,27 +112,39 @@ export default function Rates() {
               }
             />
           </div>
+          <div className="inp mb20">
+            <span className="label">Duration</span>
+            <input
+              defaultValue={selectedPair.duration}
+              type="text"
+              className={`w100p bd-input ${
+                hasError && !selectedPair.duration && "has-error"
+              }`}
+              onChange={(e) =>
+                setselectedPair({ ...selectedPair, duration: e.target.value })
+              }
+            />
+          </div>
           <button className="main-btn" onClick={submit}>
             {loading ? <Loader /> : "Submit"}
           </button>
         </div>
       </Modal>
-      {rates.length < 3 && (
-        <button
-          className="main-btn"
-          onClick={() => {
-            setisAdding(true);
-            setopen(true);
-          }}
-        >
-          Add new
-        </button>
-      )}
+      <button
+        className="main-btn"
+        onClick={() => {
+          setisAdding(true);
+          setopen(true);
+        }}
+      >
+        Add new
+      </button>
       <div className="rates-wrap">
-        {rates.map((rate, i) => (
-          <div key={"rate" + i} className="rate gradient">
-            <p>{rate.pair}</p>
-            <p>{rate.rate}</p>
+        {shippingTypes.map((rate, i) => (
+          <div key={"rate" + i} className="link gradient">
+            <p style={{ fontSize: 20 }}>{rate.name}</p>
+            <p>NGN {parseFloat(rate.rate).toLocaleString()}</p>
+            <p>{rate.duration}</p>
             <button onClick={() => OpenModal(i)} className="white-btn">
               Edit
             </button>

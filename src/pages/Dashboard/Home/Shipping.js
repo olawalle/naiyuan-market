@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./Home.scss";
 
 import badge from "../../../assets/Image.svg";
@@ -6,6 +6,7 @@ import screen from "../../../assets/screen.png";
 import ShippingModal from "../../../components/ShippingModal/ShippingModal";
 import { appContext } from "../../../store/appContext";
 import { useSnackbar } from "react-simple-snackbar";
+import apiServices from "../../../services/apiServices";
 
 export default function Shipping() {
   const context = useContext(appContext);
@@ -17,6 +18,7 @@ export default function Shipping() {
 
   const [open, setopen] = useState(false);
   const [pickedItems, setpickedItems] = useState([]);
+  const [shippingTypes, setshippingTypes] = useState([]);
 
   const onCloseModal = () => {
     setopen(false);
@@ -27,6 +29,18 @@ export default function Shipping() {
       ? setpickedItems(pickedItems.filter((j) => j !== i))
       : setpickedItems([...pickedItems, i]);
   };
+
+  useEffect(() => {
+    apiServices
+      .getShippingTypes()
+      .then((res) => {
+        console.log(res);
+        setshippingTypes(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="home">
@@ -130,6 +144,7 @@ export default function Shipping() {
         isOpen={open}
         pickedItems={pickedItems}
         onCloseModal={onCloseModal}
+        shippingTypes={shippingTypes}
       />
     </div>
   );

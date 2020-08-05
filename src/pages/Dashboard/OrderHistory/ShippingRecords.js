@@ -1,8 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import "./Orderhistory.scss";
+import { appContext } from "../../../store/appContext";
+import { useEffect } from "react";
 
 export default withRouter(function ShippingRecords({ history }) {
+  const context = useContext(appContext);
+  const { shippings, userShippings } = context;
+  const [orderShippings, setorderShippings] = useState([]);
+
+  useEffect(() => {
+    console.log(shippings);
+    let orderShippings = shippings
+      .map((shipping) => {
+        let orders = JSON.parse(shipping.orders);
+        return orders.map((order) => {
+          return {
+            order: {
+              ...order,
+              name: order.description
+                .split(" ")
+                .filter((o, i) => i <= 5)
+                .join(" "),
+            },
+            shipping,
+          };
+        });
+      })
+      .flat();
+    setorderShippings(orderShippings);
+    console.log(orderShippings);
+  }, []);
+
   return (
     <div className="orderHistory">
       <div className="header">
@@ -32,22 +61,28 @@ export default withRouter(function ShippingRecords({ history }) {
           </thead>
 
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7, 9].map((row, i) => (
+            {orderShippings.map((row, i) => (
               <tr key={`row${i}`}>
-                <td>Oct-20-2020</td>
-                <td>Cheese</td>
-                <td>Ali express</td>
-                <td>1434</td>
+                <td>{row.shipping.created_at}</td>
+                <td>{row.order.name}</td>
+                <td>{row.order.website.name}</td>
+                <td>{row.shipping.tracking_number}</td>
                 <td>
-                  <b>3,200.00</b>USD
+                  <b>{row.shipping.cost}</b>USD
                 </td>
                 <td>
                   <div
                     className={`dot ${
-                      !(i % 2) ? "bg-yellow" : !(i % 3) ? "bg-red" : "bg-green"
+                      !row.shipping.status || row.shipping.status === "pending"
+                        ? "bg-yellow"
+                        : row.shipping.status === "cancelled"
+                        ? "bg-red"
+                        : "bg-green"
                     }`}
                   ></div>{" "}
-                  <span className="pr10">Delivered</span>
+                  <span className="pr10">
+                    {row.shipping.status || "pending"}
+                  </span>
                   <select
                     name=""
                     id=""

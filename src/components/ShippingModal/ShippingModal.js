@@ -4,6 +4,8 @@ import "./ShippingModal.scss";
 import apiServices from "../../services/apiServices";
 import { useSnackbar } from "react-simple-snackbar";
 import Loader from "../loader/Loader";
+import { useContext } from "react";
+import { appContext } from "../../store/appContext";
 
 export default function ShippingModal({
   isOpen,
@@ -11,22 +13,25 @@ export default function ShippingModal({
   orders,
   pickedItems,
 }) {
+  const context = useContext(appContext);
+  const {
+    addresses,
+    saveAddresses,
+    saveUserShippings,
+    shippingTypes,
+  } = context;
+
   const [open, setopen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addingNew, setAddinNew] = useState(false);
-  const [newAddress, setnewAddress] = useState({
-    state: "",
-    city: "",
-    address_line_1: "",
-    pobox_number: "",
-  });
-  const [shipper, setShipper] = useState("");
-  const [address, setAddress] = useState({
-    first_name: "John",
-    last_name: "Doe",
-    address: "No 1, no lane street. Lagos",
-    phone: "+123409867655",
-    country: "Nigeria",
+  const [hasError, sethasError] = useState(false);
+  const [shipping_id, setShipper] = useState("");
+  const [newAddress, setAddress] = useState({
+    first_name: "",
+    last_name: "",
+    address: "",
+    mobile_number: "",
+    country: "",
   });
   const options = {
     position: "top-right",
@@ -35,6 +40,7 @@ export default function ShippingModal({
 
   useEffect(() => {
     setopen(isOpen);
+    console.log(addresses);
   }, [isOpen]);
 
   const makeid = (length) => {
@@ -55,10 +61,10 @@ export default function ShippingModal({
       })
       .filter((n) => n);
     let data = {
-      address_id: 4,
+      address_id: addresses[0].id,
       cost: picked.reduce((sum, itm) => (sum += parseFloat(itm.total)), 0),
       orders: JSON.stringify(picked),
-      shipping_id: makeid(12),
+      shipping_id,
       weight: "unset",
     };
     setLoading(true);
@@ -68,12 +74,49 @@ export default function ShippingModal({
       .then((res) => {
         setLoading(false);
         onCloseModal();
-        console.log(res);
         openSnackbar("Shipping request sent successfully", 5000);
+        apiServices
+          .getUserShippings()
+          .then((res) => {
+            console.log(res);
+            saveUserShippings(res.data.usershippings.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         setLoading(false);
         console.log({ err });
+      });
+  };
+
+  const saveAddress = () => {
+    console.log(newAddress);
+    let { first_name, last_name, address, mobile_number, country } = newAddress;
+    if (!first_name || !last_name || !address || !mobile_number || !country) {
+      sethasError(true);
+      return;
+    }
+    setLoading(true);
+    apiServices
+      .addAddress(newAddress)
+      .then((res) => {
+        console.log(res);
+        openSnackbar("Address saved successfully", 5000);
+        setLoading(false);
+        apiServices
+          .getAddresses()
+          .then((res) => {
+            saveAddresses(res.data.addresses.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
       });
   };
 
@@ -84,15 +127,16 @@ export default function ShippingModal({
           <div className="shipping-modal gradient">
             <div className="heading">Shipping Details</div>
             <div className="inp">
-              <div className="label">Select Shipper</div>
+              <div className="label">Select Shipping</div>
               <select
                 onChange={(e) => setShipper(e.target.value)}
                 name=""
                 id=""
               >
                 <option value=""></option>
-                <option value="DHL">DHL</option>
-                <option value="UPS">UPS</option>
+                {shippingTypes.map((type) => (
+                  <option value={type.id}>{type.name}</option>
+                ))}
               </select>
             </div>
 
@@ -108,17 +152,22 @@ export default function ShippingModal({
                   <div className="indicator">
                     <span className="plus">+</span>
                   </div>
-                  <div className="address">
-                    <p>
-                      <b>Receiver:</b> Mr Eric
-                    </p>
-                    <p>
-                      <b>Address:</b> lorem ipsum dolor sit amet
-                    </p>
-                    <p>
-                      <b>Phone Number:</b> +234 8098 233 1234
-                    </p>
-                  </div>
+                  {addresses.length ? (
+                    <div className="address">
+                      <p>
+                        <b>Receiver:</b> {addresses[0].last_name}{" "}
+                        {addresses[0].first_name}
+                      </p>
+                      <p>
+                        <b>Address:</b> {addresses[0].address}
+                      </p>
+                      <p>
+                        <b>Phone Number:</b> {addresses[0].mobile_number}
+                      </p>
+                    </div>
+                  ) : (
+                    <p>No addresses saved</p>
+                  )}
                 </div>
               </div>
               <div className="t-right">
@@ -134,31 +183,73 @@ export default function ShippingModal({
             <div className="half f-left">
               <div className="inp">
                 <div className="label">First Name</div>
-                <input type="text" className="border-inp" />
+                <input
+                  type="text"
+                  className={`border-inp ${
+                    hasError && !newAddress.first_name && "has-error"
+                  }`}
+                  onChange={(e) =>
+                    setAddress({ ...newAddress, first_name: e.target.value })
+                  }
+                />
               </div>
             </div>
             <div className="half f-right">
               <div className="inp">
                 <div className="label">Last Name</div>
-                <input type="text" className="border-inp" />
+                <input
+                  type="text"
+                  className={`border-inp ${
+                    hasError && !newAddress.last_name && "has-error"
+                  }`}
+                  onChange={(e) =>
+                    setAddress({ ...newAddress, last_name: e.target.value })
+                  }
+                />
               </div>
             </div>
             <div className="">
               <div className="inp">
                 <div className="label">Phone Number</div>
-                <input type="text" className="border-inp" />
+                <input
+                  type="text"
+                  className={`border-inp ${
+                    hasError && !newAddress.mobile_number && "has-error"
+                  }`}
+                  onChange={(e) =>
+                    setAddress({ ...newAddress, mobile_number: e.target.value })
+                  }
+                />
               </div>
             </div>
             <div className="">
               <div className="inp">
                 <div className="label">Full Address</div>
-                <textarea rows={10} type="text" />
+                <textarea
+                  rows={5}
+                  type="text"
+                  style={{ height: "auto" }}
+                  className={`border-inp ${
+                    hasError && !newAddress.address && "has-error"
+                  }`}
+                  onChange={(e) =>
+                    setAddress({ ...newAddress, address: e.target.value })
+                  }
+                />
               </div>
             </div>
             <div className="">
               <div className="inp">
                 <div className="label">Country/Region</div>
-                <input type="text" className="border-inp" />
+                <input
+                  type="text"
+                  className={`border-inp ${
+                    hasError && !newAddress.country && "has-error"
+                  }`}
+                  onChange={(e) =>
+                    setAddress({ ...newAddress, country: e.target.value })
+                  }
+                />
               </div>
             </div>
             <div className="t-right">
@@ -168,7 +259,9 @@ export default function ShippingModal({
               >
                 Back
               </button>
-              <button className="main-btn">Continue</button>
+              <button className="main-btn" onClick={saveAddress}>
+                {loading ? <Loader /> : "Continue"}
+              </button>
             </div>
           </div>
         )}
