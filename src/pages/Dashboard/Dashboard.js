@@ -27,6 +27,7 @@ import OrderPlacement from "./SourceProducts/OrderPlacement";
 import VerifyPayment from "../Login/VerifyPayment";
 import Notifications from "./OrderHistory/Notifications";
 import ShippingTypes from "./Rates/ShippingTypes";
+import AdminShippings from "./OrderHistory/AdminShippings";
 
 export default function Dashboard() {
   const context = useContext(appContext);
@@ -249,6 +250,10 @@ export default function Dashboard() {
 
             <Route path={`${match.path}orders`}>
               <AdminOrders />
+            </Route>
+
+            <Route path={`${match.path}shippings`}>
+              <AdminShippings />
             </Route>
             <Route path={`${match.path}pay-supplier`}>
               <PaySupplier />

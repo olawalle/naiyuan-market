@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import "./Signup.scss";
 import { withRouter, useRouteMatch } from "react-router-dom";
@@ -26,6 +26,7 @@ export default withRouter(function Signup({ history }) {
   const [password_confirmation, setpassword_confirmation] = useState("");
   const [frontend_url, setfrontend_url] = useState("");
   const [loading, setloading] = useState(false);
+  const [verifying, setverifying] = useState(true);
 
   const toLogin = () => {
     history.push("/login");
@@ -77,9 +78,8 @@ export default withRouter(function Signup({ history }) {
       phone_number,
       password,
       password_confirmation,
-      frontend_url: window.location.origin,
+      frontend_url: `${window.location.origin}/#/signup?code=`,
     };
-    console.log(data);
     if (
       !first_name ||
       !last_name ||
@@ -115,100 +115,125 @@ export default withRouter(function Signup({ history }) {
       });
   };
 
+  useEffect(() => {
+    let url = window.location;
+    if (url.hash.includes("code")) {
+      let code = url.hash.split("=")[1];
+      apiServices
+        .activateUser(code)
+        .then((res) => {
+          console.log(res);
+          toLogin();
+        })
+        .catch((err) => {
+          console.log(err);
+          setverifying(false);
+        });
+    }
+  }, []);
+
   return (
     <div className="signup">
       <img src={logo} alt="" className="logo" />
-      <div className="login-box">
-        <p className="welcome">Create Your Account</p>
+      {verifying ? (
+        <p style={{ paddingTop: 100 }}>Verifying account...</p>
+      ) : (
+        <div className="login-box">
+          <p className="welcome">Create Your Account</p>
 
-        <div className="inp mb20">
-          <span className="label">Fullname</span>
-          <input
-            onChange={(e) => updateForm("fullname", e.target.value)}
-            type="text"
-            className={`w100p bd-input ${
-              hasError && (!first_name || !last_name) && "has-error"
-            }`}
-          />
+          <div className="inp mb20">
+            <span className="label">Fullname</span>
+            <input
+              onChange={(e) => updateForm("fullname", e.target.value)}
+              type="text"
+              className={`w100p bd-input ${
+                hasError && (!first_name || !last_name) && "has-error"
+              }`}
+            />
+          </div>
+
+          <div className="inp mb20">
+            <span className="label">Username</span>
+            <input
+              onChange={(e) => updateForm("username", e.target.value)}
+              type="text"
+              className={`w100p bd-input ${
+                hasError && !username && "has-error"
+              }`}
+            />
+          </div>
+
+          <div className="inp mb20">
+            <span className="label">Email Address</span>
+            <input
+              type="text"
+              onChange={(e) => updateForm("email", e.target.value)}
+              className={`w100p bd-input ${hasError && !email && "has-error"}`}
+            />
+          </div>
+
+          <div className="inp mb20">
+            <span className="label">Password</span>
+            <input
+              type="password"
+              onChange={(e) => updateForm("password", e.target.value)}
+              className={`w100p bd-input ${
+                (hasError && !password) || hasPasswordError ? "has-error" : ""
+              }`}
+            />
+            {(hasPasswordError && password.length < 8) ||
+              (hasError && password.length < 8 && (
+                <span className="red" style={{ fontSize: 10 }}>
+                  Password must contain at least 8 characters
+                </span>
+              ))}
+          </div>
+
+          <div className="inp mb20">
+            <span className="label">Confirm Password</span>
+            <input
+              type="password"
+              onChange={(e) => updateForm("confirm_password", e.target.value)}
+              className={`w100p bd-input ${
+                (hasError && !password_confirmation) || hasPasswordError
+                  ? "has-error"
+                  : ""
+              }`}
+            />
+          </div>
+
+          <div className="inp mb20">
+            <span className="label">Select your country</span>
+            <select
+              onChange={(e) => updateForm("country", e.target.value)}
+              type="text"
+              className={`w100p bd-input ${
+                hasError && !country && "has-error"
+              }`}
+            >
+              {countries.map((country) => (
+                <option key={country.name} value={country.name}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <p className="forgot">
+            Creating an account means you’re okay with our{" "}
+            <span className="red">Terms of Service</span> and our{" "}
+            <span className="red">default Notification Settings</span>
+          </p>
+
+          <button className="w100p main-btn mt12" onClick={submitForm}>
+            {loading ? <Loader /> : "REGISTER"}
+          </button>
+
+          <span className="caveat" onClick={toLogin}>
+            Have an account? <span className="red pointer">Login</span>
+          </span>
         </div>
-
-        <div className="inp mb20">
-          <span className="label">Username</span>
-          <input
-            onChange={(e) => updateForm("username", e.target.value)}
-            type="text"
-            className={`w100p bd-input ${hasError && !username && "has-error"}`}
-          />
-        </div>
-
-        <div className="inp mb20">
-          <span className="label">Email Address</span>
-          <input
-            type="text"
-            onChange={(e) => updateForm("email", e.target.value)}
-            className={`w100p bd-input ${hasError && !email && "has-error"}`}
-          />
-        </div>
-
-        <div className="inp mb20">
-          <span className="label">Password</span>
-          <input
-            type="password"
-            onChange={(e) => updateForm("password", e.target.value)}
-            className={`w100p bd-input ${
-              (hasError && !password) || hasPasswordError ? "has-error" : ""
-            }`}
-          />
-          {(hasPasswordError && password.length < 8) ||
-            (hasError && password.length < 8 && (
-              <span className="red" style={{ fontSize: 10 }}>
-                Password must contain at least 8 characters
-              </span>
-            ))}
-        </div>
-
-        <div className="inp mb20">
-          <span className="label">Confirm Password</span>
-          <input
-            type="password"
-            onChange={(e) => updateForm("confirm_password", e.target.value)}
-            className={`w100p bd-input ${
-              (hasError && !password_confirmation) || hasPasswordError
-                ? "has-error"
-                : ""
-            }`}
-          />
-        </div>
-
-        <div className="inp mb20">
-          <span className="label">Select your country</span>
-          <select
-            onChange={(e) => updateForm("country", e.target.value)}
-            type="text"
-            className={`w100p bd-input ${hasError && !country && "has-error"}`}
-          >
-            {countries.map((country) => (
-              <option key={country.name} value={country.name}>
-                {country.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <p className="forgot">
-          Creating an account means you’re okay with our{" "}
-          <span className="red">Terms of Service</span> and our{" "}
-          <span className="red">default Notification Settings</span>
-        </p>
-
-        <button className="w100p main-btn mt12" onClick={submitForm}>
-          {loading ? <Loader /> : "REGISTER"}
-        </button>
-
-        <span className="caveat" onClick={toLogin}>
-          Have an account? <span className="red pointer">Login</span>
-        </span>
-      </div>
+      )}
     </div>
   );
 });

@@ -7,7 +7,7 @@ import { appContext } from "../../../store/appContext";
 import { useSnackbar } from "react-simple-snackbar";
 import Loader from "../../../components/loader/Loader";
 
-export default withRouter(function AdminOrders({ history }) {
+export default withRouter(function AdminShippings({ history }) {
   const [open, setopen] = useState(false);
   const context = useContext(appContext);
   const { websites } = context;
@@ -34,9 +34,16 @@ export default withRouter(function AdminOrders({ history }) {
 
   const getAllOrders = () => {
     apiServices
-      .adminGetAllOrders()
+      .adminGetAllShippings()
       .then((res) => {
-        setorders(res.data.data);
+        let data = res.data.data.map((ord) => {
+          return {
+            ...ord,
+            orders: JSON.parse(ord.orders),
+          };
+        });
+        console.log(data);
+        setorders(data);
       })
       .catch((err) => {
         console.log(err);
@@ -90,7 +97,7 @@ export default withRouter(function AdminOrders({ history }) {
         </div>
       </Modal>
       <div className="header">
-        All Orders
+        All Shippings
         <div className="form f-right">
           <input type="text" />
           <select name="" id="">
@@ -107,8 +114,8 @@ export default withRouter(function AdminOrders({ history }) {
           <thead>
             <tr>
               <th>Date</th>
-              <th>Product</th>
-              <th>Source</th>
+              <th>Items</th>
+              {/* <th>Source</th> */}
               <th>Tracking no.</th>
               <th>Amount</th>
               <th>Status</th>
@@ -120,25 +127,35 @@ export default withRouter(function AdminOrders({ history }) {
             {orders.map((row, i) => (
               <tr key={`row${i}`}>
                 <td>{row.created_at}</td>
-                <td>---</td>
                 <td>
-                  {websites.find((web) => web.id === row.website_id).name}
+                  <ul style={{ paddingLeft: 0 }}>
+                    {row.orders.map((ordr) => (
+                      <li style={{ height: 16, lineHeight: "16px" }}>
+                        {ordr.description
+                          .split(" ")
+                          .filter((o, i) => i <= 5)
+                          .join(" ")}{" "}
+                        ({ordr.quantity})
+                      </li>
+                    ))}
+                  </ul>
                 </td>
-                <td>{row.reference}</td>
+                {/* <td>{row.website.name}</td> */}
+                <td>{row.tracking_number}</td>
                 <td>
-                  <b>${row.total}</b>
+                  <b>${row.cost}</b>
                 </td>
                 <td>
                   <div
                     className={`dot ${
-                      row.status === "pending"
+                      row.status === "pending" || !row.status
                         ? "bg-yellow"
                         : row.status === "cancelled"
                         ? "bg-red"
                         : "bg-green"
                     }`}
                   ></div>{" "}
-                  <span className="pr10">{row.status}</span>
+                  <span className="pr10">{row.status || "pending"}</span>
                 </td>
                 <td className="pointer" onClick={() => updateOrder(row.id)}>
                   Update

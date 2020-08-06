@@ -153,6 +153,12 @@ export const NavLinks = ({
     //   link: "/dashboard/orders/",
     //   name: "Orders",
     // },
+
+    // {
+    //   text: "Shippings",
+    //   link: "/dashboard/shippings/",
+    //   name: "Shippings",
+    // },
     // {
     //   name: "Exchange Rates",
     //   text: "Exchange Rates",

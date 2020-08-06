@@ -99,9 +99,10 @@ export default withRouter(function Login({ history }) {
             });
 
           apiServices
-            .getAllShippings()
+            .getAllShippingTypes()
             .then((res) => {
-              saveShippings(res.data.usershippings.data);
+              console.log({ shippings: res });
+              saveShippings(res.data);
             })
             .catch((err) => {
               console.log(err);

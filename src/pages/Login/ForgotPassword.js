@@ -17,15 +17,19 @@ export default withRouter(function ForgotPaaword({ history }) {
   const [email, setEmail] = useState("");
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
-  const [sent, setsent] = useState(true);
+  const [sent, setsent] = useState(false);
 
   const toSignup = () => {
     history.push("/signup");
   };
 
   const submit = () => {
+    if (sent) {
+      history.push("/login");
+    }
     let data = {
       email,
+      frontend_url: `${window.location.origin}/#/forgot-password?code=`,
     };
     if (!email) {
       sethasError(true);
@@ -63,8 +67,8 @@ export default withRouter(function ForgotPaaword({ history }) {
         ) : (
           <div style={{ color: "#2D2F39", fontSize: 14, lineHeight: "24px" }}>
             <p>
-              We have sent an email to *********************** with a link to
-              reset your password.
+              We have sent an email to {email} with a link to reset your
+              password.
             </p>
             <p>
               If you have not received a mail after a few minutes, please check

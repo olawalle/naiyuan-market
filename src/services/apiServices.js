@@ -24,6 +24,13 @@ let getCurrentUser = () => {
   });
 };
 
+let activateUser = (code) => {
+  return axios({
+    method: "get",
+    url: `${urls.activateUrl}/${code}`,
+  });
+};
+
 let postOrder = (data) => {
   return axios({
     method: "post",
@@ -76,10 +83,38 @@ let getAllProcurements = () => {
   });
 };
 
-let getAllShippings = () => {
+let getAllShippingTypes = () => {
   return axios({
     method: "get",
-    url: `${urls.baseUrl}user-shippings`,
+    url: `${urls.shippingTypesUrl}`,
+  });
+};
+
+let getUserShippings = () => {
+  return axios({
+    method: "get",
+    url: urls.userShippingUrl,
+  });
+};
+
+let adminGetAllShippings = () => {
+  return axios({
+    method: "get",
+    url: urls.allShippingsUrl,
+  });
+};
+
+let adminGetAllOrders = () => {
+  return axios({
+    method: "get",
+    url: urls.allOrdersUrl,
+  });
+};
+
+let adminGetAllProcurements = () => {
+  return axios({
+    method: "get",
+    url: urls.allProcurementsUrl,
   });
 };
 
@@ -266,13 +301,6 @@ let deleteShippingType = (id) => {
   });
 };
 
-let getUserShippings = () => {
-  return axios({
-    method: "get",
-    url: urls.userShippingUrl,
-  });
-};
-
 let uploadShipping = (data) => {
   return axios({
     method: "post",
@@ -292,6 +320,7 @@ export default {
   signupUser,
   userLogin,
   getCurrentUser,
+  activateUser,
   postOrder,
   getRates,
   addRate,
@@ -320,11 +349,14 @@ export default {
   trackShipping,
   getAllOrders,
   getAllProcurements,
-  getAllShippings,
+  getAllShippingTypes,
   getAllUserss,
   postNotification,
   getShippingTypes,
   addShippingType,
   updateShippingType,
   deleteShippingType,
+  adminGetAllShippings,
+  adminGetAllOrders,
+  adminGetAllProcurements,
 };
