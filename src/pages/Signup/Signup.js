@@ -123,6 +123,7 @@ export default withRouter(function Signup({ history }) {
         .activateUser(code)
         .then((res) => {
           console.log(res);
+          openSnackbar("Account activated", 5000);
           toLogin();
         })
         .catch((err) => {

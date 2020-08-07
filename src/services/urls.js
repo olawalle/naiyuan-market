@@ -7,6 +7,12 @@ export const signupUrl = `${baseUrl}auth/signup-email`;
 export const loginUrl = `${baseUrl}auth/login`;
 export const userUrl = `${baseUrl}user/me`;
 export const usersUrl = `${baseUrl}users/all`;
+
+export const passwordResetUrl = `${baseUrl}auth/password/new`;
+export const changePasswordUrl = `${baseUrl}auth/change-password`;
+
+export const profilePicUrl = `${baseUrl}profile-picture`;
+export const activateUrl = `${baseUrl}auth/activate`;
 export const allOrdersUrl = `${baseUrl}orders/all`;
 export const allShippingsUrl = `${baseUrl}shippings/all`;
 export const allProcurementsUrl = `${baseUrl}procurements/all`;
@@ -30,5 +36,4 @@ export const shippingTypesUrl = `${baseUrl}shippings`;
 export const addressUrl = `${baseUrl}address`;
 export const shippingTypeUrl = `${baseUrl}shipping`;
 export const withdrawalUrl = `${baseUrl}withdrawals`;
-export const activateUrl = `${baseUrl}activate`;
 export const trackingUrl = `${baseUrl}track-order`;

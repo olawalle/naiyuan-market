@@ -17,6 +17,22 @@ let userLogin = (data) => {
   });
 };
 
+let resetPassword = (data) => {
+  return axios({
+    method: "post",
+    url: urls.passwordResetUrl,
+    data,
+  });
+};
+
+let changePassword = (data) => {
+  return axios({
+    method: "post",
+    url: urls.changePasswordUrl,
+    data,
+  });
+};
+
 let getCurrentUser = () => {
   return axios({
     method: "get",
@@ -28,6 +44,14 @@ let activateUser = (code) => {
   return axios({
     method: "get",
     url: `${urls.activateUrl}/${code}`,
+  });
+};
+
+let uploadProfilePic = (data) => {
+  return axios({
+    method: "post",
+    url: urls.profilePicUrl,
+    data,
   });
 };
 
@@ -321,6 +345,9 @@ export default {
   userLogin,
   getCurrentUser,
   activateUser,
+  resetPassword,
+  changePassword,
+  uploadProfilePic,
   postOrder,
   getRates,
   addRate,

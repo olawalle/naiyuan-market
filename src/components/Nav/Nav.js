@@ -12,6 +12,7 @@ import { NavLinks } from "../Sidebar/Sidebar";
 import Avatar from "../Avatar/Avatar";
 import { appContext } from "../../store/appContext";
 import { Modal } from "react-responsive-modal";
+import { mainUrl } from "../../services/urls";
 
 export default withRouter(function Nav({ showLogo, history }) {
   const context = useContext(appContext);
@@ -88,7 +89,11 @@ export default withRouter(function Nav({ showLogo, history }) {
           <div
             className="avatar"
             style={{
-              backgroundImage: `url("https://randomuser.me/api/portraits/women/34.jpg")`,
+              backgroundSize: "cover",
+              backgroundImage:
+                user.picture && user.picture.path
+                  ? `url(${mainUrl}/image/${user.picture.path})`
+                  : "",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

@@ -28,9 +28,10 @@ export const Balance = () => {
 
   const returnBalance = () => {
     let yuanRate = rates.find((r) => r.pair === "Naira/Yuan");
-    let yuanRate_ = yuanRate ? parseFloat(yuanRate.rate.split("/")[1]) : null;
-    let yuanBalance = user.balance * yuanRate_;
+    let yuanRate_ = yuanRate ? parseFloat(yuanRate.rate.split("/")[0]) : null;
+    let yuanBalance = user.balance / yuanRate_;
     let val = currency === "₦" ? user.balance : yuanBalance;
+
     return val.toLocaleString();
   };
 

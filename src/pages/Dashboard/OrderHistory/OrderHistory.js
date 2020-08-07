@@ -30,7 +30,7 @@ export default withRouter(function OrderHistory({ history }) {
               <th>Date</th>
               <th>Product</th>
               <th>Source</th>
-              <th>Tracking no.</th>
+              <th>Reference no.</th>
               <th>Amount</th>
               <th>Status</th>
             </tr>
