@@ -5,7 +5,7 @@
     transition: linear all 0.2s;
     float: left;
     &.open {
-      width: 220px;
+      width: 250px;
     }
     .arrow {
       width: 25px;
@@ -34,13 +34,13 @@
     float: left;
     height: 100vh;
     overflow: hidden;
-    width: calc(100% - 220px);
+    width: calc(100% - 250px);
     padding-top: 60px;
     &.wide {
       width: calc(100% - 80px) !important;
     }
     &.narrow {
-      width: calc(100% - 220px) !important;
+      width: calc(100% - 250px) !important;
     }
   }
   @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {

@@ -3,8 +3,12 @@ import "./PaySupplier.scss";
 import apiServices from "../../../services/apiServices";
 import { useSnackbar } from "react-simple-snackbar";
 import Loader from "../../../components/loader/Loader";
+import { useContext } from "react";
+import { appContext } from "../../../store/appContext";
 
 export default function PaySuppier() {
+  const context = useContext(appContext);
+  const { updateUser, setTnx } = context;
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
   const options = {
@@ -55,6 +59,8 @@ export default function PaySuppier() {
           payment_description: "",
           amount: "",
         });
+        fetchUser();
+        getTransactions();
       })
       .catch((err) => {
         console.log({ err });
@@ -66,9 +72,31 @@ export default function PaySuppier() {
       });
   };
 
+  const fetchUser = () => {
+    apiServices
+      .getCurrentUser()
+      .then((res) => {
+        updateUser(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  };
+
+  const getTransactions = () => {
+    apiServices
+      .getTnxs()
+      .then((tnx) => {
+        setTnx(tnx.data.transactions.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="pay-supplier">
-      <div className="header">Shipping Records</div>
+      <div className="header">Pay Supplier</div>
 
       <div className="gradient w100p mt30">
         <div className="roww">
@@ -108,7 +136,7 @@ export default function PaySuppier() {
           </div>
         </div>
         <div className="roww">
-          <div className="label">Receiever's Name</div>
+          <div className="label">Receiver's Name</div>
           <div className="inp">
             <input
               type="text"

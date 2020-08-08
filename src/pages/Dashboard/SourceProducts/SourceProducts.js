@@ -245,10 +245,10 @@ export default function SourceProducts() {
                   Item(s)
                 </p>
                 <p>
-                  20.00 <span className="grey">USD</span>
+                  --- <span className="grey">NGN</span>
                 </p>
                 <p>
-                  20,000.00 <span className="grey">USD</span>
+                  300.00 <span className="grey">NGN</span>
                 </p>
               </div>
             </div>
@@ -256,7 +256,13 @@ export default function SourceProducts() {
               <div className="item"></div>
               <div className="qty">GRAND TOTAL</div>
               <div className="date">
-                <b>2,200</b> <span className="grey">USD</span>
+                <b>
+                  {cart.reduce((sum, item) => {
+                    sum += parseFloat(item.quantity);
+                    return sum;
+                  }, 0) * 300}
+                </b>{" "}
+                <span className="grey">USD</span>
               </div>
             </div>
           </>

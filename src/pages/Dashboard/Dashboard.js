@@ -38,6 +38,7 @@ export default function Dashboard() {
     websites,
     setrates,
     rates,
+    updateUser,
   } = context;
 
   let match = useRouteMatch();
@@ -91,6 +92,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    fetchUser();
     apiServices
       .getRates()
       .then((res) => {
@@ -137,6 +139,17 @@ export default function Dashboard() {
     let dollar = rates.find((r) => r.pair === "Naira/Dollar");
     let dollarRate = dollar ? (1 / dollar.rate.split("/")[0]).toFixed(4) : 0;
     return dollarRate;
+  };
+
+  const fetchUser = () => {
+    apiServices
+      .getCurrentUser()
+      .then((res) => {
+        updateUser(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
   };
 
   return (

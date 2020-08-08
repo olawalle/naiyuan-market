@@ -238,6 +238,12 @@ export const NavLinks = ({
     }
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    history.push("/login");
+  };
+
   return (
     <ul className="links">
       {linksRendered.map((link, i) => (
@@ -277,6 +283,12 @@ export const NavLinks = ({
           )}
         </li>
       ))}
+      <li className="logout">
+        <div onClick={() => handleLogout()} className={`main-link pointer`}>
+          {/* <span dangerouslySetInnerHTML={{ __html: icons[] }}></span> */}
+          {sideOpen && <span>Logout</span>}
+        </div>
+      </li>
     </ul>
   );
 };

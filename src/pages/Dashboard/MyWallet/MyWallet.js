@@ -13,7 +13,7 @@ import { withRouter } from "react-router-dom";
 
 export default withRouter(function MyWallet({ history }) {
   const context = useContext(appContext);
-  const { user, tnx } = context;
+  const { user, tnx, setTnx, updateUser } = context;
   const [open, setopen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(0);
@@ -37,9 +37,12 @@ export default withRouter(function MyWallet({ history }) {
         obj[tn.date] = obj[tn.date] ? [...obj[tn.date], tn] : [tn];
         return obj;
       }, {});
-    console.log({ tnx, transactionsObj });
     settransactions(transactionsObj);
+  }, [tnx]);
+
+  useEffect(() => {
     totals();
+    getTransactions();
   }, []);
 
   const totals = () => {
@@ -85,6 +88,17 @@ export default withRouter(function MyWallet({ history }) {
       });
   };
 
+  const getTransactions = () => {
+    apiServices
+      .getTnxs()
+      .then((tnx) => {
+        setTnx(tnx.data.transactions.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleWithdrawal = () => {
     setLoading(true);
     let data = { amount, account_name, account_number, bank_name };
@@ -92,11 +106,25 @@ export default withRouter(function MyWallet({ history }) {
       .withdrawFund(data)
       .then((res) => {
         setLoading(false);
+        getTransactions();
+        fetchUser();
+        setopen(false);
         console.log(res);
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
+      });
+  };
+
+  const fetchUser = () => {
+    apiServices
+      .getCurrentUser()
+      .then((res) => {
+        updateUser(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
       });
   };
 

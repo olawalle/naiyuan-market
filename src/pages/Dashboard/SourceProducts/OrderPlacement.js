@@ -22,8 +22,10 @@ export default withRouter(function OrderPlacement({ history }) {
     cart,
     clearCart,
     orders,
+    updateUser,
     websites,
     saveOrders,
+    rates,
   } = context;
   const [orderData, setorderData] = useState({
     link: "",
@@ -32,6 +34,7 @@ export default withRouter(function OrderPlacement({ history }) {
     description: "",
     amount: "",
     picture_url: "",
+    order_name: "",
   });
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
@@ -67,12 +70,24 @@ export default withRouter(function OrderPlacement({ history }) {
           openSnackbar("Order placed sucessfully", 5000);
           history.push("/dashboard/order-history");
           fetchOrders();
+          fetchUser();
         })
         .catch((err) => {
           console.log({ err });
           setloading(false);
         });
     });
+  };
+
+  const fetchUser = () => {
+    apiServices
+      .getCurrentUser()
+      .then((res) => {
+        updateUser(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
   };
 
   const fetchOrders = () => {
@@ -99,9 +114,11 @@ export default withRouter(function OrderPlacement({ history }) {
         let amt = res.data.find(
           (itm) => itm.property === "og:price:standard_amount"
         );
+        let name_ = res.data.find((itm) => itm.property === "og:title");
         let picture_url = pic ? pic.content : "";
         let amount = amt ? amt.content : "";
-        let order = { ...orderData, picture_url, amount };
+        let order_name = amt ? name_.content : "";
+        let order = { ...orderData, picture_url, amount, order_name };
         setorderData(order);
         addToCart(order);
         setloading(false);
@@ -124,14 +141,29 @@ export default withRouter(function OrderPlacement({ history }) {
     setnewOrder(newOrder.filter((o, j) => j !== i));
   };
 
-  const orderTotal = () => {
-    return newOrder.reduce(
-      (sum, order) => (sum += parseFloat(order.amount)),
-      0
-    );
+  const dollarRate = () => {
+    let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
+    let oneDollar = naira_dollar
+      ? parseFloat(naira_dollar.rate.split("/")[0])
+      : 0;
+    return oneDollar;
   };
 
-  useEffect(() => {}, []);
+  const orderTotal = () => {
+    let amtTotal = newOrder.reduce(
+      (sum, order) =>
+        (sum +=
+          parseFloat(order.amount) * dollarRate() * parseFloat(order.quantity)),
+      0
+    );
+    let fee = 300;
+    // newOrder.reduce((sum, item) => {
+    //   sum += parseFloat(item.quantity);
+    //   return sum;
+    // }, 0) * 300;
+
+    return amtTotal + fee;
+  };
 
   return (
     <div className="source-products">
@@ -140,7 +172,7 @@ export default withRouter(function OrderPlacement({ history }) {
           <p className="heading ">Make payment</p>
           <p className="amount mt55">
             <span className="title">Total Amount</span>
-            <span className="amt">$ {orderTotal().toLocaleString()}</span>
+            <span className="amt">NGN {orderTotal().toLocaleString()}</span>
           </p>
           <div className="form w100p mt12">
             <div className="inp w100p">
@@ -265,7 +297,10 @@ export default withRouter(function OrderPlacement({ history }) {
                   />
                 </div>
               </div>
-              <div className="date">{item.amount}</div>
+              <div className="date">
+                NGN{" "}
+                {(dollarRate() * item.quantity * item.amount).toLocaleString()}
+              </div>
             </div>
           );
         })}
@@ -287,18 +322,20 @@ export default withRouter(function OrderPlacement({ history }) {
                   Item(s)
                 </p>
                 <p>
-                  20.00 <span className="grey">USD</span>
+                  --- <span className="grey">USD</span>
                 </p>
                 <p>
-                  20,000.00 <span className="grey">USD</span>
+                  300.00 <span className="grey">NGN</span>
                 </p>
               </div>
             </div>
+
             <div className="footer">
               <div className="item"></div>
               <div className="qty">GRAND TOTAL</div>
               <div className="date">
-                <b>2,200</b> <span className="grey">USD</span>
+                <b>{orderTotal().toLocaleString()}</b>{" "}
+                <span className="grey">NGN</span>
               </div>
             </div>
           </>

@@ -1,6 +1,7 @@
 .orderHistory {
   padding: 60px;
   .header {
+    font-weight: 600;
     width: 100%;
     text-align: left;
     p {
@@ -29,6 +30,7 @@
   @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
     padding: 60px 20px;
     .header {
+      font-weight: 600;
       .form {
         padding: 15px 0;
         width: 100%;

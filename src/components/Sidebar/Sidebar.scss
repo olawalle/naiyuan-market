@@ -15,4 +15,12 @@
       height: 35px;
     }
   }
+  .logout {
+    display: none;
+  }
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    .logout {
+      display: block;
+    }
+  }
 }

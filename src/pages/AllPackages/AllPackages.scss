@@ -4,6 +4,7 @@
   padding-bottom: 30px;
   padding-top: 60px;
   .header {
+    font-weight: 600;
     background: #4a0003;
     height: 200px;
     width: 100%;
@@ -50,6 +51,7 @@
   }
   @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
     .header {
+      font-weight: 600;
       padding: 30px;
       .left {
         width: 100%;

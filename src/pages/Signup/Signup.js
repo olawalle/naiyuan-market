@@ -26,7 +26,7 @@ export default withRouter(function Signup({ history }) {
   const [password_confirmation, setpassword_confirmation] = useState("");
   const [frontend_url, setfrontend_url] = useState("");
   const [loading, setloading] = useState(false);
-  const [verifying, setverifying] = useState(true);
+  const [verifying, setverifying] = useState(false);
 
   const toLogin = () => {
     history.push("/login");

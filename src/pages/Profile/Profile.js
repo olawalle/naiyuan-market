@@ -4,12 +4,15 @@ import { withRouter } from "react-router-dom";
 import Nav from "../../components/Nav/Nav";
 import Avatar from "../../components/Avatar/Avatar";
 import { appContext } from "../../store/appContext";
+import { AddAddress } from "../../components/ShippingModal/ShippingModal";
+import Modal from "react-responsive-modal";
 
 export default withRouter(function Profile({ history }) {
   const context = useContext(appContext);
-  const { user } = context;
+  const { user, addresses } = context;
 
   const [updatedData, setupdatedData] = useState({});
+  const [open, setopen] = useState(false);
 
   useEffect(() => {
     console.log(user);
@@ -30,8 +33,14 @@ export default withRouter(function Profile({ history }) {
   const toTerms = () => {
     history.push("/terms/");
   };
+
+  const onCloseModal = () => setopen(false);
+
   return (
     <div className="profile">
+      <Modal open={open} onClose={onCloseModal} center>
+        <AddAddress showBack={false} setAddinNew={null} setopen={setopen} />
+      </Modal>
       <Nav showLogo={true} />
       <div className="header">
         <div className="left t-left">
@@ -118,21 +127,22 @@ export default withRouter(function Profile({ history }) {
         <div className="narrow t-center">
           <Avatar />
 
-          <div className="name">Mr Eric Moore</div>
+          <div className="name">Mr {user.full_name}</div>
           <div className="addresses">
-            <div className="address">
-              <b>Address 1:</b> Lorem, ipsum dolor sit amet consectetur
-              adipisicing elit. Rerum.
-            </div>
-            <div className="address">
-              <b>Address 2:</b> Lorem, ipsum dolor sit amet consectetur
-              adipisicing elit. Rerum.
-            </div>
+            {addresses.map((address, i) => (
+              <div className="address">
+                <b>Address {i + 1}:</b> {address.address}, {address.country}
+              </div>
+            ))}
             <div className="address">
               <b>Phone:</b> <br />
-              08022332233
+              {user.phone || user.phone_number || "---"}
             </div>
-            <button onClick={toTerms} className="main-btn">
+            <button onClick={() => setopen(true)} className="main-btn">
+              Add Address
+            </button>{" "}
+            <br />
+            <button onClick={toTerms} className="main-btn mt12">
               Term of Service
             </button>
           </div>

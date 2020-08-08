@@ -41,7 +41,8 @@ export default withRouter(function OrderHistory({ history }) {
               <tr key={`row${i}`}>
                 <td>{row.created_at}</td>
                 <td>
-                  --- <img src={row.picture_url} width={30} alt="" />
+                  {row.name || "---"}{" "}
+                  <img src={row.picture_url} width={30} alt="" />
                 </td>
                 <td>
                   {websites.find((web) => web.id === row.website_id).name}
