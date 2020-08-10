@@ -16,6 +16,8 @@ export const NavLinks = ({
   setName,
   role,
 }) => {
+  const context = useContext(appContext);
+  const { user } = context;
   const [activeIndex, setactiveIndex] = useState(0);
   const [activeIndex_, setactiveIndex_] = useState(null);
   const icons = [
@@ -148,44 +150,23 @@ export const NavLinks = ({
       text: "Contact Support",
       link: "/dashboard/support",
     },
-    // {
-    //   text: "Orders",
-    //   link: "/dashboard/orders/",
-    //   name: "Orders",
-    // },
-
-    // {
-    //   text: "Shippings",
-    //   link: "/dashboard/shippings/",
-    //   name: "Shippings",
-    // },
-    // {
-    //   name: "Exchange Rates",
-    //   text: "Exchange Rates",
-    //   link: "/dashboard/exchange-rates",
-    // },
-    // {
-    //   name: "Websites",
-    //   text: "Websites",
-    //   link: "/dashboard/websites",
-    // },
-    // {
-    //   name: "Shipping Types",
-    //   text: "Shipping Types",
-    //   link: "/dashboard/shipping-types",
-    // },
-    // {
-    //   name: "Notifications",
-    //   text: "Notifications",
-    //   link: "/dashboard/notifications",
-    // },
   ]);
 
   const [adminLinks, setAdminLinks] = useState([
     {
-      text: "Orders",
-      link: "/dashboard/orders/",
+      text: "All Orders",
+      link: "/dashboard/all-orders/",
       name: "Orders",
+    },
+    {
+      text: "All Shippings",
+      link: "/dashboard/all-shippings/",
+      name: "Shippings",
+    },
+    {
+      text: "All Procurements",
+      link: "/dashboard/all-procurements/",
+      name: "Shippings",
     },
     {
       name: "Exchange Rates",
@@ -193,12 +174,22 @@ export const NavLinks = ({
       link: "/dashboard/exchange-rates",
     },
     {
+      name: "Websites",
+      text: "Websites",
+      link: "/dashboard/websites",
+    },
+    {
+      name: "Shipping Types",
+      text: "Shipping Types",
+      link: "/dashboard/shipping-types",
+    },
+    {
       name: "Notifications",
       text: "Notifications",
       link: "/dashboard/notifications",
     },
   ]);
-  const linksRendered = role === 6 ? adminLinks : links;
+  const linksRendered = user.rolevalue === "superadmin" ? adminLinks : links;
 
   const openChild = (i, j) => {
     setTimeout(() => {

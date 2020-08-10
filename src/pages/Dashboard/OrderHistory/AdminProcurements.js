@@ -7,8 +7,9 @@ import { appContext } from "../../../store/appContext";
 import { useSnackbar } from "react-simple-snackbar";
 import Loader from "../../../components/loader/Loader";
 import dayjs from "dayjs";
+import { mainUrl } from "../../../services/urls";
 
-export default withRouter(function AdminOrders({ history }) {
+export default withRouter(function AdminProcurements({ history }) {
   const [open, setopen] = useState(false);
   const context = useContext(appContext);
   const { websites } = context;
@@ -36,8 +37,9 @@ export default withRouter(function AdminOrders({ history }) {
 
   const getAllOrders = () => {
     apiServices
-      .adminGetAllOrders()
+      .adminGetAllProcurements()
       .then((res) => {
+        console.log(res);
         setorders(res.data.data);
       })
       .catch((err) => {
@@ -122,11 +124,10 @@ export default withRouter(function AdminOrders({ history }) {
           <thead>
             <tr>
               <th>Date</th>
-              <th>Product</th>
-              <th>Source</th>
-              <th>Tracking no.</th>
-              <th>Amount</th>
-              <th>Status</th>
+              <th>Description</th>
+              <th>Picture</th>
+              <th>Quantity</th>
+              <th>User</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -135,25 +136,17 @@ export default withRouter(function AdminOrders({ history }) {
             {filteredOrders().map((row, i) => (
               <tr key={`row${i}`}>
                 <td>{dayjs(row.created_at).format("DD MMM, YYYY")}</td>
-                <td>{row.order_name}</td>
+                <td>{row.description}</td>
                 <td>
-                  {websites.find((web) => web.id === row.website_id).name}
+                  <img
+                    src={`${mainUrl}/image/${JSON.parse(row.picture)[0].path}`}
+                    alt=""
+                    width={200}
+                  />
                 </td>
-                <td>{row.reference}</td>
+                <td>{row.quantity}</td>
                 <td>
-                  <b>${row.total}</b>
-                </td>
-                <td>
-                  <div
-                    className={`dot ${
-                      row.status === "pending"
-                        ? "bg-yellow"
-                        : row.status === "cancelled"
-                        ? "bg-red"
-                        : "bg-green"
-                    }`}
-                  ></div>{" "}
-                  <span className="pr10">{row.status}</span>
+                  <b>{row.user.full_name}</b>
                 </td>
                 <td className="pointer" onClick={() => updateOrder(row.id)}>
                   <span

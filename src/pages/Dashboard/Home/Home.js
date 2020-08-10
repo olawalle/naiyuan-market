@@ -116,7 +116,7 @@ export default withRouter(function Home({ history }) {
               <tr>
                 <th>Item</th>
                 <th className="web">Qty</th>
-                <th>Tracking ID</th>
+                <th>referrence No.</th>
                 <th className="web">Status</th>
               </tr>
             </thead>
@@ -125,7 +125,7 @@ export default withRouter(function Home({ history }) {
                 <tr key={`row${i}`}>
                   <td>
                     <span className="no">{i + 1}</span>
-                    Deskjet Printers
+                    {row.order_name || "---"}
                     <img
                       src={row.picture_url}
                       height="20"

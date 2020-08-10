@@ -106,7 +106,7 @@ export default withRouter(function AllPackages({ history }) {
                         checked={pickedItems.includes(i)}
                         onChange={() => updateItems(i)}
                       />
-                      ---
+                      {row.order_name || "---"}
                       <img
                         src={row.picture_url}
                         width="30"

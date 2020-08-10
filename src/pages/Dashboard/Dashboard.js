@@ -28,6 +28,7 @@ import VerifyPayment from "../Login/VerifyPayment";
 import Notifications from "./OrderHistory/Notifications";
 import ShippingTypes from "./Rates/ShippingTypes";
 import AdminShippings from "./OrderHistory/AdminShippings";
+import AdminProcurements from "./OrderHistory/AdminProcurements";
 
 export default function Dashboard() {
   const context = useContext(appContext);
@@ -261,12 +262,16 @@ export default function Dashboard() {
               <ShippingRecords />
             </Route>
 
-            <Route path={`${match.path}orders`}>
+            <Route path={`${match.path}all-orders`}>
               <AdminOrders />
             </Route>
 
-            <Route path={`${match.path}shippings`}>
+            <Route path={`${match.path}all-shippings`}>
               <AdminShippings />
+            </Route>
+
+            <Route path={`${match.path}all-procurements`}>
+              <AdminProcurements />
             </Route>
             <Route path={`${match.path}pay-supplier`}>
               <PaySupplier />

@@ -110,7 +110,7 @@ export default function Tracking() {
             </div>
             {statuses.map((item) => (
               <div className="row items">
-                <div className="three">{item.date}</div>
+                <div className="three">{item.date || "---"}</div>
                 <div className="three">{item.location}</div>
                 <div className="three event">
                   <span className="black">{item.title}</span>

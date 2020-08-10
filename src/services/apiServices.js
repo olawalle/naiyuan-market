@@ -66,7 +66,15 @@ let postOrder = (data) => {
 let updateOrder = (data, id) => {
   return axios({
     method: "post",
-    url: `${urls.orderUrl}/update/${id}`,
+    url: `${urls.baseUrl}orders/update/${id}`,
+    data,
+  });
+};
+
+let updateShipping = (data) => {
+  return axios({
+    method: "post",
+    url: `${urls.baseUrl}shipping-status`,
     data,
   });
 };
@@ -357,6 +365,7 @@ export default {
   uploadPic,
   getOrders,
   updateOrder,
+  updateShipping,
   requestPaystack,
   getNotifications,
   requestReset,

@@ -6,6 +6,7 @@ import apiServices from "../../../services/apiServices";
 import { appContext } from "../../../store/appContext";
 import { useSnackbar } from "react-simple-snackbar";
 import Loader from "../../../components/loader/Loader";
+import dayjs from "dayjs";
 
 export default withRouter(function AdminShippings({ history }) {
   const [open, setopen] = useState(false);
@@ -15,6 +16,19 @@ export default withRouter(function AdminShippings({ history }) {
   const [order_status, setStatus] = useState("");
   const [selectedId, setselectedId] = useState(null);
   const [loading, setloading] = useState(false);
+  const [fetching, setfetching] = useState(false);
+  const [updateData, setupdateData] = useState({
+    title: "",
+    user_shipping_id: "",
+    description: "",
+    event: "",
+    location: "",
+    date: "",
+  });
+  const [filterVal, setFilterVal] = useState({
+    inp: "",
+    status: "All",
+  });
   const onCloseModal = () => {
     setopen(false);
   };
@@ -26,6 +40,10 @@ export default withRouter(function AdminShippings({ history }) {
   const updateOrder = (id) => {
     setopen(true);
     setselectedId(id);
+    setupdateData({
+      ...updateData,
+      user_shipping_id: id,
+    });
   };
 
   useEffect(() => {
@@ -33,6 +51,7 @@ export default withRouter(function AdminShippings({ history }) {
   }, []);
 
   const getAllOrders = () => {
+    setfetching(true);
     apiServices
       .adminGetAllShippings()
       .then((res) => {
@@ -41,8 +60,10 @@ export default withRouter(function AdminShippings({ history }) {
             ...ord,
             orders: JSON.parse(ord.orders),
           };
+          setfetching(false);
         });
         console.log(data);
+        setfetching(false);
         setorders(data);
       })
       .catch((err) => {
@@ -51,14 +72,16 @@ export default withRouter(function AdminShippings({ history }) {
   };
 
   const submitUpdateOrder = () => {
-    let data = { order_status };
+    let data = { ...updateData, data: dayjs().format("DD MMM YYYY") };
+
     setloading(true);
     apiServices
-      .updateOrder(data, selectedId)
+      .updateShipping(data)
       .then((res) => {
         console.log(res);
         setloading(false);
         setopen(false);
+        getAllOrders();
         openSnackbar("Order updated successfully", 5000);
       })
       .catch((err) => {
@@ -66,6 +89,15 @@ export default withRouter(function AdminShippings({ history }) {
         openSnackbar("An error occured. Please try again", 5000);
         console.log(err);
       });
+  };
+
+  const filteredOrders = () => {
+    let orders_ = [...orders];
+    return filterVal.inp
+      ? orders_.filter((ord) => {
+          return ord.tracking_number === filterVal.inp;
+        })
+      : orders_;
   };
 
   return (
@@ -78,17 +110,58 @@ export default withRouter(function AdminShippings({ history }) {
           <div className="header">Update Order</div>
 
           <div className="inp mb20">
-            <span className="label">Status</span>
+            <span className="label">Title</span>
             <select
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) =>
+                setupdateData({
+                  ...updateData,
+                  title: e.target.value,
+                })
+              }
               type="text"
-              className={`w100p bd-input`}
+              className={`w100p bd-input mb20`}
             >
-              <option value="Pending">pending</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Cancelled">Cancelled</option>
+              <option value="Pending">Ordered</option>
+              <option value="Shipped">Ready</option>
+              <option value="Cancelled">Shipped</option>
               <option value="Delivered">Delivered</option>
             </select>
+
+            <span className="label">Description</span>
+            <input
+              type="text"
+              className="w100p bd-input mb20"
+              onChange={(e) =>
+                setupdateData({
+                  ...updateData,
+                  description: e.target.value,
+                })
+              }
+            />
+
+            <span className="label">Event</span>
+            <input
+              type="text"
+              className="w100p bd-input mb20"
+              onChange={(e) =>
+                setupdateData({
+                  ...updateData,
+                  event: e.target.value,
+                })
+              }
+            />
+
+            <span className="label">location</span>
+            <input
+              type="text"
+              className="w100p bd-input mb20"
+              onChange={(e) =>
+                setupdateData({
+                  ...updateData,
+                  location: e.target.value,
+                })
+              }
+            />
           </div>
 
           <button className="main-btn f-right" onClick={submitUpdateOrder}>
@@ -99,13 +172,12 @@ export default withRouter(function AdminShippings({ history }) {
       <div className="header">
         All Shippings
         <div className="form f-right">
-          <input type="text" />
-          <select name="" id="">
-            <option value=""></option>
-          </select>
-          <select name="" id="">
-            <option value=""></option>
-          </select>
+          <input
+            type="text"
+            onChange={(e) => setFilterVal({ inp: e.target.value })}
+            placeholder="Tracking no."
+            className="f-right mr12"
+          />
         </div>
       </div>
 
@@ -123,46 +195,63 @@ export default withRouter(function AdminShippings({ history }) {
             </tr>
           </thead>
 
-          <tbody>
-            {orders.map((row, i) => (
-              <tr key={`row${i}`}>
-                <td>{row.created_at}</td>
-                <td>
-                  <ul style={{ paddingLeft: 0 }}>
-                    {row.orders.map((ordr) => (
-                      <li style={{ height: 16, lineHeight: "16px" }}>
-                        {ordr.description
-                          .split(" ")
-                          .filter((o, i) => i <= 5)
-                          .join(" ")}{" "}
-                        ({ordr.quantity})
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                {/* <td>{row.website.name}</td> */}
-                <td>{row.tracking_number}</td>
-                <td>
-                  <b>${row.cost}</b>
-                </td>
-                <td>
-                  <div
-                    className={`dot ${
-                      row.status === "pending" || !row.status
-                        ? "bg-yellow"
-                        : row.status === "cancelled"
-                        ? "bg-red"
-                        : "bg-green"
-                    }`}
-                  ></div>{" "}
-                  <span className="pr10">{row.status || "pending"}</span>
-                </td>
-                <td className="pointer" onClick={() => updateOrder(row.id)}>
-                  Update
-                </td>
+          {!fetching ? (
+            <tbody>
+              {filteredOrders().map((row, i) => (
+                <tr key={`row${i}`}>
+                  <td>{row.created_at}</td>
+                  <td>
+                    <ul style={{ paddingLeft: 0 }}>
+                      {row.orders.map((ordr) => (
+                        <li style={{ height: 16, lineHeight: "16px" }}>
+                          {ordr.description
+                            .split(" ")
+                            .filter((o, i) => i <= 5)
+                            .join(" ")}{" "}
+                          ({ordr.quantity})
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  {/* <td>{row.website.name}</td> */}
+                  <td>{row.tracking_number}</td>
+                  <td>
+                    <b>${row.cost}</b>
+                  </td>
+                  <td>
+                    <div
+                      className={`dot ${
+                        row.status === "Ordered" || !row.status
+                          ? "bg-yellow"
+                          : row.status === "cancelled"
+                          ? "bg-red"
+                          : "bg-green"
+                      }`}
+                    ></div>{" "}
+                    <span className="pr10">{row.status || "Ordered"}</span>
+                  </td>
+                  <td className="pointer" onClick={() => updateOrder(row.id)}>
+                    <span
+                      style={{
+                        padding: "10px 20px",
+                        borderRadius: 20,
+                        backgroundColor: "#ff130217",
+                        color: "#ff0c03",
+                      }}
+                    >
+                      Update
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan={5}>Loading</td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
         </table>
       </div>
     </div>
