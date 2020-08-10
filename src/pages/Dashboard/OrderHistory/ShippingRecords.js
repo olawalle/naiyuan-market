@@ -8,9 +8,13 @@ export default withRouter(function ShippingRecords({ history }) {
   const context = useContext(appContext);
   const { shippings, userShippings } = context;
   const [orderShippings, setorderShippings] = useState([]);
+  const [orders_, setorders_] = useState([]);
+  const [filterVal, setFilterVal] = useState({
+    inp: "",
+    status: "All",
+  });
 
   useEffect(() => {
-    console.log(shippings);
     let orderShippings = shippings
       .map((shipping) => {
         let orders = JSON.parse(shipping.orders);
@@ -29,20 +33,57 @@ export default withRouter(function ShippingRecords({ history }) {
       })
       .flat();
     setorderShippings(orderShippings);
-    console.log(orderShippings);
+    setorders_(orderShippings);
   }, []);
+
+  const filteredOrders = (n, val) => {
+    let orders_ = [...orderShippings].map((o) => {
+      return {
+        ...o,
+        status: o.status ? o.status : "pending",
+      };
+    });
+    console.log({ orders_ });
+    let data =
+      n === 1
+        ? val === "All"
+          ? orders_
+          : orders_.filter((ord) => {
+              return ord.status === val;
+            })
+        : !val
+        ? orders_
+        : orders_.filter((ord) => {
+            return ord.shipping.tracking_number.includes(val);
+          });
+    setorders_(data);
+  };
 
   return (
     <div className="orderHistory">
       <div className="header">
         <p>Shipping Records</p>
         <div className="form f-right">
-          <input type="text" />
-          <select name="" id="">
-            <option value=""></option>
-          </select>
-          <select name="" id="">
-            <option value=""></option>
+          <input
+            type="text"
+            onChange={(e) => {
+              filteredOrders(2, e.target.value);
+              setFilterVal({ ...filterVal, inp: e.target.value });
+            }}
+            placeholder="Tracking no."
+          />
+          <select
+            onChange={(e) => {
+              filteredOrders(1, e.target.value);
+              setFilterVal({ ...filterVal, status: e.target.value });
+            }}
+            type="text"
+          >
+            <option value="All">All</option>
+            <option value="pending">Pending</option>
+            <option value="shipped">Shipped</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="delivered">Delivered</option>
           </select>
         </div>
       </div>
@@ -61,7 +102,7 @@ export default withRouter(function ShippingRecords({ history }) {
           </thead>
 
           <tbody>
-            {orderShippings.map((row, i) => (
+            {orders_.map((row, i) => (
               <tr key={`row${i}`}>
                 <td>{row.shipping.created_at}</td>
                 <td>{row.order.name}</td>
@@ -83,7 +124,7 @@ export default withRouter(function ShippingRecords({ history }) {
                   <span className="pr10">
                     {row.shipping.status || "pending"}
                   </span>
-                  <select
+                  {/* <select
                     name=""
                     id=""
                     className="pl12 ml30"
@@ -95,7 +136,7 @@ export default withRouter(function ShippingRecords({ history }) {
                     }}
                   >
                     <option value=""></option>
-                  </select>
+                  </select> */}
                 </td>
               </tr>
             ))}

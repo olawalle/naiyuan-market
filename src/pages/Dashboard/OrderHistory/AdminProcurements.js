@@ -48,21 +48,21 @@ export default withRouter(function AdminProcurements({ history }) {
   };
 
   const submitUpdateOrder = () => {
-    let data = { order_status };
-    setloading(true);
-    apiServices
-      .updateOrder(data, selectedId)
-      .then((res) => {
-        console.log(res);
-        setloading(false);
-        setopen(false);
-        openSnackbar("Order updated successfully", 5000);
-      })
-      .catch((err) => {
-        setloading(false);
-        openSnackbar("An error occured. Please try again", 5000);
-        console.log(err);
-      });
+    // let data = { order_status };
+    // setloading(true);
+    // apiServices
+    //   .updateOrder(data, selectedId)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setloading(false);
+    setopen(false);
+    //     openSnackbar("Order updated successfully", 5000);
+    //   })
+    //   .catch((err) => {
+    //     setloading(false);
+    //     openSnackbar("An error occured. Please try again", 5000);
+    //     console.log(err);
+    //   });
   };
 
   const filteredOrders = () => {
@@ -104,7 +104,7 @@ export default withRouter(function AdminProcurements({ history }) {
       </Modal>
       <div className="header">
         All Orders
-        <div className="form f-right">
+        {/* <div className="form f-right">
           <select
             name=""
             id=""
@@ -116,7 +116,7 @@ export default withRouter(function AdminProcurements({ history }) {
             <option value="cancelled">Cancelled</option>
             <option value="delivered">Delivered</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       <div className="gradient w100p mt50">

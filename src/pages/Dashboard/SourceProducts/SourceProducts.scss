@@ -188,6 +188,26 @@
         .white-btn {
           width: 100%;
           margin: 12px 0;
+          span {
+            min-width: 100%;
+          }
+        }
+      }
+      .side-label {
+        .label {
+          display: block;
+          width: 100%;
+        }
+        .field {
+          display: block;
+          width: 100%;
+          position: relative;
+          top: 4px;
+        }
+        .count {
+          position: relative;
+          top: -25px;
+          left: 110px;
         }
       }
     }

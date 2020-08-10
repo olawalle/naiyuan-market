@@ -234,7 +234,7 @@ export default withRouter(function OrderPlacement({ history }) {
               value={orderData.quantity}
               onChange={(e) => updateForm("quantity", e.target.value)}
             />{" "}
-            <span>Items</span>
+            <span className="count">Items</span>
           </div>
           <div className="inp side-label small">
             <span className="label">Product Description (optional)</span>

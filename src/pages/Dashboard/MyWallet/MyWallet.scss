@@ -254,7 +254,10 @@
         width: 100%;
         .tnxs {
           padding: 0 10px;
+          height: auto;
+          position: relative;
           .tnx {
+            width: 600px;
             .row {
               .one {
                 width: 40%;
@@ -269,6 +272,10 @@
                 width: 30%;
               }
             }
+          }
+          .red {
+            position: relative;
+            width: 600px;
           }
         }
       }

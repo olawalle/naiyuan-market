@@ -15,6 +15,8 @@
   .avatar {
     width: 140px;
     height: 140px;
+    text-align: center;
+    line-height: 140px;
     border-radius: 50%;
     margin: auto;
     background-color: #cfcd2e;
@@ -28,12 +30,16 @@
     position: absolute;
     left: 130px;
     background-color: #fff;
+    line-height: 45px;
+    text-align: center;
   }
   @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
     height: 160px;
     .avatar {
       width: 120px;
       height: 120px;
+      text-align: center;
+      line-height: 120px;
     }
   }
 }

@@ -5,6 +5,9 @@ import { useContext } from "react";
 import { appContext } from "../../store/appContext";
 import { mainUrl } from "../../services/urls";
 
+import edit from "../../assets/pen.svg";
+import camera from "../../assets/camera.svg";
+
 export default function Avatar() {
   const context = useContext(appContext);
   const { updateUser, user } = context;
@@ -47,8 +50,12 @@ export default function Avatar() {
               ? `url(${mainUrl}/image/${user.picture.path})`
               : "",
         }}
-      ></div>
-      <div className="edit">.</div>
+      >
+        <img src={camera} width={20} alt="" />
+      </div>
+      <div className="edit">
+        <img src={edit} width={20} alt="" />
+      </div>
     </div>
   );
 }
