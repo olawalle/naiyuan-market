@@ -8,7 +8,7 @@ import { appContext } from "../../store/appContext";
 import { useSnackbar } from "react-simple-snackbar";
 export default withRouter(function AllPackages({ history }) {
   const context = useContext(appContext);
-  const { orders } = context;
+  const { orders, websites } = context;
   const [open, setopen] = useState(false);
   const [pickedItems, setpickedItems] = useState([]);
   const options = {
@@ -33,11 +33,14 @@ export default withRouter(function AllPackages({ history }) {
   };
 
   const filteredOrders = () => {
-    return orders.filter((ord) => {
-      return status === "all"
-        ? ord.reference.toLowerCase().includes(searchVal.toLowerCase())
-        : ord.reference.includes(searchVal) && ord.status === status;
-    });
+    console.log(orders);
+    return orders
+      .filter((or) => or.carts.length)
+      .filter((ord) => {
+        return status === "all"
+          ? ord.reference.toLowerCase().includes(searchVal.toLowerCase())
+          : ord.reference.includes(searchVal) && ord.status === status;
+      });
   };
 
   return (
@@ -62,9 +65,9 @@ export default withRouter(function AllPackages({ history }) {
           </select>
           <select onChange={(e) => setStatus(e.target.value)} name="" id="">
             <option value="all">All</option>
-            <option value="pending">Pending</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="delivered">Delivered</option>
+            <option value="Pending">Pending</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Delivered">Delivered</option>
           </select>
         </div>
       </div>
@@ -106,15 +109,21 @@ export default withRouter(function AllPackages({ history }) {
                         checked={pickedItems.includes(i)}
                         onChange={() => updateItems(i)}
                       />
-                      {row.order_name || "---"}
+                      {row.carts[0].cart_name || "---"}
                       <img
-                        src={row.picture_url}
+                        src={row.carts[0].picture_url}
                         width="30"
                         alt=""
-                        style={{ marginTop: 5 }}
+                        style={{ marginTop: 5, float: "right" }}
                       />
                     </td>
-                    <td>{row.website.name}</td>
+                    <td>
+                      {
+                        websites.find(
+                          (web) => web.id === row.carts[0].website_id
+                        ).name
+                      }
+                    </td>
                     <td>{row.reference}</td>
                     <td>
                       <b>{row.total}</b>USD
@@ -122,9 +131,9 @@ export default withRouter(function AllPackages({ history }) {
                     <td>
                       <div
                         className={`dot ${
-                          row.status === "pending"
+                          row.status === "Pending"
                             ? "bg-yellow"
-                            : row.status === "cancelled"
+                            : row.status === "Cancelled"
                             ? "bg-red"
                             : "bg-green"
                         }`}
@@ -165,7 +174,7 @@ export default withRouter(function AllPackages({ history }) {
                         pickedItems.length
                           ? setopen(true)
                           : openSnackbar(
-                              "Please select items to be shipped",
+                              "Please select items to be Shipped",
                               5000
                             );
                       }}

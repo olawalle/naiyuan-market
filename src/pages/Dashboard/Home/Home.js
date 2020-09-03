@@ -9,10 +9,16 @@ import { useContext } from "react";
 import { appContext } from "../../../store/appContext";
 import { useEffect } from "react";
 import apiServices from "../../../services/apiServices";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useSnackbar } from "react-simple-snackbar";
 
 export const Balance = () => {
   const context = useContext(appContext);
   const { user, rates, setTnx, addresses } = context;
+  const options = {
+    position: "top-right",
+  };
+  const [openSnackbar, closeSnackbar] = useSnackbar(options);
   const [currency, setcurrency] = useState("₦");
 
   useEffect(() => {
@@ -24,6 +30,7 @@ export const Balance = () => {
       .catch((err) => {
         console.log(err);
       });
+    console.log({ user });
   }, []);
 
   const returnBalance = () => {
@@ -53,8 +60,7 @@ export const Balance = () => {
 
 export default withRouter(function Home({ history }) {
   const context = useContext(appContext);
-  const { orders, rates, addresses } = context;
-  console.log({ addresses });
+  const { orders, rates, addresses, user } = context;
   const toAll = () => {
     history.push("/all");
   };
@@ -62,6 +68,10 @@ export default withRouter(function Home({ history }) {
   const toProfile = () => {
     history.push("/profile");
   };
+
+  useEffect(() => {
+    console.log(addresses);
+  }, []);
 
   return (
     <div className="home">
@@ -82,15 +92,25 @@ export default withRouter(function Home({ history }) {
             <div className="btm">
               <div className="half">
                 <p>
-                  <b>Address:</b> {addresses.length ? addresses[0].address : ""}
+                  <b>Address:</b> {addresses.length ? addresses[0].address : ""}{" "}
+                  <br />
+                  <b>Phone:</b> {user.phone || "---"}
                 </p>
-                <span className="copy">copy</span>
+                <CopyToClipboard
+                  text={`Address: ${
+                    addresses.length ? addresses[0].address : "---"
+                  }, Phone: ${user.phone || "---"}`}
+                >
+                  <span className="copy">copy</span>
+                </CopyToClipboard>
               </div>
               <div className="half">
                 <p>
                   <b>防飛間:</b> 防飛間応支違索加売偽顔動思首跡初発止見使
                 </p>
-                <span className="copy">copy</span>
+                <CopyToClipboard text={"lorem"}>
+                  <span className="copy">copy</span>
+                </CopyToClipboard>
               </div>
             </div>
           </div>
@@ -116,43 +136,48 @@ export default withRouter(function Home({ history }) {
               <tr>
                 <th>Item</th>
                 <th className="web">Qty</th>
-                <th>referrence No.</th>
                 <th className="web">Status</th>
               </tr>
             </thead>
             <tbody>
-              {orders.map((row, i) => (
-                <tr key={`row${i}`}>
-                  <td>
-                    <span className="no">{i + 1}</span>
-                    {row.order_name || "---"}
-                    <img
-                      src={row.picture_url}
-                      height="20"
-                      style={{
-                        float: "right",
-                        marginRight: "30px",
-                        marginTop: "15px",
-                      }}
-                      alt=""
-                    />
-                  </td>
-                  <td className="web">{row.quantity} Units</td>
-                  <td>{row.reference}</td>
-                  <td className="web">
-                    <div
-                      className={`dot ${
-                        row.status === "pending"
-                          ? "bg-yellow"
-                          : row.status === "cancelled"
-                          ? "bg-red"
-                          : "bg-green"
-                      }`}
-                    ></div>{" "}
-                    <span className="pr10">{row.status}</span>
-                  </td>
-                </tr>
-              ))}
+              {orders
+                .filter((ord) => ord.carts.length)
+                .map((row, i) => (
+                  <tr key={`row${i}`}>
+                    <td style={{ width: "70%" }}>
+                      <span className="no">{i + 1}</span>
+                      <span style={{ width: "80%", overflow: "hidden" }}>
+                        {row.carts[0].cart_name
+                          .split(" ")
+                          .slice(0, 5)
+                          .join(" ") || "---"}
+                      </span>
+                      <img
+                        src={row.carts[0].picture_url}
+                        height="20"
+                        style={{
+                          float: "right",
+                          marginRight: "30px",
+                          marginTop: "15px",
+                        }}
+                        alt=""
+                      />
+                    </td>
+                    <td className="web">{row.carts[0].quantity} Units</td>
+                    <td className="web">
+                      <div
+                        className={`dot ${
+                          row.status === "Pending"
+                            ? "bg-yellow"
+                            : row.status === "Cancelled"
+                            ? "bg-red"
+                            : "bg-green"
+                        }`}
+                      ></div>{" "}
+                      <span className="pr10">{row.status}</span>
+                    </td>
+                  </tr>
+                ))}
               <tr>
                 <td colSpan="4">
                   <p onClick={toAll} className="red t-center pointer">

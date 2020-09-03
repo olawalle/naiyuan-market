@@ -45,6 +45,7 @@ export default function Avatar() {
         className="avatar"
         style={{
           backgroundSize: "cover",
+          backgroundPosition: "center",
           backgroundImage:
             user.picture && user.picture.path
               ? `url(${mainUrl}/image/${user.picture.path})`

@@ -78,7 +78,10 @@ export default withRouter(function ForgotPaaword({ history }) {
       .catch((err) => {
         console.log({ err });
         setloading(false);
-        openSnackbar("An error occured. Please try again", 5000);
+        openSnackbar(
+          err.response.data.error.message || "An error occured",
+          5000
+        );
       });
   };
 

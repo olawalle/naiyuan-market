@@ -3,18 +3,26 @@ import { withRouter } from "react-router-dom";
 import "./Orderhistory.scss";
 import { appContext } from "../../../store/appContext";
 import { useEffect } from "react";
+import * as dayjs from "dayjs";
 
 export default withRouter(function ShippingRecords({ history }) {
   const context = useContext(appContext);
   const { shippings, userShippings } = context;
   const [orderShippings, setorderShippings] = useState([]);
   const [orders_, setorders_] = useState([]);
+  const [usersObj, setusersObj] = useState({});
   const [filterVal, setFilterVal] = useState({
     inp: "",
     status: "All",
   });
 
   useEffect(() => {
+    // let obj = allUsers.reduce((agg, user) => {
+    //   agg[user.id] = user;
+    //   return agg;
+    // }, {});
+    // console.log(obj);
+    // setusersObj(obj);
     let orderShippings = shippings
       .map((shipping) => {
         let orders = JSON.parse(shipping.orders);
@@ -22,10 +30,10 @@ export default withRouter(function ShippingRecords({ history }) {
           return {
             order: {
               ...order,
-              name: order.description
-                .split(" ")
-                .filter((o, i) => i <= 5)
-                .join(" "),
+              name: "order.description",
+              // .split(" ")
+              // .filter((o, i) => i <= 5)
+              // .join(" "),
             },
             shipping,
           };
@@ -34,13 +42,14 @@ export default withRouter(function ShippingRecords({ history }) {
       .flat();
     setorderShippings(orderShippings);
     setorders_(orderShippings);
+    console.log({ orderShippings });
   }, []);
 
   const filteredOrders = (n, val) => {
     let orders_ = [...orderShippings].map((o) => {
       return {
         ...o,
-        status: o.status ? o.status : "pending",
+        status: o.status ? o.status : "Pending",
       };
     });
     console.log({ orders_ });
@@ -80,10 +89,10 @@ export default withRouter(function ShippingRecords({ history }) {
             type="text"
           >
             <option value="All">All</option>
-            <option value="pending">Pending</option>
-            <option value="shipped">Shipped</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="delivered">Delivered</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Delivered">Delivered</option>
           </select>
         </div>
       </div>
@@ -104,42 +113,37 @@ export default withRouter(function ShippingRecords({ history }) {
           <tbody>
             {orders_.map((row, i) => (
               <tr key={`row${i}`}>
-                <td>{row.shipping.created_at}</td>
-                <td>{row.order.name}</td>
-                <td>{row.order.website.name}</td>
+                <td>{dayjs(row.shipping.created_at).format("DD MMM YYYY")}</td>
+                <td>{row.order.carts[0].cart_name}</td>
+                <td>{row.order.carts[0].website_id}</td>
                 <td>{row.shipping.tracking_number}</td>
                 <td>
-                  <b>{row.shipping.cost}</b>USD
+                  NGN{" "}
+                  <b>
+                    {parseFloat(row.shipping.shipping.rate).toLocaleString()}
+                  </b>
                 </td>
                 <td>
                   <div
                     className={`dot ${
-                      !row.shipping.status || row.shipping.status === "pending"
+                      !row.shipping.status || row.shipping.status === "Pending"
                         ? "bg-yellow"
-                        : row.shipping.status === "cancelled"
+                        : row.shipping.status === "Cancelled"
                         ? "bg-red"
                         : "bg-green"
                     }`}
                   ></div>{" "}
                   <span className="pr10">
-                    {row.shipping.status || "pending"}
+                    {row.shipping.status || "Pending"}
                   </span>
-                  {/* <select
-                    name=""
-                    id=""
-                    className="pl12 ml30"
-                    style={{
-                      height: "25px",
-                      width: "60px",
-                      border: "1px solid #dfdfdf",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    <option value=""></option>
-                  </select> */}
                 </td>
               </tr>
             ))}
+            {!orders_.length ? (
+              <tr>
+                <td colSpan="6">No records</td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>

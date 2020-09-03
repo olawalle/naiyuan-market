@@ -26,6 +26,8 @@ export default withRouter(function OrderPlacement({ history }) {
     websites,
     saveOrders,
     rates,
+    userCart,
+    updateUserCart,
   } = context;
   const [orderData, setorderData] = useState({
     link: "",
@@ -38,19 +40,42 @@ export default withRouter(function OrderPlacement({ history }) {
   });
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
+  const [loading_, setloading_] = useState(false);
   const [uploadingImage, setuploadingImage] = useState(false);
   const [newOrder, setnewOrder] = useState([]);
   const [open, setopen] = useState(false);
+  const [count, setcount] = useState(0);
+  const [userCart_, setuserCart_] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+    setuserCart_(userCart);
+  }, [selectedItems, userCart]);
 
   const onCloseModal = () => {
     setopen(false);
   };
 
   const addToCart = (data) => {
+    setloading_(true);
+    apiServices
+      .addToCart({ ...data, cart_name: data.order_name })
+      .then((res) => {
+        setloading_(false);
+        openSnackbar("Item added to cart", 5000);
+        apiServices.getUserCart().then((res) => {
+          console.log(res);
+          updateUserCart(res.data);
+        });
+      })
+      .catch((err) => {
+        setloading_(false);
+        console.log(err);
+      });
+  };
+
+  const addToList = (data) => {
     const { quantity, description, link, website_id, picture_url } = data;
     if (!quantity || !description || !link || !website_id) {
       sethasError(true);
@@ -61,22 +86,26 @@ export default withRouter(function OrderPlacement({ history }) {
 
   const handleOrderPost = () => {
     setloading(true);
-    newOrder.map((data) => {
-      apiServices
-        .postOrder(data)
-        .then((res) => {
-          setloading(false);
-          setopen(false);
-          openSnackbar("Order placed sucessfully", 5000);
-          history.push("/dashboard/order-history");
-          fetchOrders();
-          fetchUser();
-        })
-        .catch((err) => {
-          console.log({ err });
-          setloading(false);
-        });
-    });
+    let payload = {
+      carts: selectedItems,
+      total: parseFloat(orderTotal()),
+    };
+    console.log(payload);
+    apiServices
+      .postOrder(payload)
+      .then((res) => {
+        setloading(false);
+        setopen(false);
+        openSnackbar("Order placed sucessfully", 5000);
+        history.push("/dashboard/order-history");
+        fetchOrders();
+        fetchUser();
+      })
+      .catch((err) => {
+        console.log({ err });
+        openSnackbar(err.response.data.error.message, 5000);
+        setloading(false);
+      });
   };
 
   const fetchUser = () => {
@@ -102,25 +131,50 @@ export default withRouter(function OrderPlacement({ history }) {
   };
 
   const getProductDetails = () => {
-    let data = {
-      url: orderData.link,
-    };
+    const { quantity, description, link, website_id } = orderData;
+    if (!quantity || !description || !link || !website_id) {
+      sethasError(true);
+      return;
+    }
+    let selectedSite = websites.find(
+      (s) => s.id === parseFloat(orderData.website_id)
+    ).name;
+    let n = selectedSite === "Alibaba" ? 1 : 2;
+    let data = {};
+    if (n === 1) {
+      data = {
+        url: orderData.link,
+      };
+    } else {
+      data = {
+        id: orderData.link.split("/offer/")[1].split(".")[0],
+      };
+    }
     setloading(true);
     apiServices
-      .getLinkDetails(data)
+      .getLinkDetails(data, n)
       .then((res) => {
         console.log(res);
-        let pic = res.data.find((itm) => itm.property === "og:image");
-        let amt = res.data.find(
-          (itm) => itm.property === "og:price:standard_amount"
-        );
-        let name_ = res.data.find((itm) => itm.property === "og:title");
-        let picture_url = pic ? pic.content : "";
-        let amount = amt ? amt.content : "";
-        let order_name = amt ? name_.content : "";
-        let order = { ...orderData, picture_url, amount, order_name };
-        setorderData(order);
-        addToCart(order);
+        if (n === 1) {
+          let pic = res.data.find((itm) => itm.property === "og:image");
+          let amt = res.data.find(
+            (itm) => itm.property === "og:price:standard_amount"
+          );
+          let name_ = res.data.find((itm) => itm.property === "og:title");
+          let picture_url = pic ? pic.content : "";
+          let amount = amt ? amt.content : "";
+          let order_name = amt ? name_.content : "";
+          let order = { ...orderData, picture_url, amount, order_name };
+          // setorderData(order);
+          addToCart(order);
+        } else {
+          let picture_url = res.data.item.pic_url;
+          let amount = res.data.item.price * yuanRate(); // in dollars
+          let order_name = res.data.item.title;
+          let order = { ...orderData, picture_url, amount, order_name };
+          // setorderData(order);
+          addToCart(order);
+        }
         setloading(false);
       })
       .catch((err) => {
@@ -138,9 +192,25 @@ export default withRouter(function OrderPlacement({ history }) {
   };
 
   const deleteItem = (i) => {
-    setnewOrder(newOrder.filter((o, j) => j !== i));
+    console.log(userCart_[i]);
+    apiServices
+      .deleteFromCart(userCart_[i].id)
+      .then((res) => {
+        openSnackbar("Item deleted from cart", 5000);
+      })
+      .catch((err) => {
+        console.log(err);
+        setloading(false);
+        openSnackbar(
+          err.response.data.error.message || "An error occured",
+          5000
+        );
+      });
   };
 
+  /**
+   * exchange rate of one dollar to naira
+   */
   const dollarRate = () => {
     let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
     let oneDollar = naira_dollar
@@ -149,20 +219,29 @@ export default withRouter(function OrderPlacement({ history }) {
     return oneDollar;
   };
 
-  const orderTotal = () => {
-    let amtTotal = newOrder.reduce(
-      (sum, order) =>
-        (sum +=
-          parseFloat(order.amount) * dollarRate() * parseFloat(order.quantity)),
-      0
-    );
-    let fee = 300;
-    // newOrder.reduce((sum, item) => {
-    //   sum += parseFloat(item.quantity);
-    //   return sum;
-    // }, 0) * 300;
+  /**
+   * exchange rate of one dollar to yuan
+   */
+  const yuanRate = () => {
+    let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
+    let naira_yuan = rates.find((r) => r.pair === "Naira/Yuan");
+    let oneDollar = naira_dollar
+      ? parseFloat(naira_dollar.rate.split("/")[0])
+      : 0;
+    let oneYuan = naira_yuan ? parseFloat(naira_yuan.rate.split("/")[0]) : 0;
+    let dollar_yuan_rate = oneDollar / oneYuan;
+    return dollar_yuan_rate;
+  };
 
-    return amtTotal + fee;
+  const orderTotal = () => {
+    let pickedCartItemsData = selectedItems.map((itm) =>
+      userCart_.find((cartItm) => cartItm.id === itm)
+    );
+    let amtTotal =
+      pickedCartItemsData.reduce((sum, item) => (sum += item.total), 0) *
+      dollarRate();
+    let fee = amtTotal * 0.05;
+    return (amtTotal + fee).toFixed(2);
   };
 
   return (
@@ -171,13 +250,17 @@ export default withRouter(function OrderPlacement({ history }) {
         <div className="gradient t-center o-hidden placement-modal">
           <p className="heading ">Make payment</p>
           <p className="amount mt55">
-            <span className="title">Total Amount</span>
-            <span className="amt">NGN {orderTotal().toLocaleString()}</span>
+            <span className="title">
+              Total Amount + 5% Sourcing fee(
+              {(parseFloat(orderTotal()) * 0.05).toLocaleString()})
+            </span>
+            <span className="amt">
+              NGN {parseFloat(orderTotal()).toLocaleString()}
+            </span>
           </p>
-          <div className="form w100p mt12">
+          <div className="form w100p mt16">
             <div className="inp w100p">
               <select className="border-inp w100p" name="" id="">
-                <option value="">Select Payment method</option>
                 <option value="Pay from wallet">Pay from wallet</option>
               </select>
             </div>
@@ -265,25 +348,63 @@ export default withRouter(function OrderPlacement({ history }) {
       <div className="btm">
         <p className="heading">Uploads</p>
         <div className="header">
-          <div className="item">Item</div>
+          <div className="item">
+            Item
+            <label
+              class="custom-checkbox"
+              style={{ float: "left", marginRight: 12 }}
+            >
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked
+                    ? setSelectedItems(userCart_.map((itm) => itm.id))
+                    : setSelectedItems([])
+                }
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
           <div className="qty">Quantity</div>
           <div className="date">Amount</div>
         </div>
-        {newOrder.map((item, i) => {
+        {userCart_.map((item, i) => {
           return (
             <div key={`item${i}`} className="item-details">
               <div className="item">
+                <label
+                  class="custom-checkbox"
+                  style={{ float: "left", marginRight: 12 }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={(e) =>
+                      e.target.checked
+                        ? setSelectedItems([...selectedItems, item.id])
+                        : setSelectedItems(
+                            selectedItems.filter((id) => id !== item.id)
+                          )
+                    }
+                  />
+                  <span class="checkmark"></span>
+                </label>
                 <div className="img">
                   <img src={item.picture_url} alt="" />
                 </div>
                 <div className="details">
-                  <p className="name">{item.name || "---"}</p>
+                  <p className="name">{item.cart_name || "---"}</p>
                   <p className="desc">{item.description}</p>
                   <div className="btns">
                     <button onClick={() => deleteItem(i)} className="main-btn">
                       Delete
                     </button>
-                    <button className="bd-btn ml15">Save for later</button>
+                    {/* <button
+                      className="bd-btn ml15"
+                      onClick={() => addToCart(i)}
+                    >
+                      {loading_ ? <Loader /> : "Save for later"}
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -304,7 +425,7 @@ export default withRouter(function OrderPlacement({ history }) {
             </div>
           );
         })}
-        {newOrder.length ? (
+        {userCart_.length ? (
           <>
             <div className="sub-footer">
               <div className="item"></div>
@@ -315,7 +436,7 @@ export default withRouter(function OrderPlacement({ history }) {
               </div>
               <div className="date">
                 <p>
-                  {newOrder.reduce((sum, item) => {
+                  {userCart_.reduce((sum, item) => {
                     sum += parseFloat(item.quantity);
                     return sum;
                   }, 0)}{" "}
@@ -325,7 +446,10 @@ export default withRouter(function OrderPlacement({ history }) {
                   --- <span className="grey">USD</span>
                 </p>
                 <p>
-                  300.00 <span className="grey">NGN</span>
+                  {(parseFloat(orderTotal()) * 0.05)
+                    .toFixed(2)
+                    .toLocaleString()}{" "}
+                  <span className="grey">NGN</span>
                 </p>
               </div>
             </div>
@@ -334,7 +458,7 @@ export default withRouter(function OrderPlacement({ history }) {
               <div className="item"></div>
               <div className="qty">GRAND TOTAL</div>
               <div className="date">
-                <b>{orderTotal().toLocaleString()}</b>{" "}
+                <b>{parseFloat(orderTotal()).toLocaleString()}</b>{" "}
                 <span className="grey">NGN</span>
               </div>
             </div>
@@ -343,9 +467,9 @@ export default withRouter(function OrderPlacement({ history }) {
           <p>There are no items in your cart</p>
         )}
       </div>
-      {newOrder.length ? (
+      {userCart_.length ? (
         <div className="t-right mb60">
-          <button
+          {/* <button
             style={{
               position: loading ? "relative" : "",
               top: loading ? "-13px" : "",
@@ -353,8 +477,15 @@ export default withRouter(function OrderPlacement({ history }) {
             className="bd-btn"
           >
             Save
-          </button>
-          <button onClick={() => setopen(true)} className="main-btn ml15">
+          </button> */}
+          <button
+            onClick={() =>
+              selectedItems.length
+                ? setopen(true)
+                : openSnackbar("Please select an item", 5000)
+            }
+            className="main-btn ml15"
+          >
             Checkout
           </button>
         </div>

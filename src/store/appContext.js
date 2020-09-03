@@ -32,6 +32,8 @@ export default class AppContextProvider extends Component {
     addresses: [],
     shippingTypes: [],
     shippings: [],
+    userCart: [],
+    allUsers: [],
   };
 
   componentWillMount() {
@@ -83,9 +85,13 @@ export default class AppContextProvider extends Component {
 
   saveAddresses = (addresses) => this.setState({ addresses });
 
+  updateUserCart = (userCart) => this.setState({ userCart });
+
   saveShippings = (shippingTypes) => this.setState({ shippingTypes });
 
   saveUserShippings = (shippings) => this.setState({ shippings });
+
+  saveAllUsers = (allUsers) => this.setState({ allUsers });
 
   updateUser = (user) => {
     this.setState({ user });
@@ -125,6 +131,7 @@ export default class AppContextProvider extends Component {
       updateUser,
       updateLoggedInStatus,
       updateCart,
+      updateUserCart,
       clearCart,
       removeItem,
       updateNotifications,
@@ -135,6 +142,7 @@ export default class AppContextProvider extends Component {
       setTnx,
       saveShippings,
       saveUserShippings,
+      saveAllUsers,
     } = this;
     return (
       <appContext.Provider
@@ -144,6 +152,7 @@ export default class AppContextProvider extends Component {
           updateNotifications,
           updateLoggedInStatus,
           updateCart,
+          updateUserCart,
           clearCart,
           removeItem,
           saveOrders,
@@ -153,6 +162,7 @@ export default class AppContextProvider extends Component {
           setTnx,
           saveShippings,
           saveUserShippings,
+          saveAllUsers,
         }}
       >
         {this.props.children}

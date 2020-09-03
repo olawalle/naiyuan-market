@@ -29,6 +29,8 @@ import Notifications from "./OrderHistory/Notifications";
 import ShippingTypes from "./Rates/ShippingTypes";
 import AdminShippings from "./OrderHistory/AdminShippings";
 import AdminProcurements from "./OrderHistory/AdminProcurements";
+import Cart from "./SourceProducts/Cart";
+import AllUsers from "./OrderHistory/AllUsers";
 
 export default function Dashboard() {
   const context = useContext(appContext);
@@ -71,8 +73,8 @@ export default function Dashboard() {
 
     if (topSym === "Naira") {
       btmSym === "Dollar"
-        ? setBtmAmt(topAmt * oneDollar)
-        : setBtmAmt(topAmt * oneYuan);
+        ? setBtmAmt(topAmt / oneDollar)
+        : setBtmAmt(topAmt / oneYuan);
     }
 
     if (topSym === "Dollar") {
@@ -248,6 +250,10 @@ export default function Dashboard() {
               <OrderPlacement />
             </Route>
 
+            <Route path={`${match.path}cart`}>
+              <Cart />
+            </Route>
+
             <Route path={`${match.path}my-wallet`}>
               <MyWallet />
             </Route>
@@ -266,6 +272,10 @@ export default function Dashboard() {
               <AdminOrders />
             </Route>
 
+            <Route path={`${match.path}all-users`}>
+              <AllUsers />
+            </Route>
+
             <Route path={`${match.path}all-shippings`}>
               <AdminShippings />
             </Route>
@@ -273,6 +283,7 @@ export default function Dashboard() {
             <Route path={`${match.path}all-procurements`}>
               <AdminProcurements />
             </Route>
+
             <Route path={`${match.path}pay-supplier`}>
               <PaySupplier />
             </Route>

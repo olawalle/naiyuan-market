@@ -273,7 +273,7 @@ export default withRouter(function MyWallet({ history }) {
 
           <div className="gradient mt20 f-left w100p">
             <div className="top">
-              Spendings
+              SPendings
               <select name="" id="" className="f-right">
                 <option value=""></option>
                 {months.map((month) => (
@@ -307,56 +307,58 @@ export default withRouter(function MyWallet({ history }) {
         <div className="big gradient">
           <div className="top">Transactions</div>
           <div className="tnxs">
-            {Object.keys(transactions).map((key, i) => {
-              return (
-                <div className="tnx">
-                  <span className="date">{key}</span>
-                  {transactions[key].map((day) => (
-                    <div className="row w100p">
-                      <div className="one">
-                        <div
-                          className={`${
-                            day.event !== "Wallet Funding" ? "redd" : "green"
-                          }`}
-                        >
-                          <img
-                            src={`${
-                              day.event !== "Wallet Funding" ? down : up
+            {Object.keys(transactions)
+              .reverse()
+              .map((key, i) => {
+                return (
+                  <div className="tnx">
+                    <span className="date">{key}</span>
+                    {transactions[key].map((day) => (
+                      <div className="row w100p">
+                        <div className="one">
+                          <div
+                            className={`${
+                              day.event !== "Wallet Funding" ? "redd" : "green"
                             }`}
-                            alt=""
-                          />
+                          >
+                            <img
+                              src={`${
+                                day.event !== "Wallet Funding" ? down : up
+                              }`}
+                              alt=""
+                            />
+                          </div>
+                          <div className="texts">
+                            <p className="txt">{day.event}</p>
+                            <p className="sub">{day.event}</p>
+                          </div>
                         </div>
-                        <div className="texts">
-                          <p className="txt">{day.event}</p>
-                          <p className="sub">{day.event}</p>
+                        <div className="two">
+                          <div
+                            className={`dot ${
+                              day.status === "Pending"
+                                ? "bg-yellow"
+                                : day.status === "Cancelled"
+                                ? "bg-red"
+                                : "bg-green"
+                            }`}
+                          ></div>
+                          {day.status}
+                        </div>
+                        <div className="three">
+                          <span
+                            className={`${
+                              day.event !== "Wallet Funding" ? "out" : "in"
+                            }`}
+                          >
+                            NGN {parseFloat(day.amount).toLocaleString()}
+                          </span>
                         </div>
                       </div>
-                      <div className="two">
-                        <div
-                          className={`dot ${
-                            day.status === "pending"
-                              ? "bg-yellow"
-                              : day.status === "cancelled"
-                              ? "bg-red"
-                              : "bg-green"
-                          }`}
-                        ></div>
-                        {day.status}
-                      </div>
-                      <div className="three">
-                        <span
-                          className={`${
-                            day.event !== "Wallet Funding" ? "out" : "in"
-                          }`}
-                        >
-                          NGN {parseFloat(day.amount).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
+                    ))}
+                  </div>
+                );
+              })}
             <p className="view-all red t-center m0 p15">
               <span style={{ fontSize: 12 }} onClick={toAll}>
                 View All Transactions

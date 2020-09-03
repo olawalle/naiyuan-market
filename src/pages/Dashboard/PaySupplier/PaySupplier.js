@@ -130,6 +130,7 @@ export default function PaySuppier() {
               }}
             >
               <option value="">WeChat, Bank transfer.</option>
+              <option value="Alipay">Alipay</option>
               <option value="WeChat">WeChat</option>
               <option value="Bank transter">Bank Transfer</option>
             </select>

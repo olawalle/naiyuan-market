@@ -154,6 +154,11 @@ export const NavLinks = ({
 
   const [adminLinks, setAdminLinks] = useState([
     {
+      text: "All Users",
+      link: "/dashboard/all-users/",
+      name: "Users",
+    },
+    {
       text: "All Orders",
       link: "/dashboard/all-orders/",
       name: "Orders",

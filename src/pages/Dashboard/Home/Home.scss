@@ -10,7 +10,7 @@
     padding-bottom: 40px;
     .top-section {
       width: 100%;
-      height: 130px;
+      height: 160px;
       display: block;
       .half {
         width: 48%;
@@ -33,8 +33,12 @@
           font-size: 13px;
           text-align: left;
           padding: 25px 25px 35px;
-          height: 90px;
+          height: 120px;
           line-height: 18px;
+          color: #353535;
+          b {
+            color: #070707;
+          }
           .thirds {
             width: 33.33%;
             display: inline-block;
@@ -60,7 +64,10 @@
             .copy {
               float: right;
               font-size: 13px;
-              color: #c91f25;
+              background-color: #c91f25;
+              color: #fff;
+              padding: 3px 5px;
+              border-radius: 5px;
               cursor: pointer;
               font-style: italic;
             }
@@ -72,6 +79,20 @@
       padding-top: 30px;
       display: block;
       text-align: left;
+      .main-table {
+        tr {
+          td {
+            p {
+              span {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+              }
+            }
+          }
+        }
+      }
     }
   }
   .narrow {

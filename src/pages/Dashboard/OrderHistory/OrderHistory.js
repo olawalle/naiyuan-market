@@ -15,14 +15,19 @@ export default withRouter(function OrderHistory({ history }) {
   });
 
   useEffect(() => {
-    setorders_(orders);
+    // let red = orders.reduce((payload, order) => {
+    //   payload.push(...order.carts);
+    //   return payload;
+    // }, []);
+    console.log({ orders });
+    setorders_(orders.filter((order) => order.carts.length));
   }, []);
 
   const filteredOrders = (n, val) => {
     let orders_ = [...orders].map((o) => {
       return {
         ...o,
-        status: o.status ? o.status : "pending",
+        status: o.status ? o.status : "Pending",
       };
     });
     let data =
@@ -61,10 +66,10 @@ export default withRouter(function OrderHistory({ history }) {
             type="text"
           >
             <option value="All">All</option>
-            <option value="pending">Pending</option>
-            <option value="shipped">Shipped</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="delivered">Delivered</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Delivered">Delivered</option>
           </select>
         </div>
       </div>
@@ -84,32 +89,37 @@ export default withRouter(function OrderHistory({ history }) {
             </thead>
 
             <tbody>
-              {orders_.map((row, i) => (
-                <tr key={`row${i}`}>
-                  <td>{dayjs(row.created_at).format("DD MMM, YYYY")}</td>
-                  <td>
-                    {row.order_name || "---"}{" "}
-                    <img src={row.picture_url} width={30} alt="" />
-                  </td>
-                  <td>
-                    {websites.find((web) => web.id === row.website_id).name}
-                  </td>
-                  <td>{row.reference}</td>
-                  <td>
-                    <b>$ {row.total}</b>
-                  </td>
-                  <td>
-                    <div
-                      className={`dot ${
-                        row.status === "pending"
-                          ? "bg-yellow"
-                          : row.status === "cancelled"
-                          ? "bg-red"
-                          : "bg-green"
-                      }`}
-                    ></div>{" "}
-                    <span className="pr10">{row.status}</span>
-                    {/* <select
+              {orders_.map((row, i) =>
+                row.carts.length ? (
+                  <tr key={`row${i}`}>
+                    <td>{dayjs(row.created_at).format("DD MMM, YYYY")}</td>
+                    <td>
+                      {row.carts[0].cart_name || "---"}{" "}
+                      <img src={row.carts[0].picture_url} width={30} alt="" />
+                    </td>
+                    <td>
+                      {
+                        websites.find(
+                          (web) => web.id === row.carts[0].website_id
+                        ).name
+                      }
+                    </td>
+                    <td>{row.reference}</td>
+                    <td>
+                      <b>NGN {row.total.toLocaleString()}</b>
+                    </td>
+                    <td>
+                      <div
+                        className={`dot ${
+                          row.status === "Pending"
+                            ? "bg-yellow"
+                            : row.status === "Cancelled"
+                            ? "bg-red"
+                            : "bg-green"
+                        }`}
+                      ></div>{" "}
+                      <span className="pr10">{row.status}</span>
+                      {/* <select
                     name=""
                     id=""
                     className="pl12 bd-input"
@@ -122,9 +132,10 @@ export default withRouter(function OrderHistory({ history }) {
                   >
                     <option value=""></option>
                   </select> */}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                ) : null
+              )}
             </tbody>
           </table>
         </div>

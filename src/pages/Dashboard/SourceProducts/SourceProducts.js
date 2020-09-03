@@ -60,7 +60,6 @@ export default function SourceProducts() {
   // };
 
   const updateForm = (key, value) => {
-    console.log({ key, value });
     let data = {
       ...orderData,
     };
@@ -73,7 +72,6 @@ export default function SourceProducts() {
   };
 
   const checkout = () => {
-    console.log(cart);
     let data = cart.map((itm) => {
       return {
         ...itm,
@@ -85,7 +83,6 @@ export default function SourceProducts() {
       apiServices
         .postProcurement(item)
         .then((res) => {
-          console.log(res);
           openSnackbar("Order placed sucessfully", 5000);
           clearCart();
           setloading(false);
@@ -98,6 +95,11 @@ export default function SourceProducts() {
   };
 
   const uploadPhoto = (file) => {
+    let filesize = parseFloat(file.size / 1024 / 1024);
+    if (filesize > 2) {
+      openSnackbar("Image must be less than 2MB in size", 5000);
+      return;
+    }
     let data = new FormData();
     data.append("picture", file);
     setuploadingImage(true);
@@ -248,7 +250,8 @@ export default function SourceProducts() {
                   --- <span className="grey">NGN</span>
                 </p>
                 <p>
-                  300.00 <span className="grey">NGN</span>
+                  {(cart.length * 300).toLocaleString()}{" "}
+                  <span className="grey">NGN</span>
                 </p>
               </div>
             </div>
@@ -256,13 +259,8 @@ export default function SourceProducts() {
               <div className="item"></div>
               <div className="qty">GRAND TOTAL</div>
               <div className="date">
-                <b>
-                  {cart.reduce((sum, item) => {
-                    sum += parseFloat(item.quantity);
-                    return sum;
-                  }, 0) * 300}
-                </b>{" "}
-                <span className="grey">USD</span>
+                <b>{(cart.length * 300).toLocaleString()} NGN</b>{" "}
+                <span className="grey">NGN</span>
               </div>
             </div>
           </>

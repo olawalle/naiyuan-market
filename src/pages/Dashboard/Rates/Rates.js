@@ -6,6 +6,7 @@ import Modal from "react-responsive-modal";
 import Loader from "../../../components/loader/Loader";
 import apiServices from "../../../services/apiServices";
 import { useSnackbar } from "react-simple-snackbar";
+import IsAdmin from "../../../components/isAdmin/IsAdmin";
 
 export default function Rates() {
   const context = useContext(appContext);
@@ -73,66 +74,73 @@ export default function Rates() {
   };
 
   return (
-    <div className="rates">
-      <Modal open={open} onClose={onCloseModal} center>
-        <div
-          className="gradient t-center o-hidden placement-modal"
-          style={{ padding: 30 }}
-        >
-          <div className="header">{isAdding ? "Add" : "Update"} Rate</div>
-          <div className="inp mb20">
-            <span className="label">Pair</span>
-            <input
-              defaultValue={selectedPair.pair}
-              type="text"
-              className={`w100p bd-input ${
-                hasError && !selectedPair.pair && "has-error"
-              }`}
-              onChange={(e) =>
-                setselectedPair({ ...selectedPair, pair: e.target.value })
-              }
-            />
-          </div>
-          <div className="inp mb20">
-            <span className="label">Rate</span>
-            <input
-              defaultValue={selectedPair.rate}
-              type="text"
-              className={`w100p bd-input ${
-                hasError && !selectedPair.rate && "has-error"
-              }`}
-              onChange={(e) =>
-                setselectedPair({ ...selectedPair, rate: e.target.value })
-              }
-            />
-          </div>
-          <button className="main-btn" onClick={submit}>
-            {loading ? <Loader /> : "Submit"}
-          </button>
-        </div>
-      </Modal>
-      {rates.length < 3 && (
-        <button
-          className="main-btn"
-          onClick={() => {
-            setisAdding(true);
-            setopen(true);
-          }}
-        >
-          Add new
-        </button>
-      )}
-      <div className="rates-wrap">
-        {rates.map((rate, i) => (
-          <div key={"rate" + i} className="rate gradient">
-            <p>{rate.pair}</p>
-            <p>{rate.rate}</p>
-            <button onClick={() => OpenModal(i)} className="white-btn">
-              Edit
+    <IsAdmin>
+      <div className="rates">
+        <Modal open={open} onClose={onCloseModal} center>
+          <div
+            className="gradient t-center o-hidden placement-modal"
+            style={{ padding: 30 }}
+          >
+            <div className="header">{isAdding ? "Add" : "Update"} Rate</div>
+            <div className="inp mb20">
+              <span className="label">Pair</span>
+              <input
+                defaultValue={selectedPair.pair}
+                type="text"
+                className={`w100p bd-input ${
+                  hasError && !selectedPair.pair && "has-error"
+                }`}
+                onChange={(e) =>
+                  setselectedPair({ ...selectedPair, pair: e.target.value })
+                }
+              />
+            </div>
+            <div className="inp mb20">
+              <span className="label">Rate</span>
+              <input
+                defaultValue={selectedPair.rate}
+                type="text"
+                className={`w100p bd-input ${
+                  hasError && !selectedPair.rate && "has-error"
+                }`}
+                onChange={(e) =>
+                  setselectedPair({ ...selectedPair, rate: e.target.value })
+                }
+              />
+            </div>
+            <button className="main-btn" onClick={submit}>
+              {loading ? <Loader /> : "Submit"}
             </button>
           </div>
-        ))}
+        </Modal>
+        {rates.length < 3 && (
+          <button
+            className="main-btn"
+            onClick={() => {
+              setisAdding(true);
+              setopen(true);
+            }}
+          >
+            Add new
+          </button>
+        )}
+        <div className="rates-wrap">
+          <p style={{ fontSize: 14, textAlign: "left" }}>
+            Please make sure the rates created are named <b>"Naira/Dollar"</b>,
+            <b> "Naira/Yuan"</b> and <b>"Naira/Cedis"</b> as any other naming
+            convention will affect the conversions.
+          </p>
+          {rates.map((rate, i) => (
+            <div key={"rate" + i} className="rate gradient">
+              <p>{rate.pair}</p>
+              <p>{rate.rate}</p>
+              <button onClick={() => OpenModal(i)} className="white-btn">
+                Edit
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </IsAdmin>
   );
 }

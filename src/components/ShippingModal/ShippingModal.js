@@ -155,7 +155,7 @@ export default function ShippingModal({
   const [open, setopen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addingNew, setAddinNew] = useState(false);
-  const [shipping_id, setShipper] = useState("");
+  const [shipping_id, setsetShipping] = useState("");
 
   const options = {
     position: "top-right",
@@ -224,7 +224,7 @@ export default function ShippingModal({
             <div className="inp">
               <div className="label">Select Shipping</div>
               <select
-                onChange={(e) => setShipper(e.target.value)}
+                onChange={(e) => setsetShipping(e.target.value)}
                 name=""
                 id=""
               >

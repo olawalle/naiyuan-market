@@ -17,6 +17,13 @@ let userLogin = (data) => {
   });
 };
 
+let blockUser = (id) => {
+  return axios({
+    method: "put",
+    url: `${urls.baseUrl}user/${id}/lock`,
+  });
+};
+
 let resetPassword = (data) => {
   return axios({
     method: "post",
@@ -37,6 +44,14 @@ let getCurrentUser = () => {
   return axios({
     method: "get",
     url: urls.userUrl,
+  });
+};
+
+let updateUser = (data) => {
+  return axios({
+    method: "post",
+    url: urls.userUrl,
+    data,
   });
 };
 
@@ -157,6 +172,28 @@ let getAllUserss = () => {
   });
 };
 
+let addToCart = (data) => {
+  return axios({
+    method: "post",
+    url: urls.cartUrl,
+    data,
+  });
+};
+
+let deleteFromCart = (id) => {
+  return axios({
+    method: "delete",
+    url: urls.cartUrl + "/" + id,
+  });
+};
+
+let getUserCart = () => {
+  return axios({
+    method: "get",
+    url: urls.cartUrl,
+  });
+};
+
 let uploadPic = (data) => {
   return axios({
     method: "post",
@@ -250,10 +287,10 @@ let postPayment = (data) => {
   });
 };
 
-let getLinkDetails = (data) => {
+let getLinkDetails = (data, n) => {
   return axios({
     method: "post",
-    url: urls.linkUrl,
+    url: n === 1 ? urls.linkUrl : urls.link1688Url,
     data,
   });
 };
@@ -351,7 +388,9 @@ let trackShipping = (id) => {
 export default {
   signupUser,
   userLogin,
+  blockUser,
   getCurrentUser,
+  updateUser,
   activateUser,
   resetPassword,
   changePassword,
@@ -372,6 +411,9 @@ export default {
   getWebsites,
   addWebsite,
   updateWebsite,
+  addToCart,
+  deleteFromCart,
+  getUserCart,
   postPayment,
   getLinkDetails,
   verifyAcctFunding,

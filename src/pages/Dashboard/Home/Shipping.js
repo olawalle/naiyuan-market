@@ -31,6 +31,7 @@ export default function Shipping() {
   };
 
   useEffect(() => {
+    console.log(orders);
     apiServices
       .getShippingTypes()
       .then((res) => {
@@ -69,46 +70,52 @@ export default function Shipping() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((row, i) => (
-                <tr key={`row${i}`}>
-                  <td style={{ width: "40%" }}>
-                    <input
-                      type="checkbox"
-                      checked={pickedItems.includes(i)}
-                      onChange={() => updateItems(i)}
-                      name=""
-                      id=""
-                    />
-                    <span className="no"></span>
-                    Deskjet Printers
-                    <img
-                      src={row.picture_url}
-                      style={{
-                        float: "right",
-                        // marginRight: "30px",
-                        // marginTop: "15px",
-                      }}
-                      alt=""
-                    />
-                  </td>
-                  <td>{row.website.name}</td>
-                  <td>
-                    <div
-                      className={`dot ${
-                        row.status === "pending"
-                          ? "bg-yellow"
-                          : row.status === "cancelled"
-                          ? "bg-red"
-                          : "bg-green"
-                      }`}
-                    ></div>
-                    {row.status}
-                  </td>
-                  <td>
-                    $ {(row.amount * parseFloat(row.quantity)).toLocaleString()}
-                  </td>
-                </tr>
-              ))}
+              {orders.map((row, i) =>
+                row.carts.length ? (
+                  <tr key={`row${i}`}>
+                    <td style={{ width: "40%" }}>
+                      <input
+                        type="checkbox"
+                        checked={pickedItems.includes(i)}
+                        onChange={() => updateItems(i)}
+                        name=""
+                        id=""
+                      />
+                      <span className="no"></span>
+                      {row.carts[0].cart_name || "---"}
+                      <img
+                        src={row.carts[0].picture_url}
+                        style={{
+                          float: "right",
+                          // marginRight: "30px",
+                          // marginTop: "15px",
+                        }}
+                        alt=""
+                      />
+                    </td>
+                    <td>
+                      {
+                        websites.find(
+                          (web) => web.id === row.carts[0].website_id
+                        ).name
+                      }
+                    </td>
+                    <td>
+                      <div
+                        className={`dot ${
+                          row.status === "Pending"
+                            ? "bg-yellow"
+                            : row.status === "Cancelled"
+                            ? "bg-red"
+                            : "bg-green"
+                        }`}
+                      ></div>
+                      {row.status}
+                    </td>
+                    <td>NGN {row.total.toLocaleString()}</td>
+                  </tr>
+                ) : null
+              )}
 
               <tr style={{ border: 0 }}>
                 <td
@@ -122,7 +129,7 @@ export default function Shipping() {
                       pickedItems.length
                         ? setopen(true)
                         : openSnackbar(
-                            "Please select items to be shipped",
+                            "Please select items to be Shipped",
                             5000
                           );
                     }}

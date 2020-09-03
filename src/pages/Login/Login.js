@@ -17,6 +17,8 @@ export default withRouter(function Login({ history }) {
     saveAddresses,
     saveShippings,
     saveUserShippings,
+    updateUserCart,
+    saveAllUsers,
   } = context;
   const options = {
     position: "top-right",
@@ -69,7 +71,19 @@ export default withRouter(function Login({ history }) {
         ] = `Bearer ${res.data.token}`;
         setTimeout(() => {
           setloading(false);
-          history.push("/dashboard");
+          if (res.data.user.rolevalue === "superadmin") {
+            history.push("/dashboard/all-users/");
+            apiServices
+              .getAllUserss()
+              .then((res) => {
+                saveAllUsers(res.data.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            history.push("/dashboard");
+          }
           apiServices
             .getProcurements()
             .then((res) => {
@@ -117,6 +131,10 @@ export default withRouter(function Login({ history }) {
             .catch((err) => {
               console.log(err);
             });
+
+          apiServices.getUserCart().then((res) => {
+            updateUserCart(res.data);
+          });
         }, 500);
       })
       .catch((err) => {
