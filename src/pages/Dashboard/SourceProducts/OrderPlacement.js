@@ -437,17 +437,19 @@ export default withRouter(function OrderPlacement({ history }) {
               <div className="date">
                 <p>
                   {userCart_.reduce((sum, item) => {
-                    sum += parseFloat(item.quantity);
+                    sum += selectedItems.includes(item.id)
+                      ? parseFloat(item.quantity)
+                      : 0;
                     return sum;
                   }, 0)}{" "}
                   Item(s)
                 </p>
                 <p>
-                  --- <span className="grey">USD</span>
+                  --- <span className="grey">NGN</span>
                 </p>
                 <p>
                   {(parseFloat(orderTotal()) * 0.05)
-                    .toFixed(2)
+                    // .toFixed(2)
                     .toLocaleString()}{" "}
                   <span className="grey">NGN</span>
                 </p>

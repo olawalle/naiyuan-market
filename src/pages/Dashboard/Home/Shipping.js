@@ -51,7 +51,7 @@ export default function Shipping() {
           <table className="main-table">
             <thead>
               <tr>
-                <th>
+                <th style={{ width: "60%" }}>
                   <input
                     type="checkbox"
                     name=""
@@ -81,14 +81,23 @@ export default function Shipping() {
                         name=""
                         id=""
                       />
-                      <span className="no"></span>
-                      {row.carts[0].cart_name || "---"}
+                      <p
+                        style={{
+                          display: "inline-block",
+                          width: "80%",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {row.carts[0].cart_name || "---"}{" "}
+                        {row.carts[0].cart_name || "---"}{" "}
+                        {row.carts[0].cart_name || "---"}{" "}
+                        {row.carts[0].cart_name || "---"}
+                      </p>
                       <img
                         src={row.carts[0].picture_url}
                         style={{
                           float: "right",
-                          // marginRight: "30px",
-                          // marginTop: "15px",
+                          marginTop: 15,
                         }}
                         alt=""
                       />
