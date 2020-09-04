@@ -13,20 +13,40 @@ export default withRouter(function AllUsers({ history }) {
   const [open, setopen] = useState(false);
   const context = useContext(appContext);
   const [filterVal, setFilterVal] = useState("");
-  const { websites, allUsers } = context;
+  const { websites, allUsers, saveAllUsers } = context;
+  const options = {
+    position: "top-right",
+  };
+  const [openSnackbar, closeSnackbar] = useSnackbar(options);
 
   useEffect(() => {
     console.log(allUsers);
+    fetchUsers();
   }, []);
 
-  const blockUser = (i) => {
+  const blockUser = (i, is_locked) => {
     apiServices
       .blockUser(i)
       .then((res) => {
         console.log(res);
+        !is_locked
+          ? openSnackbar("User locked suxessfully", 5000)
+          : openSnackbar("User unblocked sucessfully", 5000);
+        fetchUsers();
       })
       .catch((err) => {
         console.log({ err });
+      });
+  };
+
+  const fetchUsers = () => {
+    apiServices
+      .getAllUserss()
+      .then((res) => {
+        saveAllUsers(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -85,12 +105,14 @@ export default withRouter(function AllUsers({ history }) {
                         style={{
                           padding: "5px 10px",
                           borderRadius: 20,
-                          backgroundColor: "#ff130217",
-                          color: "#ff0c03",
+                          backgroundColor: !user.is_locked
+                            ? "#ff130217"
+                            : "#02ffff17",
+                          color: !user.is_locked ? "#ff0c03" : "#008a57",
                         }}
-                        onClick={() => blockUser(user.id)}
+                        onClick={() => blockUser(user.id, user.is_locked)}
                       >
-                        Block
+                        {!user.is_locked ? "Block" : "Unblock"}
                       </span>
                     </td>
                   </tr>
