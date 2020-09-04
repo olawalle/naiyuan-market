@@ -20,7 +20,6 @@ export default withRouter(function AllUsers({ history }) {
   const [openSnackbar, closeSnackbar] = useSnackbar(options);
 
   useEffect(() => {
-    console.log(allUsers);
     fetchUsers();
   }, []);
 

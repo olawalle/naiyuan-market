@@ -24,8 +24,8 @@ export default withRouter(function Login({ history }) {
     position: "top-right",
   };
   const [openSnackbar, closeSnackbar] = useSnackbar(options);
-  const [email, setEmail] = useState("superadmin@naiyuan.com");
-  const [password, setPassword] = useState("default12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
 
