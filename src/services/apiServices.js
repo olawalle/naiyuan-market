@@ -19,8 +19,9 @@ let userLogin = (data) => {
 
 let blockUser = (id) => {
   return axios({
-    method: "put",
+    method: "post",
     url: `${urls.baseUrl}user/${id}/lock`,
+    reason: "You are currently blocked",
   });
 };
 
