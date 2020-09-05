@@ -273,7 +273,7 @@ export default withRouter(function MyWallet({ history }) {
 
           <div className="gradient mt20 f-left w100p">
             <div className="top">
-              SPendings
+              Spendings
               <select name="" id="" className="f-right">
                 <option value=""></option>
                 {months.map((month) => (
