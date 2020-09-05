@@ -23,7 +23,7 @@ function App() {
               <Route path="/login">
                 <Login />
               </Route>
-              <Route path="/">
+              <Route exact path="/">
                 <Login />
               </Route>
               <Route path="/forgot-password">
