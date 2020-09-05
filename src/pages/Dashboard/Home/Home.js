@@ -83,7 +83,7 @@ export default withRouter(function Home({ history }) {
           <div className="half gradient f-left">
             <div className="heading">
               <p>
-                Hello Mr Mike Erik
+                Hello {user.full_name}
                 <span className="f-right red pointer" onClick={toProfile}>
                   View Profile
                 </span>
@@ -92,23 +92,26 @@ export default withRouter(function Home({ history }) {
             <div className="btm">
               <div className="half">
                 <p>
-                  <b>Address:</b> {addresses.length ? addresses[0].address : ""}{" "}
+                  <b>Address:</b> 608, Building E, Shisi Commercial Center,
+                  Vanke World Expo, Shibi Street, Panyu District, Guangzhou
                   <br />
-                  <b>Phone:</b> {user.phone || "---"}
+                  <b>Phone:</b> 15603010790
                 </p>
                 <CopyToClipboard
-                  text={`Address: ${
-                    addresses.length ? addresses[0].address : "---"
-                  }, Phone: ${user.phone || "---"}`}
+                  text={`Address: 608, Building E, Shisi Commercial Center, Vanke World Expo, Shibi Street, Panyu District, Guangzhou, Phone: 15603010790`}
                 >
                   <span className="copy">copy</span>
                 </CopyToClipboard>
               </div>
               <div className="half">
                 <p>
-                  <b>防飛間:</b> 防飛間応支違索加売偽顔動思首跡初発止見使
+                  <b>地址:</b> 广州番禺区石壁街道万科世博会石四商业中心E栋608房{" "}
+                  <br />
+                  <b>电话:</b> 15603010790 <br />
                 </p>
-                <CopyToClipboard text={"lorem"}>
+                <CopyToClipboard
+                  text={`地址: 广州番禺区石壁街道万科世博会石四商业中心E栋608房, 电话: 15603010790`}
+                >
                   <span className="copy">copy</span>
                 </CopyToClipboard>
               </div>

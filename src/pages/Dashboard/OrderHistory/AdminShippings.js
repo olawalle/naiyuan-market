@@ -319,7 +319,7 @@ export default withRouter(function AdminShippings({ history }) {
           <table className="white-table">
             <thead>
               <tr>
-                <th>Items</th>
+                <th style={{ width: "45%" }}>Items</th>
                 <th>User</th>
                 <th>Tracking no.</th>
                 <th>Status</th>
@@ -339,9 +339,17 @@ export default withRouter(function AdminShippings({ history }) {
                       style={{ cursor: "pointer" }}
                     >
                       <ul style={{ paddingLeft: 0 }}>
-                        {row.items.map((ordr) => (
+                        {row.items.slice(0, 1).map((ordr) => (
                           <li style={{ height: 16, lineHeight: "16px" }}>
-                            {ordr.cart_name}({ordr.quantity})
+                            <p
+                              style={{
+                                lineHeight: "18px",
+                                display: "inline-block",
+                                width: "100%",
+                              }}
+                            >
+                              {ordr.cart_name}({ordr.quantity})
+                            </p>
                             <img
                               src={ordr.picture_url}
                               style={{ width: "20px", float: "right" }}

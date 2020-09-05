@@ -222,7 +222,7 @@ export default function ShippingModal({
           <div className="shipping-modal gradient">
             <div className="heading">Shipping Details</div>
             <div className="inp">
-              <div className="label">Select Shipping</div>
+              <div className="label">Select Shipper</div>
               <select
                 onChange={(e) => setsetShipping(e.target.value)}
                 name=""

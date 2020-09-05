@@ -27,4 +27,14 @@
       margin: 0 1.5%;
     }
   }
+
+  @media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
+    .rates-wrap {
+      .link,
+      .rate {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+  }
 }

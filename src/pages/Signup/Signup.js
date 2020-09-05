@@ -143,7 +143,7 @@ export default withRouter(function Signup({ history }) {
           <p className="welcome">Create Your Account</p>
 
           <div className="inp mb20">
-            <span className="label">Fullname</span>
+            <span className="label">Full name</span>
             <input
               onChange={(e) => updateForm("fullname", e.target.value)}
               type="text"

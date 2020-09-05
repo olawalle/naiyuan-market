@@ -7,7 +7,7 @@ import * as dayjs from "dayjs";
 
 export default withRouter(function ShippingRecords({ history }) {
   const context = useContext(appContext);
-  const { shippings, userShippings } = context;
+  const { shippings, userShippings, websites } = context;
   const [orderShippings, setorderShippings] = useState([]);
   const [orders_, setorders_] = useState([]);
   const [usersObj, setusersObj] = useState({});
@@ -102,7 +102,7 @@ export default withRouter(function ShippingRecords({ history }) {
           <thead>
             <tr>
               <th>Date</th>
-              <th>Product</th>
+              <th style={{ width: "40%" }}>Product</th>
               <th>Source</th>
               <th>Tracking no.</th>
               <th>Shipping Fee</th>
@@ -114,8 +114,23 @@ export default withRouter(function ShippingRecords({ history }) {
             {orders_.map((row, i) => (
               <tr key={`row${i}`}>
                 <td>{dayjs(row.shipping.created_at).format("DD MMM YYYY")}</td>
-                <td>{row.order.carts[0].cart_name}</td>
-                <td>{row.order.carts[0].website_id}</td>
+                <td>
+                  <p
+                    style={{
+                      lineHeight: "18px",
+                      display: "inline-block",
+                      width: "100%",
+                    }}
+                  >
+                    {row.order.carts[0].cart_name}
+                  </p>
+                </td>
+                <td>
+                  {
+                    websites.find((w) => w.id === row.order.carts[0].website_id)
+                      .name
+                  }
+                </td>
                 <td>{row.shipping.tracking_number}</td>
                 <td>
                   NGN{" "}

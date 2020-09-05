@@ -80,9 +80,9 @@ export default withRouter(function OrderHistory({ history }) {
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Product</th>
+                <th style={{ width: "55%" }}>Product</th>
                 <th>Source</th>
-                <th>Reference no.</th>
+                {/* <th>Reference no.</th> */}
                 <th>Amount</th>
                 <th>Status</th>
               </tr>
@@ -94,7 +94,15 @@ export default withRouter(function OrderHistory({ history }) {
                   <tr key={`row${i}`}>
                     <td>{dayjs(row.created_at).format("DD MMM, YYYY")}</td>
                     <td>
-                      {row.carts[0].cart_name || "---"}{" "}
+                      <p
+                        style={{
+                          lineHeight: "18px",
+                          display: "inline-block",
+                          width: "80%",
+                        }}
+                      >
+                        {row.carts[0].cart_name || "---"}
+                      </p>
                       <img src={row.carts[0].picture_url} width={30} alt="" />
                     </td>
                     <td>
@@ -104,7 +112,7 @@ export default withRouter(function OrderHistory({ history }) {
                         ).name
                       }
                     </td>
-                    <td>{row.reference}</td>
+                    {/* <td>{row.reference}</td> */}
                     <td>
                       <b>NGN {row.total.toLocaleString()}</b>
                     </td>

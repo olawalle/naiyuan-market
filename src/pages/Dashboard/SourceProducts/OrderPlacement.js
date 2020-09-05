@@ -192,11 +192,11 @@ export default withRouter(function OrderPlacement({ history }) {
   };
 
   const deleteItem = (i) => {
-    console.log(userCart_[i]);
     apiServices
       .deleteFromCart(userCart_[i].id)
       .then((res) => {
         openSnackbar("Item deleted from cart", 5000);
+        fetchOrders();
       })
       .catch((err) => {
         console.log(err);
@@ -251,7 +251,7 @@ export default withRouter(function OrderPlacement({ history }) {
           <p className="heading ">Make payment</p>
           <p className="amount mt55">
             <span className="title">
-              Total Amount + 5% Sourcing fee(
+              Total Amount + 5% Procurement fee(
               {(parseFloat(orderTotal()) * 0.05).toLocaleString()})
             </span>
             <span className="amt">

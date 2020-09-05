@@ -159,7 +159,7 @@ export const NavLinks = ({
       name: "Users",
     },
     {
-      text: "All Orders",
+      text: "All Procurements",
       link: "/dashboard/all-orders/",
       name: "Orders",
     },
@@ -169,7 +169,7 @@ export const NavLinks = ({
       name: "Shippings",
     },
     {
-      text: "All Procurements",
+      text: "All Sourcing",
       link: "/dashboard/all-procurements/",
       name: "Shippings",
     },
@@ -184,8 +184,8 @@ export const NavLinks = ({
       link: "/dashboard/websites",
     },
     {
-      name: "Shipping Types",
-      text: "Shipping Types",
+      name: "Shippers",
+      text: "Shippers",
       link: "/dashboard/shipping-types",
     },
     {

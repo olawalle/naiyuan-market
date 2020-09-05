@@ -27,6 +27,7 @@
     top: 5px;
     left: -10px;
     display: inline-block;
+    margin-left: 10px;
     img {
       height: 25px;
     }
@@ -142,6 +143,7 @@
       height: 20px;
       position: absolute;
       right: 0;
+      top: 0;
       -webkit-transform: rotate(0deg);
       -moz-transform: rotate(0deg);
       -o-transform: rotate(0deg);
@@ -221,14 +223,18 @@
       display: inline-block;
       height: 100%;
       line-height: 60px;
-      width: calc(100% - 50px);
+      // width: calc(100% - 50px);
       font-size: 16px;
       font-weight: 600;
       text-align: left;
+      position: absolute;
+      top: 0;
+      left: 20px;
     }
     .notif {
       left: -40px;
       width: 50px;
+      margin-left: 0;
     }
   }
 }

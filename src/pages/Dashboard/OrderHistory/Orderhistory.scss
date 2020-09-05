@@ -37,11 +37,13 @@
         width: 100%;
         input {
           width: 42%;
+          display: inline-block;
         }
       }
     }
     .gradient {
-      overflow: hidden;
+      overflow: auto;
+      width: 1000px !important;
       .table-wrap {
         overflow: auto;
         .white-table {

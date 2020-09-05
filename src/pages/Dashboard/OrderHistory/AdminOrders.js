@@ -280,7 +280,7 @@ export default withRouter(function AdminOrders({ history }) {
             <thead>
               <tr>
                 <th>User</th>
-                <th>Product/Source</th>
+                <th style={{ width: "55%" }}>Product/Source</th>
                 {/* <th></th> */}
                 {/* <th>Tracking no.</th> */}
                 <th>Amount</th>
@@ -302,7 +302,7 @@ export default withRouter(function AdminOrders({ history }) {
                           setselectedItm(row);
                         }}
                       >
-                        {row.carts.map((itm) => {
+                        {row.carts.slice(0, 1).map((itm) => {
                           return (
                             <ul style={{ paddingLeft: 0 }}>
                               <li>

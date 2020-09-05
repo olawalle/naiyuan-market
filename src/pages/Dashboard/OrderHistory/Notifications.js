@@ -122,8 +122,8 @@ export default withRouter(function Notifications({ history }) {
           <div className="form f-right">
             <input
               type="text"
-              placeholder="serch user"
-              style={{ width: "200px", marginRight: 15 }}
+              placeholder="search user"
+              style={{ marginRight: 15 }}
               onChange={(e) => setFilterVal(e.target.value)}
               className="bd-inp"
             />
