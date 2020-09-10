@@ -140,7 +140,10 @@ export default withRouter(function Login({ history }) {
       .catch((err) => {
         console.log({ err });
         setloading(false);
-        openSnackbar("An error occured", 5000);
+        openSnackbar(
+          err.response.data.error.message || "An error occured",
+          5000
+        );
       });
   };
 

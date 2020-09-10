@@ -34,7 +34,10 @@ export default withRouter(function VerifyPayment({ history }) {
       })
       .catch((err) => {
         console.log(err);
-        openSnackbar("An error occured", 5000);
+        openSnackbar(
+          err.response.data.error.message || "An error occured",
+          5000
+        );
       });
   };
 

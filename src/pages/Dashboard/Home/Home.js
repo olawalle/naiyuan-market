@@ -98,7 +98,7 @@ export default withRouter(function Home({ history }) {
                   <b>Phone:</b> 15603010790
                 </p>
                 <CopyToClipboard
-                  text={`Address: 608, Building E, Shisi Commercial Center, Vanke World Expo, Shibi Street, Panyu District, Guangzhou, Phone: 15603010790`}
+                  text={`Name: ${user.full_name}, Address: 608, Building E, Shisi Commercial Center, Vanke World Expo, Shibi Street, Panyu District, Guangzhou, Phone: 15603010790`}
                 >
                   <span className="copy">copy</span>
                 </CopyToClipboard>
@@ -110,7 +110,7 @@ export default withRouter(function Home({ history }) {
                   <b>电话:</b> 15603010790 <br />
                 </p>
                 <CopyToClipboard
-                  text={`地址: 广州番禺区石壁街道万科世博会石四商业中心E栋608房, 电话: 15603010790`}
+                  text={`名称: ${user.full_name}, 地址: 广州番禺区石壁街道万科世博会石四商业中心E栋608房, 电话: 15603010790`}
                 >
                   <span className="copy">copy</span>
                 </CopyToClipboard>

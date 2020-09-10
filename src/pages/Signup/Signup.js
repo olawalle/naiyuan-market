@@ -15,6 +15,7 @@ export default withRouter(function Signup({ history }) {
   const [openSnackbar, closeSnackbar] = useSnackbar(options);
   const [hasError, sethasError] = useState(false);
   const [hasPasswordError, sethasPasswordError] = useState(false);
+  const [hasPasswordError_, sethasPasswordError_] = useState(false);
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
   const [username, setusername] = useState("");
@@ -94,7 +95,12 @@ export default withRouter(function Signup({ history }) {
       return;
     }
 
-    if (password !== password_confirmation || password.length < 8) {
+    if (password !== password_confirmation) {
+      sethasPasswordError_(true);
+      return;
+    }
+
+    if (password.length < 8) {
       sethasPasswordError(true);
       return;
     }
@@ -111,7 +117,10 @@ export default withRouter(function Signup({ history }) {
       .catch((err) => {
         console.log({ err });
         setloading(false);
-        openSnackbar("An error occured", 5000);
+        openSnackbar(
+          err.response.data.error.message || "An error occured",
+          5000
+        );
       });
   };
 
@@ -179,15 +188,22 @@ export default withRouter(function Signup({ history }) {
               type="password"
               onChange={(e) => updateForm("password", e.target.value)}
               className={`w100p bd-input ${
-                (hasError && !password) || hasPasswordError ? "has-error" : ""
+                (hasError && !password) || hasPasswordError || hasPasswordError_
+                  ? "has-error"
+                  : ""
               }`}
             />
-            {(hasPasswordError && password.length < 8) ||
-              (hasError && password.length < 8 && (
-                <span className="red" style={{ fontSize: 10 }}>
-                  Password must contain at least 8 characters
-                </span>
-              ))}
+            {hasPasswordError &&
+            (password.length > 0 || password.length < 8) ? (
+              <span className="red" style={{ fontSize: 10 }}>
+                Password must contain at least 8 characters
+              </span>
+            ) : null}
+            {hasPasswordError_ && password !== password_confirmation ? (
+              <span className="red" style={{ fontSize: 10 }}>
+                Passwords do not match
+              </span>
+            ) : null}
           </div>
 
           <div className="inp mb20">
@@ -196,7 +212,9 @@ export default withRouter(function Signup({ history }) {
               type="password"
               onChange={(e) => updateForm("confirm_password", e.target.value)}
               className={`w100p bd-input ${
-                (hasError && !password_confirmation) || hasPasswordError
+                (hasError && !password_confirmation) ||
+                hasPasswordError ||
+                hasPasswordError_
                   ? "has-error"
                   : ""
               }`}
