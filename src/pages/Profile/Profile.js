@@ -130,6 +130,37 @@ export default withRouter(function Profile({ history }) {
         </div>
       </div>
       <div className="profile-content">
+        <div className="narrow t-center mobile mb30">
+          <Avatar small={true} />
+
+          <div className="addresses">
+            <div className="add-wrap">
+              {addresses.map((address, i) => (
+                <>
+                  <div className="name">
+                    Mr {address.first_name} {address.last_name}
+                  </div>
+                  <div className="address">
+                    <b>Address {i + 1}:</b> {address.address}, {address.country}
+                  </div>
+                  <div className="address" style={{ marginTop: "-8px" }}>
+                    <b>Phone:</b>
+                    <span className="block">
+                      {address.mobile_number || "---"}
+                    </span>
+                  </div>
+                </>
+              ))}
+            </div>
+            <button onClick={() => setopen(true)} className="main-btn">
+              Add Address
+            </button>{" "}
+            <br />
+            <button onClick={toTerms} className="main-btn mt12">
+              Term of Service
+            </button>
+          </div>
+        </div>
         <div className="wide">
           <div className="heading">Edit Personal Information</div>
 
@@ -228,7 +259,8 @@ export default withRouter(function Profile({ history }) {
             {loadingReset ? <Loader /> : "Submit"}
           </button>
         </div>
-        <div className="narrow t-center">
+
+        <div className="narrow t-center web">
           <Avatar small={true} />
 
           <div className="addresses">

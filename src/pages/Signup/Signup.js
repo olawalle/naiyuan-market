@@ -28,6 +28,7 @@ export default withRouter(function Signup({ history }) {
   const [frontend_url, setfrontend_url] = useState("");
   const [loading, setloading] = useState(false);
   const [verifying, setverifying] = useState(false);
+  const [signupDone, setsignupDone] = useState(false);
 
   const toLogin = () => {
     history.push("/login");
@@ -109,10 +110,9 @@ export default withRouter(function Signup({ history }) {
     apiServices
       .signupUser(data)
       .then((res) => {
-        console.log(res);
         setloading(false);
         openSnackbar("Account created successfully. Kindly login", 5000);
-        history.push("/login");
+        setsignupDone(true);
       })
       .catch((err) => {
         console.log({ err });
@@ -147,7 +147,7 @@ export default withRouter(function Signup({ history }) {
       <img src={logo} alt="" className="logo" />
       {verifying ? (
         <p style={{ paddingTop: 100 }}>Verifying account...</p>
-      ) : (
+      ) : !signupDone ? (
         <div className="login-box">
           <p className="welcome">Create Your Account</p>
 
@@ -251,6 +251,24 @@ export default withRouter(function Signup({ history }) {
           <span className="caveat" onClick={toLogin}>
             Have an account? <span className="red pointer">Login</span>
           </span>
+        </div>
+      ) : (
+        <div
+          className="login-box"
+          style={{ color: "#2D2F39", fontSize: 14, lineHeight: "24px" }}
+        >
+          <p>
+            We have sent an email to <b>{email}</b> with a link to activate your
+            account.
+          </p>
+          <p>
+            If you do not received a mail after a few minutes, please check your
+            spam folder.
+          </p>
+
+          <button className="w100p main-btn mt12" onClick={toLogin}>
+            Back to login
+          </button>
         </div>
       )}
     </div>

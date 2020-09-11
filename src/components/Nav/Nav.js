@@ -98,7 +98,10 @@ export default withRouter(function Nav({ showLogo, history }) {
         <span></span>
         <span></span>
       </div>
-      <div className="activelink">{name}</div>
+      <div className="activelink web">{name}</div>
+      <div className="activelink mobile">
+        <img src={logo} alt="" className="logo" />
+      </div>
 
       <div className={`mobile-nav ${show_nav ? "open" : ""} `}>
         <div className="main-content">

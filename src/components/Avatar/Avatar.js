@@ -7,8 +7,9 @@ import { mainUrl } from "../../services/urls";
 
 import edit from "../../assets/pen.svg";
 import camera from "../../assets/camera.svg";
+import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 
-export default function Avatar() {
+export default withRouter(function Avatar({ history }) {
   const context = useContext(appContext);
   const { updateUser, user } = context;
 
@@ -33,6 +34,9 @@ export default function Avatar() {
         console.log(err);
       });
   };
+
+  const toProfile = () => history.push("/profile");
+
   return (
     <div className="avatar-wrap">
       <input
@@ -54,9 +58,9 @@ export default function Avatar() {
       >
         <img src={camera} width={20} alt="" />
       </div>
-      <div className="edit">
+      <div className="edit" onClick={toProfile}>
         <img src={edit} width={20} alt="" />
       </div>
     </div>
   );
-}
+});
