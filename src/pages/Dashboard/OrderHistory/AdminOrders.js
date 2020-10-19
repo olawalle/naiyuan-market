@@ -75,7 +75,7 @@ export default withRouter(function AdminOrders({ history }) {
       .catch((err) => {
         setloading(false);
         openSnackbar(
-          err.response.data.error.message || "An error occured",
+          err.response ? err.response.data.error.message : "An error occured",
           5000
         );
         console.log(err);
@@ -94,6 +94,10 @@ export default withRouter(function AdminOrders({ history }) {
     return results.filter((r) =>
       r.user.full_name.toLowerCase().includes(filterVal.toLowerCase())
     );
+  };
+
+  const toCreate = () => {
+    history.push("/dashboard/admin/order-placement");
   };
 
   return (
@@ -272,6 +276,9 @@ export default withRouter(function AdminOrders({ history }) {
               <option value="Cancelled">Cancelled</option>
               <option value="Delivered">Delivered</option>
             </select>
+            <button className="main-btn f-right ml12" onClick={toCreate}>
+              Create Order
+            </button>
           </div>
         </div>
 

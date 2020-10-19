@@ -110,7 +110,10 @@ export default withRouter(function Cart({ history }) {
         })
         .catch((err) => {
           console.log({ err });
-          openSnackbar(err.response.data.error.message, 5000);
+          openSnackbar(
+            err.response ? err.response.data.error.message : "An error occured",
+            5000
+          );
           setloading(false);
         });
     });
@@ -149,7 +152,7 @@ export default withRouter(function Cart({ history }) {
       .catch((err) => {
         console.log({ err });
         openSnackbar(
-          err.response.data.error.message || "An error occured",
+          err.response ? err.response.data.error.message : "An error occured",
           5000
         );
         setloading(false);
@@ -158,9 +161,7 @@ export default withRouter(function Cart({ history }) {
 
   const dollarRate = () => {
     let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
-    let oneDollar = naira_dollar
-      ? parseFloat(naira_dollar.rate.split("/")[0])
-      : 0;
+    let oneDollar = naira_dollar ? parseFloat(naira_dollar.rate) : 0;
     return oneDollar;
   };
 

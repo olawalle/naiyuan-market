@@ -76,7 +76,10 @@ export default withRouter(function Profile({ history }) {
       .catch((err) => {
         console.log({ err });
         setloadingReset(false);
-        openSnackbar(err.response.data.error.message, 5000);
+        openSnackbar(
+          err.response ? err.response.data.error.message : "An error occured",
+          5000
+        );
       });
   };
 

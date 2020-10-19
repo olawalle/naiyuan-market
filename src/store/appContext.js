@@ -59,7 +59,9 @@ export default withRouter(
           },
           (error) => {
             // Do something with response error
-            let error_ = error.response.data.error.message;
+            let error_ = error.ersponse
+              ? error.response.data.error.message
+              : "";
             // handle expired token
             if (error_ === "Unauthenticated.") {
               this.props.openSnackbar(

@@ -10,7 +10,7 @@ import { useSnackbar } from "react-simple-snackbar";
 import Modal from "react-responsive-modal";
 import { withRouter } from "react-router-dom";
 
-export default withRouter(function OrderPlacement({ history }) {
+export default withRouter(function AdminOrderPlacement({ history }) {
   const context = useContext(appContext);
   const options = {
     position: "top-right",
@@ -28,6 +28,7 @@ export default withRouter(function OrderPlacement({ history }) {
     rates,
     userCart,
     updateUserCart,
+    allUsers,
   } = context;
   const [orderData, setorderData] = useState({
     link: "",
@@ -37,6 +38,7 @@ export default withRouter(function OrderPlacement({ history }) {
     amount: "",
     picture_url: "",
     order_name: "",
+    user_id: "",
   });
   const [hasError, sethasError] = useState(false);
   const [loading, setloading] = useState(false);
@@ -53,35 +55,50 @@ export default withRouter(function OrderPlacement({ history }) {
     setuserCart_(userCart);
   }, [selectedItems, userCart]);
 
+  useEffect(() => {
+    updateUserCart([]);
+  }, []);
+
   const onCloseModal = () => {
     setopen(false);
+  };
+
+  let getUserCart = (id) => {
+    apiServices
+      .adminGetFromCart(id)
+      .then((res) => {
+        console.log(res);
+        updateUserCart(res.data);
+      })
+      .catch((err) => {
+        openSnackbar(
+          err.response ? err.response.data.error.message : "An error occured",
+          5000
+        );
+      });
   };
 
   const addToCart = (data) => {
     setloading_(true);
     apiServices
-      .addToCart({ ...data, cart_name: data.order_name })
+      .adminAddToCart({
+        ...data,
+        cart_name: data.order_name,
+        user_id: orderData.user_id,
+      })
       .then((res) => {
         setloading_(false);
         openSnackbar("Item added to cart", 5000);
-        apiServices.getUserCart().then((res) => {
-          console.log(res);
-          updateUserCart(res.data);
-        });
+        getUserCart(orderData.user_id);
       })
       .catch((err) => {
         setloading_(false);
         console.log(err);
+        openSnackbar(
+          err.response ? err.response.data.error.message : "An error occured",
+          5000
+        );
       });
-  };
-
-  const addToList = (data) => {
-    const { quantity, description, link, website_id, picture_url } = data;
-    if (!quantity || !description || !link || !website_id) {
-      sethasError(true);
-      return;
-    }
-    setnewOrder([...newOrder, data]);
   };
 
   const handleOrderPost = () => {
@@ -89,15 +106,15 @@ export default withRouter(function OrderPlacement({ history }) {
     let payload = {
       carts: selectedItems,
       total: parseFloat(orderTotal()),
+      user_id: orderData.user_id,
     };
-    console.log(payload);
     apiServices
-      .postOrder(payload)
+      .adminPostOrder(payload)
       .then((res) => {
         setloading(false);
         setopen(false);
         openSnackbar("Order placed sucessfully", 5000);
-        history.push("/dashboard/order-history");
+        history.push("/dashboard/all-orders");
         fetchOrders();
         fetchUser();
       })
@@ -164,6 +181,11 @@ export default withRouter(function OrderPlacement({ history }) {
             (itm) => itm.property === "og:price:standard_amount"
           );
           let name_ = res.data.find((itm) => itm.property === "og:title");
+          console.log({
+            pic,
+            amt,
+            name_,
+          });
           let picture_url = pic ? pic.content : "";
           let amount = amt ? amt.content : "";
           let order_name = amt ? name_.content : "";
@@ -183,6 +205,10 @@ export default withRouter(function OrderPlacement({ history }) {
       .catch((err) => {
         console.log(err);
         setloading(false);
+        openSnackbar(
+          err.response ? err.response.data.error.message : "An error occured",
+          5000
+        );
       });
   };
 
@@ -195,11 +221,12 @@ export default withRouter(function OrderPlacement({ history }) {
   };
 
   const deleteItem = (i) => {
+    let id = userCart_[i].id;
     apiServices
-      .deleteFromCart(userCart_[i].id)
+      .deleteFromCart(id)
       .then((res) => {
         openSnackbar("Item deleted from cart", 5000);
-        fetchOrders();
+        getUserCart(orderData.user_id);
       })
       .catch((err) => {
         console.log(err);
@@ -258,11 +285,6 @@ export default withRouter(function OrderPlacement({ history }) {
             </span>
           </p>
           <div className="form w100p mt16">
-            <div className="inp w100p">
-              <select className="border-inp w100p" name="" id="">
-                <option value="Pay from wallet">Pay from wallet</option>
-              </select>
-            </div>
             <button className="main-btn w100p" onClick={handleOrderPost}>
               {loading ? <Loader /> : "Continue"}
             </button>
@@ -271,8 +293,30 @@ export default withRouter(function OrderPlacement({ history }) {
       </Modal>
 
       <p className="header">Order Placement</p>
-      <div className="top gradient">
+      <div className="top gradient" style={{ minHeight: 480 }}>
         <div className="w100p mb20">
+          <div className="inp side-label small">
+            <span className="label">Select user</span>
+            <select
+              type="text"
+              className={`field border-inp ${
+                hasError && !orderData.user_id && "has-error"
+              }`}
+              defaultValue={orderData.user_id}
+              value={orderData.user_id}
+              onChange={(e) => {
+                updateForm("user_id", e.target.value);
+                getUserCart(e.target.value);
+              }}
+            >
+              <option value={null}>Select a user</option>
+              {allUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.full_name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="inp side-label small">
             <span className="label">Sourcing Webiste</span>
             <select

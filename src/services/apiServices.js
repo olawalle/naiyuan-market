@@ -81,6 +81,14 @@ let postOrder = (data) => {
   });
 };
 
+let adminPostOrder = (data) => {
+  return axios({
+    method: "post",
+    url: urls.adminOrderUrl,
+    data,
+  });
+};
+
 let updateOrder = (data, id) => {
   return axios({
     method: "post",
@@ -179,6 +187,21 @@ let addToCart = (data) => {
   return axios({
     method: "post",
     url: urls.cartUrl,
+    data,
+  });
+};
+
+let adminGetFromCart = (id) => {
+  return axios({
+    method: "get",
+    url: `${urls.getAdminCartUrl}/${id}`,
+  });
+};
+
+let adminAddToCart = (data) => {
+  return axios({
+    method: "post",
+    url: urls.adminCartUrl,
     data,
   });
 };
@@ -399,6 +422,7 @@ export default {
   changePassword,
   uploadProfilePic,
   postOrder,
+  adminPostOrder,
   getRates,
   addRate,
   updateRate,
@@ -415,6 +439,8 @@ export default {
   addWebsite,
   updateWebsite,
   addToCart,
+  adminGetFromCart,
+  adminAddToCart,
   deleteFromCart,
   getUserCart,
   postPayment,

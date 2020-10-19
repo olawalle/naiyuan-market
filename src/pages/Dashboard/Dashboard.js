@@ -31,6 +31,7 @@ import AdminShippings from "./OrderHistory/AdminShippings";
 import AdminProcurements from "./OrderHistory/AdminProcurements";
 import Cart from "./SourceProducts/Cart";
 import AllUsers from "./OrderHistory/AllUsers";
+import AdminOrderPlacement from "./SourceProducts/AdminOrderPlacement";
 
 export default function Dashboard() {
   const context = useContext(appContext);
@@ -42,6 +43,7 @@ export default function Dashboard() {
     setrates,
     rates,
     updateUser,
+    saveAllUsers,
   } = context;
 
   let match = useRouteMatch();
@@ -65,10 +67,8 @@ export default function Dashboard() {
   const calculate = (n) => {
     let naira_dollar = rates.find((r) => r.pair === "Naira/Dollar");
     let naira_yuan = rates.find((r) => r.pair === "Naira/Yuan");
-    let oneDollar = naira_dollar
-      ? parseFloat(naira_dollar.rate.split("/")[0])
-      : 0;
-    let oneYuan = naira_yuan ? parseFloat(naira_yuan.rate.split("/")[0]) : 0;
+    let oneDollar = naira_dollar ? parseFloat(naira_dollar.rate) : 0;
+    let oneYuan = naira_yuan ? parseFloat(naira_yuan.rate) : 0;
     let dollar_yuan_rate = oneDollar / oneYuan;
 
     if (topSym === "Naira") {
@@ -132,6 +132,8 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
+
+    fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -140,7 +142,7 @@ export default function Dashboard() {
 
   const dollaAmt = () => {
     let dollar = rates.find((r) => r.pair === "Naira/Dollar");
-    let dollarRate = dollar ? (1 / dollar.rate.split("/")[0]).toFixed(4) : 0;
+    let dollarRate = dollar ? (1 / dollar.rate).toFixed(4) : 0;
     return dollarRate;
   };
 
@@ -152,6 +154,17 @@ export default function Dashboard() {
       })
       .catch((err) => {
         console.log({ err });
+      });
+  };
+
+  const fetchUsers = () => {
+    apiServices
+      .getAllUserss()
+      .then((res) => {
+        saveAllUsers(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -248,6 +261,10 @@ export default function Dashboard() {
 
             <Route path={`${match.path}order-placement`}>
               <OrderPlacement />
+            </Route>
+
+            <Route path={`${match.path}admin/order-placement`}>
+              <AdminOrderPlacement />
             </Route>
 
             <Route path={`${match.path}cart`}>

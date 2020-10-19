@@ -66,7 +66,7 @@ export default function PaySuppier() {
         console.log({ err });
         setloading(false);
         openSnackbar(
-          err.response.data.error.message || "An error occured",
+          err.response ? err.response.data.error.message : "An error occured",
           5000
         );
       });

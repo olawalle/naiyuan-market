@@ -65,7 +65,7 @@ export default withRouter(function Notifications({ history }) {
       .catch((err) => {
         setloading(false);
         openSnackbar(
-          err.response.data.error.message || "An error occured",
+          err.response ? err.response.data.error.message : "An error occured",
           5000
         );
         console.log(err);

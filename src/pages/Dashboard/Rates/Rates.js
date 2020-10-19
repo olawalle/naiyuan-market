@@ -127,7 +127,7 @@ export default function Rates() {
         <div className="rates-wrap">
           <p style={{ fontSize: 14, textAlign: "left" }}>
             Please make sure the rates created are named <b>"Naira/Dollar"</b>,
-            <b> "Naira/Yuan"</b> and <b>"Naira/Cedis"</b> as any other naming
+            <b> "Naira/Yuan"</b> and <b>"Naira/Cedi"</b> as any other naming
             convention will affect the conversions.
           </p>
           {rates.map((rate, i) => (

@@ -87,7 +87,8 @@ export default withRouter(function AllUsers({ history }) {
                       .toLowerCase()
                       .includes(filterVal.toLowerCase()) ||
                     usr.email.toLowerCase().includes(filterVal.toLowerCase()) ||
-                    usr.phone.toLowerCase().includes(filterVal.toLowerCase())
+                    (usr.phone &&
+                      usr.phone.toLowerCase().includes(filterVal.toLowerCase()))
                   );
                 })
                 .map((user, i) => (

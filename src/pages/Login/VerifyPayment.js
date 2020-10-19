@@ -35,7 +35,7 @@ export default withRouter(function VerifyPayment({ history }) {
       .catch((err) => {
         console.log(err);
         openSnackbar(
-          err.response.data.error.message || "An error occured",
+          err.response ? err.response.data.error.message : "An error occured",
           5000
         );
       });
