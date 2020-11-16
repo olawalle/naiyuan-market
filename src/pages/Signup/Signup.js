@@ -77,7 +77,7 @@ export default withRouter(function Signup({ history }) {
       username,
       email,
       country,
-      phone_number,
+      phone_number: null,
       password,
       password_confirmation,
       frontend_url: `${window.location.origin}/#/signup?code=`,
@@ -143,49 +143,49 @@ export default withRouter(function Signup({ history }) {
   }, []);
 
   return (
-    <div className="signup">
-      <img src={logo} alt="" className="logo" />
+    <div className='signup'>
+      <img src={logo} alt='' className='logo' />
       {verifying ? (
         <p style={{ paddingTop: 100 }}>Verifying account...</p>
       ) : !signupDone ? (
-        <div className="login-box">
-          <p className="welcome">Create Your Account</p>
+        <div className='login-box'>
+          <p className='welcome'>Create Your Account</p>
 
-          <div className="inp mb20">
-            <span className="label">Full name</span>
+          <div className='inp mb20'>
+            <span className='label'>Full name</span>
             <input
               onChange={(e) => updateForm("fullname", e.target.value)}
-              type="text"
+              type='text'
               className={`w100p bd-input ${
                 hasError && (!first_name || !last_name) && "has-error"
               }`}
             />
           </div>
 
-          <div className="inp mb20">
-            <span className="label">Username</span>
+          <div className='inp mb20'>
+            <span className='label'>Username</span>
             <input
               onChange={(e) => updateForm("username", e.target.value)}
-              type="text"
+              type='text'
               className={`w100p bd-input ${
                 hasError && !username && "has-error"
               }`}
             />
           </div>
 
-          <div className="inp mb20">
-            <span className="label">Email Address</span>
+          <div className='inp mb20'>
+            <span className='label'>Email Address</span>
             <input
-              type="text"
+              type='text'
               onChange={(e) => updateForm("email", e.target.value)}
               className={`w100p bd-input ${hasError && !email && "has-error"}`}
             />
           </div>
 
-          <div className="inp mb20">
-            <span className="label">Password</span>
+          <div className='inp mb20'>
+            <span className='label'>Password</span>
             <input
-              type="password"
+              type='password'
               onChange={(e) => updateForm("password", e.target.value)}
               className={`w100p bd-input ${
                 (hasError && !password) || hasPasswordError || hasPasswordError_
@@ -195,21 +195,21 @@ export default withRouter(function Signup({ history }) {
             />
             {hasPasswordError &&
             (password.length > 0 || password.length < 8) ? (
-              <span className="red" style={{ fontSize: 10 }}>
+              <span className='red' style={{ fontSize: 10 }}>
                 Password must contain at least 8 characters
               </span>
             ) : null}
             {hasPasswordError_ && password !== password_confirmation ? (
-              <span className="red" style={{ fontSize: 10 }}>
+              <span className='red' style={{ fontSize: 10 }}>
                 Passwords do not match
               </span>
             ) : null}
           </div>
 
-          <div className="inp mb20">
-            <span className="label">Confirm Password</span>
+          <div className='inp mb20'>
+            <span className='label'>Confirm Password</span>
             <input
-              type="password"
+              type='password'
               onChange={(e) => updateForm("confirm_password", e.target.value)}
               className={`w100p bd-input ${
                 (hasError && !password_confirmation) ||
@@ -221,11 +221,11 @@ export default withRouter(function Signup({ history }) {
             />
           </div>
 
-          <div className="inp mb20">
-            <span className="label">Select your country</span>
+          <div className='inp mb20'>
+            <span className='label'>Select your country</span>
             <select
               onChange={(e) => updateForm("country", e.target.value)}
-              type="text"
+              type='text'
               className={`w100p bd-input ${
                 hasError && !country && "has-error"
               }`}
@@ -238,23 +238,23 @@ export default withRouter(function Signup({ history }) {
             </select>
           </div>
 
-          <p className="forgot">
+          <p className='forgot'>
             Creating an account means you’re okay with our{" "}
-            <span className="red">Terms of Service</span> and our{" "}
-            <span className="red">default Notification Settings</span>
+            <span className='red'>Terms of Service</span> and our{" "}
+            <span className='red'>default Notification Settings</span>
           </p>
 
-          <button className="w100p main-btn mt12" onClick={submitForm}>
+          <button className='w100p main-btn mt12' onClick={submitForm}>
             {loading ? <Loader /> : "REGISTER"}
           </button>
 
-          <span className="caveat" onClick={toLogin}>
-            Have an account? <span className="red pointer">Login</span>
+          <span className='caveat' onClick={toLogin}>
+            Have an account? <span className='red pointer'>Login</span>
           </span>
         </div>
       ) : (
         <div
-          className="login-box"
+          className='login-box'
           style={{ color: "#2D2F39", fontSize: 14, lineHeight: "24px" }}
         >
           <p>
@@ -266,7 +266,7 @@ export default withRouter(function Signup({ history }) {
             spam folder.
           </p>
 
-          <button className="w100p main-btn mt12" onClick={toLogin}>
+          <button className='w100p main-btn mt12' onClick={toLogin}>
             Back to login
           </button>
         </div>
